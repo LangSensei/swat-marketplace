@@ -5,7 +5,7 @@ The official catalog of capabilities for the [SWAT](https://github.com/LangSense
 ## Contents
 
 - **📂 Squads**: Specialized agent configurations (e.g., `outlook`, `coding`, `research`).
-- **🔧 Skills**: PowerShell function libraries that give agents new abilities.
+- **🔧 Skills**: Specialized capabilities (PowerShell, Python, Node.js, etc.) that give agents new abilities.
 - **🔌 MCP Servers**: Configuration files for Model Context Protocol servers.
 
 ## Usage
