@@ -12,7 +12,7 @@ function Get-MsalToken {
         [Parameter(Mandatory)][string]$ClientId,
         [Parameter(Mandatory)][string]$Scope
     )
-    $toolScript = Join-Path $PSScriptRoot "MsalAuthBroker.cs"
+    $toolScript = Join-Path $PSScriptRoot "MsalAuth.cs"
 
     # Fast-path: check disk cache (~/.msal/tokens/{tenantId}_{clientId}_{scope}.json)
     # Avoids dotnet cold-start (~2-3s) when token is still fresh
@@ -30,7 +30,7 @@ function Get-MsalToken {
 
     # Acquire token via MsalAuthBroker (silent from MsalCacheHelper, or WAM interactive)
     # Copy script to TEMP to avoid repo's global.json / Central Package Management conflicts
-    $tempScript = Join-Path $env:TEMP "MsalAuthBroker.cs"
+    $tempScript = Join-Path $env:TEMP "MsalAuth.cs"
     Copy-Item $toolScript $tempScript -Force
     $dotnetArgs = @("run", "--file", $tempScript, "--", "-TenantId=$TenantId", "-ClientId=$ClientId", "-Scope=$Scope")
     $token = (& dotnet @dotnetArgs 2>$null).Trim()

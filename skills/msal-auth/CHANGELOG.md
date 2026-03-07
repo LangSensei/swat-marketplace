@@ -4,7 +4,7 @@
 
 Initial release.
 
-- `Get-MsalToken` — acquire access tokens (PS disk cache → MSAL silent → WAM interactive)
+- `Get-MsalToken` — acquire access tokens (PS disk cache → MSAL silent → browser interactive)
 - `Clear-MsalToken` — clear disk cache for 401 retry flows
-- `MsalAuthBroker.cs` — .NET 10 WAM broker with MsalCacheHelper persistence
+- `MsalAuth.cs` — .NET 10 system browser auth with MsalCacheHelper persistence
 - Two-tier caching: PS disk cache (`~/.msal/tokens/`) + MSAL refresh tokens (`~/.msal/cache/`)

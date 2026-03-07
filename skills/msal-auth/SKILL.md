@@ -1,17 +1,16 @@
 ---
 name: msal-auth
 version: "1.0.0"
-description: Acquire Azure AD / Entra ID access tokens via MSAL + WAM on Windows. Supports personal and work accounts. Not for service principals, certificates, or non-Windows platforms.
+description: Acquire Azure AD / Entra ID access tokens via MSAL. Supports personal and work accounts with system browser sign-in and silent refresh. Not for service principals or certificates.
 ---
 
 # MSAL Auth
 
-Acquire access tokens for any Microsoft / Entra ID protected API. Uses WAM (Web Account Manager) for interactive sign-in, MSAL for silent refresh.
+Acquire access tokens for any Microsoft / Entra ID protected API. Uses system browser for interactive sign-in, MSAL cache for silent refresh.
 
 ## Prerequisites
 
 - **.NET 10+** — `dotnet run --file` support
-- **Windows** — WAM broker requires Windows
 
 ## Quick Start
 
@@ -60,6 +59,6 @@ Two-layer cache avoids repeated sign-in and dotnet cold-start:
 | Layer | Location | Purpose |
 |-------|----------|---------|
 | PS disk cache | `~/.msal/tokens/{key}.json` | Skip dotnet startup (~2-3s) when token still fresh (>120s remaining) |
-| MSAL cache | `~/.msal/cache/msal_{key}.dat` | Refresh tokens for silent renewal without WAM |
+| MSAL cache | `~/.msal/cache/msal_{key}.dat` | Refresh tokens for silent renewal (~90 days) |
 
-Token lifecycle: PS cache hit → return | PS miss → dotnet → MSAL silent → return | MSAL miss → WAM interactive → return.
+Token lifecycle: PS cache hit → return | PS miss → dotnet → MSAL silent → return | MSAL miss → browser interactive → return.

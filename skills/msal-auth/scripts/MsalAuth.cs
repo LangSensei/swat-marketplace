@@ -1,11 +1,11 @@
-// MsalAuthBroker.cs — .NET 10 file-based C# script for token acquisition
+// MsalAuth.cs — .NET 10 file-based C# script for token acquisition
 //
 // Acquires an Azure AD / Entra ID access token:
-//   1. Silent (cached account) — instant, no user interaction
-//   2. WAM broker interactive — OS-level account picker
+//   1. Silent (cached refresh token) — no user interaction
+//   2. System browser interactive — opens default browser for sign-in
 //
 // Usage:
-//   dotnet run --file MsalAuthBroker.cs -- -TenantId=<guid> -ClientId=<guid> -Scope=<resource>
+//   dotnet run --file MsalAuth.cs -- -TenantId=<guid> -ClientId=<guid> -Scope=<resource>
 //
 // Parameters:
 //   -TenantId=<guid>        (Required) Azure AD tenant ID
@@ -14,16 +14,13 @@
 //
 // Output: Access token written to stdout. Diagnostics go to stderr.
 //
-// Requires: Windows, .NET 10+
+// Requires: .NET 10+
 
 #:package Microsoft.Identity.Client@4.*
-#:package Microsoft.Identity.Client.Broker@4.*
 #:package Microsoft.Identity.Client.Extensions.Msal@4.*
 
 using Microsoft.Identity.Client;
-using Microsoft.Identity.Client.Broker;
 using Microsoft.Identity.Client.Extensions.Msal;
-using System.Runtime.InteropServices;
 
 string? clientId = null;
 string? tenantId = null;
@@ -52,22 +49,12 @@ if (clientId == null || tenantId == null || scope == null)
     Environment.Exit(1);
 }
 
-// Console window handle for WAM parenting (with Windows Terminal support)
-var consoleHandle = GetConsoleWindow();
-var hwnd = GetAncestor(consoleHandle, GetAncestorFlags.GetRootOwner);
-if (hwnd == IntPtr.Zero) hwnd = consoleHandle;
-
-// WAM broker app
-var brokerOpts = new BrokerOptions(BrokerOptions.OperatingSystems.Windows) { Title = "MSAL Auth Broker" };
 var app = PublicClientApplicationBuilder.Create(clientId)
     .WithAuthority($"https://login.microsoftonline.com/{tenantId}")
-    .WithDefaultRedirectUri()
-    .WithBroker(brokerOpts)
-    .WithParentActivityOrWindow(() => hwnd)
+    .WithRedirectUri("http://localhost")
     .Build();
 
 // Persist MSAL token cache via MsalCacheHelper (DPAPI on Windows, Keychain on macOS, Keyring on Linux)
-// Cache file is scoped by tenantId+clientId; MSAL internally isolates by scope
 var cacheKey = $"{tenantId}_{clientId}".Replace("-", "");
 var cacheFileName = $"msal_{cacheKey}.dat";
 var cacheDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".msal", "cache");
@@ -82,13 +69,10 @@ cacheHelper.RegisterCache(app.UserTokenCache);
 
 string[] scopes = scope.Contains(' ') ? scope.Split(' ') : [scope];
 
-// Step 1: Find cached account
-var accounts = await app.GetAccountsAsync();
-IAccount? account = accounts.FirstOrDefault();
-
 AuthenticationResult result;
 
-// Step 2: Try silent auth (cached token / refresh token)
+// Step 1: Silent — cached token / refresh token
+var account = (await app.GetAccountsAsync()).FirstOrDefault();
 if (account != null)
 {
     Console.Error.WriteLine($"Account: {account.Username} (cached)");
@@ -105,12 +89,12 @@ if (account != null)
     }
 }
 
-// Step 3: WAM interactive — native account picker
-Console.Error.WriteLine("Launching WAM sign-in...");
+// Step 2: System browser interactive
+Console.Error.WriteLine("Launching browser sign-in...");
 result = await app.AcquireTokenInteractive(scopes)
-    .WithParentActivityOrWindow(() => hwnd)
+    .WithUseEmbeddedWebView(false)
     .ExecuteAsync();
-Console.Error.WriteLine("Token: WAM interactive");
+Console.Error.WriteLine("Token: browser interactive");
 WriteResult(result);
 
 // === Helpers ===
@@ -120,14 +104,5 @@ void WriteResult(AuthenticationResult r)
     Console.Error.WriteLine($"User: {r.Account.Username}");
     Console.Error.WriteLine($"Expires: {r.ExpiresOn.ToLocalTime():yyyy-MM-dd HH:mm:ss}");
     Console.Error.WriteLine($"Length: {r.AccessToken.Length}");
-    // Token to stdout for caller to capture; all diagnostics go to stderr
     Console.Out.Write(r.AccessToken);
 }
-
-[DllImport("user32.dll", ExactSpelling = true)]
-static extern IntPtr GetAncestor(IntPtr hwnd, GetAncestorFlags flags);
-
-[DllImport("kernel32.dll")]
-static extern IntPtr GetConsoleWindow();
-
-enum GetAncestorFlags { GetParent = 1, GetRoot = 2, GetRootOwner = 3 }
