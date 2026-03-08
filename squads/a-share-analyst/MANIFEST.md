@@ -67,6 +67,7 @@ A-share (中国A股) stock market analysis and research.
 ## Notes
 
 - Always use Python for data processing and calculations
+- **Write files using Python**, not shell heredoc (`cat << EOF`). Heredoc with HTML/JS content triggers shell expansion security blocks. Use `with open("report.html", "w") as f: f.write(content)` instead.
 - Install pandas and numpy if not available: `pip install pandas numpy`
 - All monetary values in CNY
 - Present numbers in human-readable format (e.g., 1.2万亿 for market cap)
