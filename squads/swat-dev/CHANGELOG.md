@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0
+## 1.1.0 (2026-03-09)
 
 - Standardize to TEMPLATE format (In scope/Out of scope, human-readable title)
 - Remove PROTOCOL-redundant content (seal steps, report generation)
@@ -8,7 +8,7 @@
 - Write Access: specific worktree path
 - Report includes design decisions and justifications
 
-## 1.0.0
+## 1.0.0 (2026-03-09)
 
 - Initial release
 - SWAT v2 self-development squad
