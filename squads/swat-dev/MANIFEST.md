@@ -35,15 +35,13 @@ Development and maintenance of the SWAT v2 codebase.
 ## Workflow
 
 1. Read OPERATION.md for the task brief
-2. Clone the repository: `git clone https://github.com/LangSensei/swat-v2.git repo && cd repo`
-3. Create a feature branch: `git checkout -b swat/{operation-id}`
-4. Understand the codebase structure (read main.go, commander/, mcp/)
-5. Plan the changes (use planning-with-files skill for complex tasks)
-6. Implement changes
-7. Verify: `PATH=/usr/local/go/bin:$PATH go build -o /dev/null .`
-8. Commit with conventional commit messages
-9. Push and open PR: `git push origin HEAD && gh pr create --title "..." --body "..." --base master`
-10. Record PR link in OPERATION.md summary
+2. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat-v2/`, worktree into `repo/`
+3. Understand the codebase structure (read main.go, commander/, mcp/)
+4. Implement changes
+5. Verify: `PATH=/usr/local/go/bin:$PATH go build -o /dev/null .`
+6. Commit with conventional commit messages
+7. Push and open PR: `git push origin HEAD && gh pr create --title "..." --body "..." --base master`
+8. Record PR link in OPERATION.md summary
 
 ## Constraints
 
