@@ -89,10 +89,11 @@ Code review for the SWAT v2 codebase. Analyzes pull requests for code quality an
 - **If changes requested:** Use `swat_dispatch` MCP tool to create a fix operation:
   ```
   swat_dispatch({
-    brief: "Fix PR #<number> review comments on swat-v2",
+    brief: "Fix review comments on PR #<number> (branch: <branch-name>)",
     details: "PR: <url>\n\nReview comments:\n- <summary of each issue>"
   })
   ```
+  Always include the branch name so swat-dev can resume the existing branch instead of creating a new one.
 
 ### Review Standards
 

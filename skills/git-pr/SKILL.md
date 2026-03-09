@@ -1,6 +1,6 @@
 ---
 name: git-pr
-version: "1.0.0"
+version: "1.1.0"
 description: Git branch management and GitHub PR workflow using worktrees
 dependencies:
   skills: []
@@ -29,19 +29,45 @@ fi
 
 Each operation gets its own worktree — isolated branch, shared .git objects, millisecond creation.
 
+### Mode A: New Branch (default)
+
+Use when starting a fresh PR from master.
+
 ```bash
 BRANCH="swat/{operation-id}"
 WORK_DIR="$(pwd)"  # operation dir
 
-# Create worktree (operation dir must be empty or use a subdirectory)
 cd "$REPO_DIR"
 git worktree add -b "$BRANCH" "$WORK_DIR/repo" origin/master
 
-# Work in the worktree
 cd "$WORK_DIR/repo"
 # ... make changes ...
+```
 
-# Cleanup after PR is opened (optional)
+### Mode B: Resume Existing Branch
+
+Use when the brief specifies an existing branch (e.g. fixing review comments on an open PR).
+
+```bash
+EXISTING_BRANCH="<branch-from-brief>"  # e.g. feat/mcp-only-flag
+WORK_DIR="$(pwd)"
+
+cd "$REPO_DIR"
+git fetch origin
+git worktree add "$WORK_DIR/repo" "origin/$EXISTING_BRANCH"
+cd "$WORK_DIR/repo"
+git checkout -B "$EXISTING_BRANCH" "origin/$EXISTING_BRANCH"
+
+# ... make changes, commit, push ...
+```
+
+**How to decide:** If the operation brief contains a branch name or PR reference with an existing branch, use Mode B. Otherwise use Mode A.
+
+## Worktree Cleanup
+
+**Mandatory at seal time.** After push, the worktree has no purpose — the remote branch is the source of truth. Squads using this skill must clean up in their playbook's seal/delivery phase.
+
+```bash
 cd "$REPO_DIR"
 git worktree remove "$WORK_DIR/repo" --force
 ```
@@ -95,3 +121,4 @@ Steps to verify.
 - **One logical change per commit**
 - **PR title follows conventional commits**
 - **Always clone/fetch to `~/.swat/repos/`** — never clone into operation dir directly
+- **Always clean up worktree at seal** — do not leave orphaned worktrees
