@@ -76,5 +76,8 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
 
 ```yaml
-summary: # PR link and what was created (e.g., "PR #4: new company-intel squad + web-scrape skill")
+pr_url: # GitHub PR link to marketplace
+pr_number: # PR number
+squads_created: [] # list of new squad names
+skills_created: [] # list of new skill names
 ```

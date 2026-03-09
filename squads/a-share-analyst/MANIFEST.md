@@ -145,5 +145,11 @@ When the brief mentions "portfolio synthesis" or "组合分析" and provides pat
 Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
 
 ```yaml
-summary: # Key findings in one line (e.g., "PE 15.6x, ROE 18.2%, 建议持有")
+stock_code: # target stock/ETF code (e.g., "600519")
+stock_name: # target name (e.g., "贵州茅台")
+pe_ttm: # trailing PE ratio
+pb: # price-to-book ratio
+roe: # return on equity (%)
+moat_rating: # moat assessment (★ to ★★★★★)
+recommendation: # hold / add / reduce
 ```

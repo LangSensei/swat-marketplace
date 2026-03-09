@@ -70,5 +70,8 @@ Development and maintenance of the SWAT v2 codebase.
 Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
 
 ```yaml
-summary: # PR link and brief description (e.g., "PR #17: fix scheduler timezone handling")
+pr_url: # GitHub PR link
+pr_number: # PR number
+branch: # feature branch name
+files_changed: # number of files changed
 ```
