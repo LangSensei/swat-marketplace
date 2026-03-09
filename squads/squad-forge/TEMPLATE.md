@@ -1,30 +1,46 @@
 ---
-name: {squad-name}                 # kebab-case identifier, matches folder name
+name: {squad-name}
 version: "1.0.0"
 description: {one-liner description}
-dependencies:                      # omit block if no dependencies
+dependencies:
   skills: [{skill-names}]
   mcps: [{mcp-names}]
 ---
 
-# {Squad Name} Squad               <!-- display name, can differ from frontmatter name -->
+# {squad-name}
 
 ## Domain
-{Detailed scope — what operations, services, or codebases this squad handles.}
+
+{What area this squad covers — detailed scope of operations.}
 
 ## Boundary
-- {What the squad DOES — list capabilities}
-- Does NOT {what the squad does NOT do — explicit exclusions}
 
-## Write Access
-- {paths the squad can write to, or "(none — all interactions via API)" if API-only}
+**In scope:**
+- {capability 1}
+- {capability 2}
 
-## Squad Playbook
-{Domain knowledge, API endpoints, workflows, operational guidance. Use ### subsections to organize content — do not create additional ## sections.}
+**Out of scope:**
+- {exclusion 1}
+- {exclusion 2}
 
-## Output Schema
-Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
-```yaml
-{field}: # {description}
-action_items: [] # Follow-up steps
-```
+<!-- Choose the sections below that fit your squad type. Not all are required. -->
+<!-- Analysis/research squads: Playbook, Output -->
+<!-- Dev squads: Workflow, Constraints, Output -->
+<!-- All squads must have: Domain, Boundary -->
+
+## Playbook
+
+{Domain knowledge, API endpoints, workflows, operational guidance.
+Use ### subsections to organize. Good for analysis/research squads.}
+
+## Workflow
+
+{Numbered steps the Captain follows. Good for dev/process squads.}
+
+## Constraints
+
+{Hard rules and limitations the Captain must follow.}
+
+## Output
+
+{What the squad produces — report format, deliverables, completion criteria.}
