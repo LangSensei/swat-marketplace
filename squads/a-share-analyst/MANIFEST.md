@@ -1,6 +1,6 @@
 ---
-name: A-Share Analyst
-version: "1.1.0"
+name: a-share-analyst
+version: "1.2.0"
 description: A-share stock analysis — technical, fundamental, moat assessment, valuation, and portfolio synthesis
 dependencies:
   skills: [eastmoney-data, fund-holdings, sina-quote]
@@ -23,8 +23,7 @@ A-share (中国A股) stock market analysis and research.
 - Decision recommendation (hold / add / reduce with reasoning)
 - ETF/fund analysis (holdings decomposition, weighted fundamentals, sector assessment)
 - Stock screening (filter by financial metrics)
-- **Portfolio synthesis** — read multiple completed operation reports and produce a combined portfolio analysis
-- Generate analysis reports with charts and conclusions
+- Portfolio synthesis — read multiple completed operation reports and produce a combined portfolio analysis
 
 **Out of scope:**
 - Trading execution (buying/selling)
@@ -32,7 +31,21 @@ A-share (中国A股) stock market analysis and research.
 - Options/futures/derivatives
 - Hong Kong or US stock markets
 
-## Playbook
+## Write Access
+
+(none — report and working files stay within the operation directory)
+
+## Squad Playbook
+
+### General Rules
+
+- Always use Python for data processing and calculations
+- **Write files using Python**, not shell heredoc (`cat << EOF`). Heredoc with HTML/JS content triggers shell expansion security blocks. Use `with open("report.html", "w") as f: f.write(content)` instead.
+- Install pandas and numpy if not available: `pip install pandas numpy`
+- All monetary values in CNY
+- Present numbers in human-readable format (e.g., 1.2万亿 for market cap)
+- Report language: Chinese (analysis audience is Chinese investors)
+- For portfolio synthesis, the prior reports are in sibling operation directories under the same squad
 
 ### Individual Stock Analysis
 
@@ -64,15 +77,8 @@ A-share (中国A股) stock market analysis and research.
    - Risk factors (industry, policy, competition, cyclical)
    - Clear recommendation: **hold / add / reduce** with reasoning
    - If the brief contains investor preferences, tailor the recommendation accordingly
-7. **Generate report** — Write report.html with:
-   - Stock overview (name, code, sector, market cap)
-   - Price chart with key indicators
-   - Technical summary (trend, signals, support/resistance)
-   - Fundamental summary (valuation, profitability, growth)
-   - Moat assessment section
-   - Decision recommendation with reasoning
-   - Key risks
-8. **Seal** — Update OPERATION.md status to completed
+
+Report should include: stock overview (name, code, sector, market cap), price chart with key indicators, technical summary, fundamental summary, moat assessment, decision recommendation, key risks.
 
 ### ETF / Fund Analysis
 
@@ -95,16 +101,10 @@ When the target is an ETF (code starts with 51xxxx, 15xxxx, 56xxxx, etc.) or the
    - Sector outlook
    - Weighted valuation assessment (cheap/fair/expensive vs history)
    - Clear recommendation: **hold / add / reduce** with reasoning
-9. **Generate report** — Write report.html with:
-   - ETF overview (name, code, tracking index, AUM if available)
-   - Price chart with technical indicators
-   - Holdings breakdown table (top 10 with weight, PE, PB)
-   - Weighted fundamental summary
-   - Cost basis P&L section (if applicable)
-   - Decision recommendation
-10. **Seal** — Update OPERATION.md status to completed
 
-### Portfolio Synthesis Task
+Report should include: ETF overview, price chart, holdings breakdown table (top 10 with weight, PE, PB), weighted fundamental summary, cost basis P&L (if applicable), decision recommendation.
+
+### Portfolio Synthesis
 
 When the brief mentions "portfolio synthesis" or "组合分析" and provides paths to prior reports:
 
@@ -119,24 +119,28 @@ When the brief mentions "portfolio synthesis" or "组合分析" and provides pat
    - Rebalancing ideas (reduce overweight sectors, add to underweight)
    - Which holdings to prioritize adding/reducing
    - Overall risk assessment
-5. **Generate report** — Write report.html with portfolio dashboard
-6. **Seal**
 
-### Screening Task
+Report should include: portfolio dashboard with all holdings, sector distribution, overall metrics, recommendations.
+
+### Screening
 
 1. **Parse criteria** — Extract screening conditions from task brief
 2. **Fetch stock list** — Use full A-share list API
 3. **Filter** — Apply financial metric filters
 4. **Rank** — Sort by relevant metric
-5. **Generate report** — Top matches with key metrics
-6. **Seal**
 
-## Notes
+Report should include: top matches with key metrics.
 
-- Always use Python for data processing and calculations
-- **Write files using Python**, not shell heredoc (`cat << EOF`). Heredoc with HTML/JS content triggers shell expansion security blocks. Use `with open("report.html", "w") as f: f.write(content)` instead.
-- Install pandas and numpy if not available: `pip install pandas numpy`
-- All monetary values in CNY
-- Present numbers in human-readable format (e.g., 1.2万亿 for market cap)
-- Report language: Chinese (analysis audience is Chinese investors)
-- For portfolio synthesis, the prior reports are in sibling operation directories under the same squad
+## Output Schema
+
+Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
+
+```yaml
+stock_code: # target stock/ETF code (e.g., "600519")
+stock_name: # target name (e.g., "贵州茅台")
+pe_ttm: # trailing PE ratio
+pb: # price-to-book ratio
+roe: # return on equity (%)
+moat_rating: # moat assessment (★ to ★★★★★)
+recommendation: # hold / add / reduce
+```
