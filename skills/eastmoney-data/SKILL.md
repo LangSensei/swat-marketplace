@@ -113,6 +113,37 @@ for k in klines[-3:]:
 
 - All APIs are public, no authentication needed
 - Data is real-time during trading hours (9:30-15:00 CST)
-- Rate limit: be reasonable, add 0.5s delay between batch requests
 - Amounts are in CNY (人民币)
 - Volume unit: 手 (lots of 100 shares)
+
+## ⚠️ Rate Limiting (IMPORTANT)
+
+Eastmoney APIs will **drop connections** (`RemoteDisconnected`) if you send requests too fast. This is the #1 cause of failures.
+
+**Mandatory rules:**
+- Add **1 second delay** between every request (`time.sleep(1)`)
+- For batch operations (e.g., fetching data for 10 stocks), use **1.5 second delay**
+- Always wrap requests in retry logic (3 retries with exponential backoff)
+- If `push2.eastmoney.com` returns empty response for ETFs, use sina-quote skill instead
+
+**Example retry pattern:**
+```python
+import time
+import requests
+
+def fetch_with_retry(url, params, max_retries=3):
+    for i in range(max_retries):
+        try:
+            r = requests.get(url, params=params, timeout=10)
+            return r.json()
+        except Exception as e:
+            if i < max_retries - 1:
+                time.sleep(2 ** i)  # 1s, 2s, 4s
+            else:
+                raise e
+    return None
+```
+
+**Known limitations:**
+- `push2.eastmoney.com/api/qt/stock/get` returns empty response for ETFs (use sina-quote)
+- Batch requests for >5 stocks often trigger connection drops — always add delays
