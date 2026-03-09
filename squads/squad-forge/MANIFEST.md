@@ -31,9 +31,8 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 
 1. Read OPERATION.md for the requirement (what squad/skill to create)
 2. Set up worktree to `swat-marketplace` using git-pr skill
-3. Study existing examples:
-   - Read 2-3 existing squad MANIFESTs in `squads/` for structure reference
-   - Read 2-3 existing skills in `skills/` if creating skills
+3. Copy `squads/TEMPLATE.md` as starting point for new squad MANIFEST
+4. Study 2-3 existing squads in `squads/` for reference
 4. Design the squad:
    - Identify domain and boundary (in scope / out of scope)
    - Determine skill dependencies (reuse existing skills when possible)
