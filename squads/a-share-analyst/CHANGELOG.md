@@ -2,16 +2,10 @@
 
 ## 1.3.0
 
-- Remove PROTOCOL-redundant content (seal steps, report generation instructions, Write Access duplication)
+- Standardize to TEMPLATE format (In scope/Out of scope, human-readable title)
+- Remove PROTOCOL-redundant content (seal steps, report generation, Write Access duplication)
+- Output Schema: squad-specific fields (stock_code, stock_name, pe_ttm, pb, roe, moat_rating, recommendation)
 - Report content described inline instead of as separate generation steps
-- Boundary: remove "Generate analysis reports" (covered by PROTOCOL S3)
-
-## 1.2.0
-
-- Standardize to TEMPLATE format (Domain, Boundary, Write Access, Squad Playbook, Output Schema)
-- Frontmatter name to kebab-case (`a-share-analyst`)
-- General rules moved into Squad Playbook
-- Added Output Schema with expected OPERATION.md fields
 
 ## 1.1.0 (2026-03-09)
 

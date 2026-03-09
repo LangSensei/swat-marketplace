@@ -2,14 +2,11 @@
 
 ## 1.2.0
 
-- Remove PROTOCOL-redundant content (seal steps, report generation, Write Access duplication)
-- Write Access: only squad-specific paths
-- Playbook: delivery section simplified (PROTOCOL handles seal)
-
-## 1.1.0
-
-- Standardize to TEMPLATE format
-- Frontmatter name to kebab-case (`swat-dev`)
+- Standardize to TEMPLATE format (In scope/Out of scope, human-readable title)
+- Remove PROTOCOL-redundant content (seal steps, report generation)
+- Output Schema: squad-specific fields (pr_url, pr_number, branch, files_changed)
+- Write Access: specific worktree path
+- Report includes design decisions and justifications
 
 ## 1.0.0
 
