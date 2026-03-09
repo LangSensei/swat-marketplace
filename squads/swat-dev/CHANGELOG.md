@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0 (2026-03-09)
+
+- Auto-dispatch to swat-review after every PR push (new or fix)
+
 ## 1.2.0 (2026-03-09)
 
 - Add SWAT MCP dependency for cross-squad dispatch
