@@ -1,6 +1,6 @@
 ---
 name: a-share-analyst
-version: "1.2.0"
+version: "1.3.0"
 description: A-share stock analysis — technical, fundamental, moat assessment, valuation, and portfolio synthesis
 dependencies:
   skills: [eastmoney-data, fund-holdings, sina-quote]
@@ -24,7 +24,6 @@ A-share (中国A股) stock market analysis and research.
 - ETF/fund analysis (holdings decomposition, weighted fundamentals, sector assessment)
 - Stock screening (filter by financial metrics)
 - Portfolio synthesis — read multiple completed operation reports and produce a combined portfolio analysis
-- Generate analysis reports with charts and conclusions
 
 **Out of scope:**
 - Trading execution (buying/selling)
@@ -34,8 +33,7 @@ A-share (中国A股) stock market analysis and research.
 
 ## Write Access
 
-- `report.html` in operation directory
-- OPERATION.md frontmatter fields (summary, action_items, status, completed_at)
+(none beyond protocol defaults)
 
 ## Squad Playbook
 
@@ -79,15 +77,8 @@ A-share (中国A股) stock market analysis and research.
    - Risk factors (industry, policy, competition, cyclical)
    - Clear recommendation: **hold / add / reduce** with reasoning
    - If the brief contains investor preferences, tailor the recommendation accordingly
-7. **Generate report** — Write report.html with:
-   - Stock overview (name, code, sector, market cap)
-   - Price chart with key indicators
-   - Technical summary (trend, signals, support/resistance)
-   - Fundamental summary (valuation, profitability, growth)
-   - Moat assessment section
-   - Decision recommendation with reasoning
-   - Key risks
-8. **Seal** — Update OPERATION.md status to completed
+
+Report should include: stock overview (name, code, sector, market cap), price chart with key indicators, technical summary, fundamental summary, moat assessment, decision recommendation, key risks.
 
 ### ETF / Fund Analysis
 
@@ -110,8 +101,8 @@ When the target is an ETF (code starts with 51xxxx, 15xxxx, 56xxxx, etc.) or the
    - Sector outlook
    - Weighted valuation assessment (cheap/fair/expensive vs history)
    - Clear recommendation: **hold / add / reduce** with reasoning
-9. **Generate report** — Write report.html
-10. **Seal** — Update OPERATION.md status to completed
+
+Report should include: ETF overview, price chart, holdings breakdown table (top 10 with weight, PE, PB), weighted fundamental summary, cost basis P&L (if applicable), decision recommendation.
 
 ### Portfolio Synthesis
 
@@ -128,8 +119,8 @@ When the brief mentions "portfolio synthesis" or "组合分析" and provides pat
    - Rebalancing ideas (reduce overweight sectors, add to underweight)
    - Which holdings to prioritize adding/reducing
    - Overall risk assessment
-5. **Generate report** — Write report.html with portfolio dashboard
-6. **Seal**
+
+Report should include: portfolio dashboard with all holdings, sector distribution, overall metrics, recommendations.
 
 ### Screening
 
@@ -137,8 +128,8 @@ When the brief mentions "portfolio synthesis" or "组合分析" and provides pat
 2. **Fetch stock list** — Use full A-share list API
 3. **Filter** — Apply financial metric filters
 4. **Rank** — Sort by relevant metric
-5. **Generate report** — Top matches with key metrics
-6. **Seal**
+
+Report should include: top matches with key metrics.
 
 ## Output Schema
 

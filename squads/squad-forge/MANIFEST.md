@@ -29,8 +29,7 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 
 ## Write Access
 
-- All files in the swat-marketplace worktree (created via git-pr skill at `~/.swat/repos/swat-marketplace/`)
-- OPERATION.md frontmatter fields (summary, action_items, status, completed_at)
+- All files in the worktree created via git-pr skill
 
 ## Squad Playbook
 
@@ -62,14 +61,14 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 ### Delivery
 
 1. Push and open PR against `main`
-2. Record PR link in OPERATION.md summary
 
 ### Constraints
 
 - **All content in English** — no Chinese in source files
 - **Reuse existing skills** — don't recreate what already exists
 - **One PR per operation**
-- **Base branch**: `main`
+
+No report.html needed — the PR itself is the deliverable.
 
 ## Output Schema
 

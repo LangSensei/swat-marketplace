@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0
+
+- Remove PROTOCOL-redundant content (seal steps, report generation instructions, Write Access duplication)
+- Report content described inline instead of as separate generation steps
+- Boundary: remove "Generate analysis reports" (covered by PROTOCOL S3)
+
 ## 1.2.0
 
 - Standardize to TEMPLATE format (Domain, Boundary, Write Access, Squad Playbook, Output Schema)

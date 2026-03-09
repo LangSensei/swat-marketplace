@@ -1,6 +1,6 @@
 ---
 name: swat-dev
-version: "1.1.0"
+version: "1.2.0"
 description: Self-development squad for the SWAT system — implements features, fixes bugs, and opens PRs on the swat-v2 repository
 dependencies:
   skills: [go-dev, git-pr]
@@ -34,8 +34,7 @@ Development and maintenance of the SWAT v2 codebase.
 
 ## Write Access
 
-- All files in the swat-v2 worktree (created via git-pr skill at `~/.swat/repos/swat-v2/`)
-- OPERATION.md frontmatter fields (summary, action_items, status, completed_at)
+- All files in the worktree created via git-pr skill
 
 ## Squad Playbook
 
@@ -55,7 +54,6 @@ Development and maintenance of the SWAT v2 codebase.
 
 1. Push and open PR: `git push origin HEAD && gh pr create --title "..." --body "..." --base master`
 2. PR description must include: What, Why, Changes, How to Test
-3. Record PR link in OPERATION.md summary
 
 ### Constraints
 
@@ -64,6 +62,8 @@ Development and maintenance of the SWAT v2 codebase.
 - **Go module**: `github.com/LangSensei/swat`
 - **Commit style**: conventional commits (feat:, fix:, refactor:, docs:, etc.)
 - **One PR per operation** — keep changes focused
+
+No report.html needed — the PR itself is the deliverable.
 
 ## Output Schema
 

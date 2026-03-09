@@ -1,10 +1,15 @@
 # Changelog
 
+## 1.2.0
+
+- Remove PROTOCOL-redundant content (seal steps, report generation, Write Access duplication)
+- Write Access: only squad-specific paths
+- Playbook: delivery section simplified (PROTOCOL handles seal)
+
 ## 1.1.0
 
-- Standardize to TEMPLATE format (Domain, Boundary, Write Access, Squad Playbook, Output Schema)
+- Standardize to TEMPLATE format
 - Frontmatter name to kebab-case (`swat-dev`)
-- Workflow/Constraints merged into Squad Playbook
 
 ## 1.0.0
 
