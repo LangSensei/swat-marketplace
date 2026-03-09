@@ -7,7 +7,7 @@ dependencies:
   mcps: []
 ---
 
-# a-share-analyst
+# A-Share Analyst Squad
 
 ## Domain
 

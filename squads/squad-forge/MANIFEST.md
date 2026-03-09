@@ -7,7 +7,7 @@ dependencies:
   mcps: []
 ---
 
-# squad-forge
+# Squad Forge Squad
 
 ## Domain
 

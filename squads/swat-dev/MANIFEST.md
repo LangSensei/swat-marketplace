@@ -7,7 +7,7 @@ dependencies:
   mcps: []
 ---
 
-# swat-dev
+# SWAT Dev Squad
 
 ## Domain
 
