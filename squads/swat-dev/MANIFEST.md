@@ -63,6 +63,14 @@ Development and maintenance of the SWAT v2 codebase.
 - **Commit style**: conventional commits (feat:, fix:, refactor:, docs:, etc.)
 - **One PR per operation** — keep changes focused
 
+### Best Practices
+
+- **Minimal change** — one PR solves one problem, don't bundle unrelated changes
+- **Read before write** — understand existing architecture and conventions before making changes
+- **Compile check** — run `go build` after every change, commit only when it passes
+- **Backward compatible** — new features must not break existing operations or squads
+- **OPERATION.MD is a contract** — template field changes affect all squads, consider impact carefully
+
 Report should include: design decisions, implementation approach, justifications for key choices, and a summary of changes made.
 
 ## Output Schema
