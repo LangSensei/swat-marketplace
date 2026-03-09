@@ -2,7 +2,6 @@
 name: SWAT Dev
 version: "1.0.0"
 description: Self-development squad for the SWAT system — implements features, fixes bugs, and opens PRs on the swat-v2 repository
-repo: "https://github.com/LangSensei/swat-v2"
 dependencies:
   skills: [go-dev, git-pr, planning-with-files]
   mcps: []
@@ -36,13 +35,15 @@ Development and maintenance of the SWAT v2 codebase.
 ## Workflow
 
 1. Read OPERATION.md for the task brief
-2. Understand the current codebase structure
-3. Plan the changes (use planning-with-files skill for complex tasks)
-4. Implement changes on the `swat/{operation-id}` branch
-5. Run `go build` to verify compilation
-6. Commit with clear messages
-7. Push branch and open a PR against `master`
-8. Write PR description: what changed, why, how to test
+2. Clone the repository: `git clone https://github.com/LangSensei/swat-v2.git repo && cd repo`
+3. Create a feature branch: `git checkout -b swat/{operation-id}`
+4. Understand the codebase structure (read main.go, commander/, mcp/)
+5. Plan the changes (use planning-with-files skill for complex tasks)
+6. Implement changes
+7. Verify: `PATH=/usr/local/go/bin:$PATH go build -o /dev/null .`
+8. Commit with conventional commit messages
+9. Push and open PR: `git push origin HEAD && gh pr create --title "..." --body "..." --base master`
+10. Record PR link in OPERATION.md summary
 
 ## Constraints
 
