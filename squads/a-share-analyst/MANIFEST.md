@@ -146,5 +146,4 @@ Captain must fill these frontmatter fields in `OPERATION.md` during the operatio
 
 ```yaml
 summary: # Key findings in one line (e.g., "PE 15.6x, ROE 18.2%, 建议持有")
-action_items: [] # Follow-up suggestions (e.g., ["Monitor Q2 earnings", "Review if PE > 20x"])
 ```

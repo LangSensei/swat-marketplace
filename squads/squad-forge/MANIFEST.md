@@ -77,5 +77,4 @@ Captain must fill these frontmatter fields in `OPERATION.md` during the operatio
 
 ```yaml
 summary: # PR link and what was created (e.g., "PR #4: new company-intel squad + web-scrape skill")
-action_items: [] # Follow-up items (e.g., ["Install squad after merge", "Test with sample dispatch"])
 ```

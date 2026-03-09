@@ -71,5 +71,4 @@ Captain must fill these frontmatter fields in `OPERATION.md` during the operatio
 
 ```yaml
 summary: # PR link and brief description (e.g., "PR #17: fix scheduler timezone handling")
-action_items: [] # Follow-up items (e.g., ["Merge after review", "Tag new release"])
 ```

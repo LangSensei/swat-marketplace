@@ -7,14 +7,20 @@ dependencies:                      # omit block if no dependencies
   mcps: [{mcp-names}]
 ---
 
-# {squad-name}
+# {Squad Name} Squad               <!-- display name, can differ from frontmatter name -->
 
 ## Domain
 {Detailed scope — what operations, services, or codebases this squad handles.}
 
 ## Boundary
-- {What the squad DOES — list capabilities}
-- Does NOT {what the squad does NOT do — explicit exclusions}
+
+**In scope:**
+- {capability 1}
+- {capability 2}
+
+**Out of scope:**
+- {exclusion 1}
+- {exclusion 2}
 
 ## Write Access
 - {paths the squad can write to, or "(none — all interactions via API)" if API-only}
@@ -26,5 +32,4 @@ dependencies:                      # omit block if no dependencies
 Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
 ```yaml
 {field}: # {description}
-action_items: [] # Follow-up steps
 ```
