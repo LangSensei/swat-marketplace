@@ -1,6 +1,6 @@
 ---
 name: eastmoney-data
-version: "1.0.0"
+version: "1.0.1"
 description: Fetch A-share stock data from East Money (东方财富) public APIs
 dependencies:
   skills: []
