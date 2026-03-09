@@ -1,13 +1,13 @@
 ---
 name: swat-dev
-version: "1.0.1"
+version: "1.1.0"
 description: Self-development squad for the SWAT system — implements features, fixes bugs, and opens PRs on the swat-v2 repository
 dependencies:
   skills: [go-dev, git-pr]
   mcps: []
 ---
 
-# SWAT Dev Squad
+# swat-dev
 
 ## Domain
 
@@ -32,33 +32,44 @@ Development and maintenance of the SWAT v2 codebase.
 - Changing CI/CD workflows without explicit request
 - Modifying other repositories
 
-## Workflow
+## Write Access
 
-1. Read OPERATION.md for the task brief
-2. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat-v2/`, worktree into `repo/`
-3. Understand the codebase structure (read main.go, commander/, mcp/)
-4. Implement changes
-5. Verify: `PATH=/usr/local/go/bin:$PATH go build -o /dev/null .`
-6. Commit with conventional commit messages
-7. Push and open PR: `git push origin HEAD && gh pr create --title "..." --body "..." --base master`
-8. Record PR link in OPERATION.md summary
+- All files in the swat-v2 worktree (created via git-pr skill at `~/.swat/repos/swat-v2/`)
+- OPERATION.md frontmatter fields (summary, action_items, status, completed_at)
 
-## Constraints
+## Squad Playbook
+
+### Setup
+
+1. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat-v2/`, worktree into `repo/`
+2. Repository: `https://github.com/LangSensei/swat-v2`
+
+### Development
+
+1. Read the codebase structure: `main.go`, `commander/`, `mcp/`, `plugin/`
+2. Implement changes following go-dev skill conventions
+3. Verify compilation: `PATH=/usr/local/go/bin:$PATH go build -o /dev/null .`
+4. Commit with conventional commit messages (see git-pr skill)
+
+### Delivery
+
+1. Push and open PR: `git push origin HEAD && gh pr create --title "..." --body "..." --base master`
+2. PR description must include: What, Why, Changes, How to Test
+3. Record PR link in OPERATION.md summary
+
+### Constraints
 
 - **Never push directly to master** — always open a PR
 - **All code and markdown in English** — no Chinese in source files
 - **Go module**: `github.com/LangSensei/swat`
-- **Build check**: `PATH=/usr/local/go/bin:$PATH go build -o /dev/null .` must pass
 - **Commit style**: conventional commits (feat:, fix:, refactor:, docs:, etc.)
 - **One PR per operation** — keep changes focused
 
-## Output
+## Output Schema
 
-- A pull request on `https://github.com/LangSensei/swat-v2`
-- PR link recorded in OPERATION.md summary
-- `status: completed` set after PR is opened (not after merge)
+Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
 
-## Report
-
-No report.html needed. The PR itself is the deliverable.
-Set completion marker: write `status: completed` and `summary:` in OPERATION.md after PR is opened.
+```yaml
+summary: # PR link and brief description (e.g., "PR #17: fix scheduler timezone handling")
+action_items: [] # Follow-up items (e.g., ["Merge after review", "Tag new release"])
+```

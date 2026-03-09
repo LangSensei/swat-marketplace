@@ -11,7 +11,7 @@ dependencies:
 
 ## Domain
 
-{What area this squad covers — detailed scope of operations.}
+{Detailed scope — what operations, services, or codebases this squad handles.}
 
 ## Boundary
 
@@ -23,24 +23,20 @@ dependencies:
 - {exclusion 1}
 - {exclusion 2}
 
-<!-- Choose the sections below that fit your squad type. Not all are required. -->
-<!-- Analysis/research squads: Playbook, Output -->
-<!-- Dev squads: Workflow, Constraints, Output -->
-<!-- All squads must have: Domain, Boundary -->
+## Write Access
 
-## Playbook
+{Paths the squad can write to, or "(none — all interactions via API)" if API-only.}
+
+## Squad Playbook
 
 {Domain knowledge, API endpoints, workflows, operational guidance.
-Use ### subsections to organize. Good for analysis/research squads.}
+Use ### subsections to organize content — do not create additional ## sections.}
 
-## Workflow
+## Output Schema
 
-{Numbered steps the Captain follows. Good for dev/process squads.}
+Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
 
-## Constraints
-
-{Hard rules and limitations the Captain must follow.}
-
-## Output
-
-{What the squad produces — report format, deliverables, completion criteria.}
+```yaml
+summary: # Brief result summary
+action_items: [] # Follow-up steps
+```

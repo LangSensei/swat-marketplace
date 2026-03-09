@@ -1,8 +1,11 @@
 # Changelog
 
-## 1.1.1
+## 1.2.0
 
-- Standardize frontmatter name to kebab-case (`a-share-analyst`)
+- Standardize to TEMPLATE format (Domain, Boundary, Write Access, Squad Playbook, Output Schema)
+- Frontmatter name to kebab-case (`a-share-analyst`)
+- General rules moved into Squad Playbook
+- Added Output Schema with expected OPERATION.md fields
 
 ## 1.1.0 (2026-03-09)
 

@@ -1,13 +1,13 @@
 ---
 name: a-share-analyst
-version: "1.1.1"
+version: "1.2.0"
 description: A-share stock analysis — technical, fundamental, moat assessment, valuation, and portfolio synthesis
 dependencies:
   skills: [eastmoney-data, fund-holdings, sina-quote]
   mcps: []
 ---
 
-# A-Share Analyst Squad
+# a-share-analyst
 
 ## Domain
 
@@ -23,7 +23,7 @@ A-share (中国A股) stock market analysis and research.
 - Decision recommendation (hold / add / reduce with reasoning)
 - ETF/fund analysis (holdings decomposition, weighted fundamentals, sector assessment)
 - Stock screening (filter by financial metrics)
-- **Portfolio synthesis** — read multiple completed operation reports and produce a combined portfolio analysis
+- Portfolio synthesis — read multiple completed operation reports and produce a combined portfolio analysis
 - Generate analysis reports with charts and conclusions
 
 **Out of scope:**
@@ -32,7 +32,22 @@ A-share (中国A股) stock market analysis and research.
 - Options/futures/derivatives
 - Hong Kong or US stock markets
 
-## Playbook
+## Write Access
+
+- `report.html` in operation directory
+- OPERATION.md frontmatter fields (summary, action_items, status, completed_at)
+
+## Squad Playbook
+
+### General Rules
+
+- Always use Python for data processing and calculations
+- **Write files using Python**, not shell heredoc (`cat << EOF`). Heredoc with HTML/JS content triggers shell expansion security blocks. Use `with open("report.html", "w") as f: f.write(content)` instead.
+- Install pandas and numpy if not available: `pip install pandas numpy`
+- All monetary values in CNY
+- Present numbers in human-readable format (e.g., 1.2万亿 for market cap)
+- Report language: Chinese (analysis audience is Chinese investors)
+- For portfolio synthesis, the prior reports are in sibling operation directories under the same squad
 
 ### Individual Stock Analysis
 
@@ -95,16 +110,10 @@ When the target is an ETF (code starts with 51xxxx, 15xxxx, 56xxxx, etc.) or the
    - Sector outlook
    - Weighted valuation assessment (cheap/fair/expensive vs history)
    - Clear recommendation: **hold / add / reduce** with reasoning
-9. **Generate report** — Write report.html with:
-   - ETF overview (name, code, tracking index, AUM if available)
-   - Price chart with technical indicators
-   - Holdings breakdown table (top 10 with weight, PE, PB)
-   - Weighted fundamental summary
-   - Cost basis P&L section (if applicable)
-   - Decision recommendation
+9. **Generate report** — Write report.html
 10. **Seal** — Update OPERATION.md status to completed
 
-### Portfolio Synthesis Task
+### Portfolio Synthesis
 
 When the brief mentions "portfolio synthesis" or "组合分析" and provides paths to prior reports:
 
@@ -122,7 +131,7 @@ When the brief mentions "portfolio synthesis" or "组合分析" and provides pat
 5. **Generate report** — Write report.html with portfolio dashboard
 6. **Seal**
 
-### Screening Task
+### Screening
 
 1. **Parse criteria** — Extract screening conditions from task brief
 2. **Fetch stock list** — Use full A-share list API
@@ -131,12 +140,11 @@ When the brief mentions "portfolio synthesis" or "组合分析" and provides pat
 5. **Generate report** — Top matches with key metrics
 6. **Seal**
 
-## Notes
+## Output Schema
 
-- Always use Python for data processing and calculations
-- **Write files using Python**, not shell heredoc (`cat << EOF`). Heredoc with HTML/JS content triggers shell expansion security blocks. Use `with open("report.html", "w") as f: f.write(content)` instead.
-- Install pandas and numpy if not available: `pip install pandas numpy`
-- All monetary values in CNY
-- Present numbers in human-readable format (e.g., 1.2万亿 for market cap)
-- Report language: Chinese (analysis audience is Chinese investors)
-- For portfolio synthesis, the prior reports are in sibling operation directories under the same squad
+Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
+
+```yaml
+summary: # Key findings in one line (e.g., "PE 15.6x, ROE 18.2%, 建议持有")
+action_items: [] # Follow-up suggestions (e.g., ["Monitor Q2 earnings", "Review if PE > 20x"])
+```

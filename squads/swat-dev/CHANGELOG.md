@@ -1,12 +1,13 @@
 # Changelog
 
-## 1.0.1
+## 1.1.0
 
-- Standardize frontmatter name to kebab-case (`swat-dev`)
+- Standardize to TEMPLATE format (Domain, Boundary, Write Access, Squad Playbook, Output Schema)
+- Frontmatter name to kebab-case (`swat-dev`)
+- Workflow/Constraints merged into Squad Playbook
 
 ## 1.0.0
 
 - Initial release
 - SWAT v2 self-development squad
-- Repo worktree integration (requires swat-v2 >= 1.0.9)
-- Skills: go-dev, git-pr, planning-with-files
+- Skills: go-dev, git-pr

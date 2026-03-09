@@ -7,7 +7,7 @@ dependencies:
   mcps: []
 ---
 
-# Squad Forge
+# squad-forge
 
 ## Domain
 
@@ -27,84 +27,55 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 - Installing squads (that's HQ via swat_install)
 - Modifying the PROTOCOL or framework files
 
-## Workflow
+## Write Access
 
-1. Read OPERATION.md for the requirement (what squad/skill to create)
-2. Set up worktree to `swat-marketplace` using git-pr skill
-3. Copy `squads/TEMPLATE.md` as starting point for new squad MANIFEST
-4. Study 2-3 existing squads in `squads/` for reference
-4. Design the squad:
-   - Identify domain and boundary (in scope / out of scope)
-   - Determine skill dependencies (reuse existing skills when possible)
-   - Define workflow steps
-   - Define constraints and output format
-5. Write the files:
-   - `squads/<name>/MANIFEST.md` — frontmatter + full squad definition
-   - `squads/<name>/CHANGELOG.md`
-   - `skills/<name>/SKILL.md` if new skills needed
-   - `skills/<name>/CHANGELOG.md` for each new skill
-6. Push and open PR against `main`
-7. Record PR link in OPERATION.md summary
+- All files in the swat-marketplace worktree (created via git-pr skill at `~/.swat/repos/swat-marketplace/`)
+- OPERATION.md frontmatter fields (summary, action_items, status, completed_at)
 
-## MANIFEST Structure
+## Squad Playbook
 
-Every squad MANIFEST.md must follow this structure:
+### Setup
 
-```yaml
----
-name: Human Readable Name
-version: "1.0.0"
-description: One-line description
-dependencies:
-  skills: [skill-a, skill-b]
-  mcps: []
----
-```
+1. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat-marketplace/`, worktree into `repo/`
+2. Repository: `https://github.com/LangSensei/swat-marketplace`
 
-Body sections:
-- **Domain** — What area this squad covers
-- **Boundary** — In scope / Out of scope (be explicit)
-- **Workflow** — Numbered steps Captain follows
-- **Constraints** — Hard rules and limitations
-- **Output** — What the squad produces
-- **Report** — Whether report.html is needed and completion criteria
+### Creating a Squad
 
-## SKILL Structure
+1. Copy `squads/squad-forge/TEMPLATE.md` to `squads/<new-name>/MANIFEST.md`
+2. Study 2-3 existing squads in `squads/` for reference
+3. Fill in all sections: Domain, Boundary, Write Access, Squad Playbook, Output Schema
+4. Create `squads/<new-name>/CHANGELOG.md`
 
-Every skill SKILL.md must follow this structure:
+### Creating a Skill
 
-```yaml
----
-name: skill-name
-version: "1.0.0"
-description: One-line description
-dependencies:
-  skills: []
----
-```
+1. Study 2-3 existing skills in `skills/` for structure reference
+2. Write `skills/<new-name>/SKILL.md` with frontmatter + practical how-to guide
+3. Skills are reference material for the Captain — be concise, actionable, include copy-paste-ready commands
+4. Create `skills/<new-name>/CHANGELOG.md`
 
-Body: practical how-to guide with code examples. Skills are reference material for the Captain — be concise, actionable, and include copy-paste-ready commands.
-
-## Naming Conventions
+### Naming Conventions
 
 - Squad names: kebab-case, must match folder name (`a-share-analyst`, `swat-dev`)
 - Skill names: kebab-case, must match folder name (`eastmoney-data`, `git-pr`)
 - Frontmatter `name:` field must equal the folder name exactly
 
-## Constraints
+### Delivery
+
+1. Push and open PR against `main`
+2. Record PR link in OPERATION.md summary
+
+### Constraints
 
 - **All content in English** — no Chinese in source files
 - **Reuse existing skills** — don't recreate what already exists
-- **One PR per operation** — keep changes focused
-- **Marketplace repo**: `https://github.com/LangSensei/swat-marketplace`
+- **One PR per operation**
 - **Base branch**: `main`
 
-## Output
+## Output Schema
 
-- A pull request on swat-marketplace
-- PR link recorded in OPERATION.md summary
-- `status: completed` set after PR is opened
+Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
 
-## Report
-
-No report.html needed. The PR itself is the deliverable.
+```yaml
+summary: # PR link and what was created (e.g., "PR #4: new company-intel squad + web-scrape skill")
+action_items: [] # Follow-up items (e.g., ["Install squad after merge", "Test with sample dispatch"])
+```
