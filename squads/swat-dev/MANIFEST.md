@@ -34,7 +34,7 @@ Development and maintenance of the SWAT v2 codebase.
 
 ## Write Access
 
-- All files in the worktree created via git-pr skill
+- `~/.swat/repos/swat-v2/` — worktree created via git-pr skill
 
 ## Squad Playbook
 

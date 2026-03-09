@@ -29,7 +29,7 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 
 ## Write Access
 
-- All files in the worktree created via git-pr skill
+- `~/.swat/repos/swat-marketplace/` — worktree created via git-pr skill
 
 ## Squad Playbook
 

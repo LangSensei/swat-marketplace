@@ -33,7 +33,7 @@ A-share (中国A股) stock market analysis and research.
 
 ## Write Access
 
-(none beyond protocol defaults)
+(none — report and working files stay within the operation directory)
 
 ## Squad Playbook
 
