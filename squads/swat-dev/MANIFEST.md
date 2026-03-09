@@ -1,6 +1,6 @@
 ---
 name: swat-dev
-version: "1.2.0"
+version: "1.1.0"
 description: Self-development squad for the SWAT system — implements features, fixes bugs, and opens PRs on the swat-v2 repository
 dependencies:
   skills: [go-dev, git-pr]

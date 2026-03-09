@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.0
+## 1.1.0
 
 - Standardize to TEMPLATE format (In scope/Out of scope, human-readable title)
 - Remove PROTOCOL-redundant content (seal steps, report generation)
