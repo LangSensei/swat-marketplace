@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0 (2026-03-09)
+
+- Add Mode B: resume existing branch (for fixing review comments on open PRs)
+- Worktree cleanup is now mandatory at seal time (was optional)
+- Add rule: always clean up worktree at seal
+
 ## 1.0.0 (2026-03-09)
 
 - Initial release
