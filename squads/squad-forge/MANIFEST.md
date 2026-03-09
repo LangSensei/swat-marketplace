@@ -38,6 +38,11 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 1. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat-marketplace/`, worktree into `repo/`
 2. Repository: `https://github.com/LangSensei/swat-marketplace`
 
+### References
+
+- **[TEMPLATE.md](https://github.com/LangSensei/swat-v2/blob/master/blueprints/squads/_framework/TEMPLATE.md)** — all new squads must follow this format exactly
+- **[PROTOCOL.md](https://github.com/LangSensei/swat-v2/blob/master/blueprints/squads/_framework/PROTOCOL.md)** — understand what the framework already provides; do not duplicate protocol behavior in MANIFEST
+
 ### Creating a Squad
 
 1. Copy `squads/squad-forge/TEMPLATE.md` to `squads/<new-name>/MANIFEST.md`
@@ -68,7 +73,7 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 - **Reuse existing skills** — don't recreate what already exists
 - **One PR per operation**
 
-No report.html needed — the PR itself is the deliverable.
+Report should include: design decisions, implementation approach, justifications for key choices, and a summary of changes made.
 
 ## Output Schema
 

@@ -63,7 +63,7 @@ Development and maintenance of the SWAT v2 codebase.
 - **Commit style**: conventional commits (feat:, fix:, refactor:, docs:, etc.)
 - **One PR per operation** — keep changes focused
 
-No report.html needed — the PR itself is the deliverable.
+Report should include: design decisions, implementation approach, justifications for key choices, and a summary of changes made.
 
 ## Output Schema
 
