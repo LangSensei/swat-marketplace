@@ -1,6 +1,6 @@
 ---
-name: A-Share Analyst
-version: "1.1.0"
+name: a-share-analyst
+version: "1.1.1"
 description: A-share stock analysis — technical, fundamental, moat assessment, valuation, and portfolio synthesis
 dependencies:
   skills: [eastmoney-data, fund-holdings, sina-quote]

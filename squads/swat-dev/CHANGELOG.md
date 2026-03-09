@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+- Standardize frontmatter name to kebab-case (`swat-dev`)
+
 ## 1.0.0
 
 - Initial release

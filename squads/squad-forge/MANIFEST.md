@@ -1,5 +1,5 @@
 ---
-name: Squad Forge
+name: squad-forge
 version: "1.0.0"
 description: Creates new SWAT squads and skills — generates MANIFEST.md, SKILL.md, and CHANGELOG.md, then opens a PR to the marketplace
 dependencies:
@@ -88,9 +88,9 @@ Body: practical how-to guide with code examples. Skills are reference material f
 
 ## Naming Conventions
 
-- Squad names: lowercase, hyphenated (`a-share-analyst`, `swat-dev`)
-- Skill names: lowercase, hyphenated (`eastmoney-data`, `git-pr`)
-- Keep names short and descriptive
+- Squad names: kebab-case, must match folder name (`a-share-analyst`, `swat-dev`)
+- Skill names: kebab-case, must match folder name (`eastmoney-data`, `git-pr`)
+- Frontmatter `name:` field must equal the folder name exactly
 
 ## Constraints
 
