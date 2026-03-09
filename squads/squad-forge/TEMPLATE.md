@@ -1,8 +1,8 @@
 ---
-name: {squad-name}
+name: {squad-name}                 # kebab-case identifier, matches folder name
 version: "1.0.0"
 description: {one-liner description}
-dependencies:
+dependencies:                      # omit block if no dependencies
   skills: [{skill-names}]
   mcps: [{mcp-names}]
 ---
@@ -10,33 +10,21 @@ dependencies:
 # {squad-name}
 
 ## Domain
-
 {Detailed scope — what operations, services, or codebases this squad handles.}
 
 ## Boundary
-
-**In scope:**
-- {capability 1}
-- {capability 2}
-
-**Out of scope:**
-- {exclusion 1}
-- {exclusion 2}
+- {What the squad DOES — list capabilities}
+- Does NOT {what the squad does NOT do — explicit exclusions}
 
 ## Write Access
-
-{Paths the squad can write to, or "(none — all interactions via API)" if API-only.}
+- {paths the squad can write to, or "(none — all interactions via API)" if API-only}
 
 ## Squad Playbook
-
-{Domain knowledge, API endpoints, workflows, operational guidance.
-Use ### subsections to organize content — do not create additional ## sections.}
+{Domain knowledge, API endpoints, workflows, operational guidance. Use ### subsections to organize content — do not create additional ## sections.}
 
 ## Output Schema
-
 Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
-
 ```yaml
-summary: # Brief result summary
+{field}: # {description}
 action_items: [] # Follow-up steps
 ```
