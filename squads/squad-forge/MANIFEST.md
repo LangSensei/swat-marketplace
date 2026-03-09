@@ -72,6 +72,13 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 - **All content in English** — no Chinese in source files
 - **Reuse existing skills** — don't recreate what already exists
 - **One PR per operation**
+- **Do not duplicate PROTOCOL behavior** — seal steps, report generation instructions, and planning file setup are handled by PROTOCOL.md. MANIFEST should only contain domain-specific knowledge.
+- **Output Schema: squad-specific fields only** — do not include `summary`, `action_items`, `completed_at`, or other fields already in OPERATION.md template
+- **Write Access: squad-specific paths only** — do not list PROTOCOL defaults (operator directory, OPERATION.md). Use `(none — ...)` if no additional paths needed.
+- **Report content as guidance, not instructions** — use "Report should include: ..." to describe what belongs in the report. Do not write "Generate report.html" (PROTOCOL S3 handles that).
+- **Boundary format: In scope / Out of scope** — use `**In scope:**` and `**Out of scope:**` bullet groups
+- **Title: human-readable** — `# {Squad Name} Squad`, can differ from kebab-case frontmatter `name:`
+- **One version bump per PR** — do not bump version in multiple commits within the same PR
 
 Report should include: design decisions, implementation approach, justifications for key choices, and a summary of changes made.
 
