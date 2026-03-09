@@ -1,6 +1,6 @@
 ---
 name: swat-dev
-version: "1.1.0"
+version: "1.2.0"
 description: Self-development squad for the SWAT system — implements features, fixes bugs, and opens PRs on the swat-v2 repository
 dependencies:
   skills: [go-dev, git-pr]
@@ -42,6 +42,7 @@ Development and maintenance of the SWAT v2 codebase.
 
 1. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat-v2/`, worktree into `repo/`
 2. Repository: `https://github.com/LangSensei/swat-v2`
+3. If the brief specifies an existing branch (e.g. fixing review comments), use git-pr Mode B (resume existing branch) instead of creating a new one
 
 ### Development
 
@@ -53,7 +54,9 @@ Development and maintenance of the SWAT v2 codebase.
 ### Delivery
 
 1. Push and open PR: `git push origin HEAD && gh pr create --title "..." --body "..." --base master`
+   - If resuming an existing branch with an open PR, push and comment on the existing PR instead of creating a new one
 2. PR description must include: What, Why, Changes, How to Test
+3. Clean up worktree (mandatory): `cd ~/.swat/repos/swat-v2 && git worktree remove "$(pwd)/repo" --force`
 
 ### Constraints
 
