@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.0
+## 1.2.0 (2026-03-09)
 
 - Standardize to TEMPLATE format (In scope/Out of scope, human-readable title)
 - Remove PROTOCOL-redundant content (seal steps, report generation, Write Access duplication)

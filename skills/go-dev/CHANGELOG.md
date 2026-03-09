@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0
+## 1.0.0 (2026-03-09)
 
 - Initial release
 - Build, test, vet commands
