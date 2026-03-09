@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0 (2026-03-09)
+
+- Add SWAT MCP dependency for cross-squad dispatch
+- Support resuming existing branches (git-pr Mode B) for fixing review comments
+- Mandatory worktree cleanup in delivery phase
+- Handle open PR resume: push and comment instead of creating new PR
+
 ## 1.1.0 (2026-03-09)
 
 - Standardize to TEMPLATE format (In scope/Out of scope, human-readable title)
