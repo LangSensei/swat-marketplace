@@ -20,7 +20,7 @@ Uses the OpenClaw Gateway `/tools/invoke` HTTP API to call the `message` tool. T
 ### Shell (notify.sh)
 
 ```bash
-bash path/to/notify/notify.sh "✅ 分析完成：平安估值合理，建议持有"
+bash path/to/notify/notify.sh "Analysis complete: valuation looks reasonable, recommend hold"
 ```
 
 ### curl (direct)
