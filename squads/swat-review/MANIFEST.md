@@ -1,6 +1,6 @@
 ---
 name: swat-review
-version: "1.0.0"
+version: "1.1.0"
 description: Code review squad — reviews PRs for style, correctness, and consistency, submits inline comments, and dispatches fix operations
 dependencies:
   skills: [git-pr]
