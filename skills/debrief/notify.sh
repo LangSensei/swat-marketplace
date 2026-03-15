@@ -35,7 +35,7 @@ fi
 PORT="${OPENCLAW_GATEWAY_PORT:-18789}"
 TOKEN="${OPENCLAW_GATEWAY_TOKEN:?OPENCLAW_GATEWAY_TOKEN not set}"
 TARGET="${TARGET:-${OPENCLAW_NOTIFY_TARGET:?OPENCLAW_NOTIFY_TARGET not set}}"
-CHANNEL="${CHANNEL:-${OPENCLAW_NOTIFY_CHANNEL:-telegram}}"
+CHANNEL="${CHANNEL:-${OPENCLAW_NOTIFY_CHANNEL:-}}"
 
 # --- JSON escape (pure bash + jq fallback) ---
 json_escape() {
@@ -56,6 +56,12 @@ json_escape() {
 
 JSON_MESSAGE=$(json_escape "$MESSAGE")
 
+# --- Build JSON payload (channel is optional) ---
+CHANNEL_FIELD=""
+if [[ -n "$CHANNEL" ]]; then
+  CHANNEL_FIELD="\"channel\": \"${CHANNEL}\","
+fi
+
 # --- Send with timeout and retry ---
 MAX_RETRIES=2
 RETRY=0
@@ -68,7 +74,7 @@ while [[ $RETRY -le $MAX_RETRIES ]]; do
       \"tool\": \"message\",
       \"args\": {
         \"action\": \"send\",
-        \"channel\": \"${CHANNEL}\",
+        ${CHANNEL_FIELD}
         \"target\": \"${TARGET}\",
         \"message\": ${JSON_MESSAGE}
       }
