@@ -85,15 +85,10 @@ Code review for the SWAT v2 codebase. Analyzes pull requests for code quality an
 
 ### Post-Review Actions
 
-- **If approved:** No further action needed
-- **If changes requested:** Use `swat_dispatch` MCP tool to create a fix operation:
-  ```
-  swat_dispatch({
-    brief: "Fix review comments on PR #<number> (branch: <branch-name>)",
-    details: "PR: <url>\n\nReview comments:\n- <summary of each issue>"
-  })
-  ```
-  Always include the branch name so swat-dev can resume the existing branch instead of creating a new one.
+- **If approved:** No further action needed.
+- **If changes requested:** Include the review comments and branch name in your debrief for the next squad to pick up.
+
+**Debrief hint:** Approved PRs → notify. Changes requested → dispatch (include branch name so swat-dev can resume the existing branch).
 
 ### Review Standards
 
