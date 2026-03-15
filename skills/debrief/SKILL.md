@@ -1,6 +1,6 @@
 ---
 name: debrief
-version: "1.0.0"
+version: "1.1.0"
 description: Operation completion gate — notify the user or dispatch the next task
 dependencies:
   skills: []

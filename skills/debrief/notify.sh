@@ -16,11 +16,11 @@ while [[ $# -gt 0 ]]; do
     --help|-h)
       echo "Usage: notify.sh \"message\" [--target CHAT_ID] [--channel CHANNEL]"
       echo ""
-      echo "Environment variables:"
-      echo "  OPENCLAW_GATEWAY_PORT   Gateway port (default: 18789)"
-      echo "  OPENCLAW_GATEWAY_TOKEN  Gateway auth token (required)"
-      echo "  OPENCLAW_NOTIFY_TARGET  Default recipient chat ID"
-      echo "  OPENCLAW_NOTIFY_CHANNEL Default channel (default: telegram)"
+      echo "Environment variables (all optional — falls back to ~/.openclaw/openclaw.json):"
+      echo "  OPENCLAW_GATEWAY_PORT   Gateway port (default: from config or 18789)"
+      echo "  OPENCLAW_GATEWAY_TOKEN  Gateway auth token (default: from config)"
+      echo "  OPENCLAW_NOTIFY_TARGET  Default recipient chat ID (default: first allowFrom in config)"
+      echo "  OPENCLAW_NOTIFY_CHANNEL Default channel (optional)"
       exit 0
       ;;
     *) MESSAGE="$1"; shift ;;
@@ -32,9 +32,36 @@ if [[ -z "$MESSAGE" ]]; then
   exit 1
 fi
 
-PORT="${OPENCLAW_GATEWAY_PORT:-18789}"
-TOKEN="${OPENCLAW_GATEWAY_TOKEN:?OPENCLAW_GATEWAY_TOKEN not set}"
-TARGET="${TARGET:-${OPENCLAW_NOTIFY_TARGET:?OPENCLAW_NOTIFY_TARGET not set}}"
+# --- Resolve config from env or ~/.openclaw/openclaw.json ---
+OC_CONFIG="$HOME/.openclaw/openclaw.json"
+
+read_oc_config() {
+  # Extract a value from openclaw.json using node (always available in CC sessions)
+  local key="$1"
+  if [[ -f "$OC_CONFIG" ]] && command -v node &>/dev/null; then
+    node -e "
+      const fs = require('fs');
+      const raw = fs.readFileSync('$OC_CONFIG', 'utf8');
+      // openclaw.json uses JS object syntax (unquoted keys), eval it
+      const cfg = eval('(' + raw + ')');
+      const val = key => key.split('.').reduce((o,k) => o && o[k], cfg);
+      process.stdout.write(String(val('$key') || ''));
+    " 2>/dev/null
+  fi
+}
+
+PORT="${OPENCLAW_GATEWAY_PORT:-$(read_oc_config 'gateway.port')}"
+PORT="${PORT:-18789}"
+TOKEN="${OPENCLAW_GATEWAY_TOKEN:-$(read_oc_config 'gateway.auth.token')}"
+if [[ -z "$TOKEN" ]]; then
+  echo "❌ Cannot resolve gateway token from env or $OC_CONFIG" >&2
+  exit 1
+fi
+TARGET="${TARGET:-${OPENCLAW_NOTIFY_TARGET:-$(read_oc_config 'channels.telegram.allowFrom.0')}}"
+if [[ -z "$TARGET" ]]; then
+  echo "❌ Cannot resolve notify target from env, args, or $OC_CONFIG" >&2
+  exit 1
+fi
 CHANNEL="${CHANNEL:-${OPENCLAW_NOTIFY_CHANNEL:-}}"
 
 # --- JSON escape (pure bash + jq fallback) ---
