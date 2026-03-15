@@ -1,6 +1,6 @@
 ---
 name: swat-dev
-version: "1.3.0"
+version: "1.4.0"
 description: Self-development squad for the SWAT system — implements features, fixes bugs, and opens PRs on the swat-v2 repository
 dependencies:
   skills: [go-dev, git-pr]
@@ -57,13 +57,8 @@ Development and maintenance of the SWAT v2 codebase.
    - If resuming an existing branch with an open PR, push and comment on the existing PR instead of creating a new one
 2. PR description must include: What, Why, Changes, How to Test
 3. Clean up worktree (mandatory): `cd ~/.swat/repos/swat-v2 && git worktree remove "$(pwd)/repo" --force`
-4. Dispatch review via SWAT MCP:
-   ```
-   swat_dispatch({
-     brief: "Review PR #<number> on swat-v2 (branch: <branch-name>)",
-     details: "PR: <url>\n\nSummary: <what the PR does>"
-   })
-   ```
+
+**Debrief hint:** Opening a PR typically means review is needed — prefer dispatch over notify.
 
 ### Constraints
 
