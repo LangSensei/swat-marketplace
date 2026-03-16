@@ -1,7 +1,7 @@
 ---
 name: xiaohongshu
 description: Xiaohongshu (小红书) browser automation skill. Use when browsing/searching content, extracting post data, or interacting with the platform via playwright. Requires pre-authenticated storage state.
-prereq: references/setup.md
+prereq: references/SETUP.md
 ---
 
 # Xiaohongshu Skill
