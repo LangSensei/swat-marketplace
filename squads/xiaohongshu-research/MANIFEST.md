@@ -4,7 +4,7 @@ version: "1.0.0"
 description: Xiaohongshu research and knowledge extraction — search posts, rank relevant results, synthesize structured notes
 dependencies:
   skills: [xiaohongshu]
-  mcps: [playwright]
+  mcps: []
 ---
 
 # Xiaohongshu Research Squad
