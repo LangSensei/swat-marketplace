@@ -62,7 +62,7 @@ if (!hasFlag('--login')) {
 
 const { chromium } = require('playwright');
 
-const SCREENSHOT_DIR = getArg('--screenshot-dir', '/tmp/xhs-auth');
+const SCREENSHOT_DIR = getArg('--screenshot-dir', path.join(require('os').tmpdir(), `xhs-auth-${process.getuid()}`));
 const TIMEOUT = parseInt(getArg('--timeout', '300')) * 1000;
 
 fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
