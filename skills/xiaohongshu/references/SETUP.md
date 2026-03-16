@@ -58,7 +58,7 @@ If the file exists, auth is likely valid (may still be expired — squads will d
 ### Steps
 1. Run the login script:
    ```bash
-   NODE_PATH=$(npm root -g) node scripts/login.js --timeout 120
+   NODE_PATH=$(npm root -g) node scripts/auth.js --timeout 120
    ```
 2. Script outputs `QR_SCREENSHOT=<path>` — send this image to the user
 3. User scans QR code with Xiaohongshu mobile app
