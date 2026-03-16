@@ -12,7 +12,7 @@ function getArg(name, defaultVal) {
   return idx >= 0 && args[idx + 1] ? args[idx + 1] : defaultVal;
 }
 
-const STATE_PATH = getArg('--state-path', path.join(process.env.HOME, '.swat/browser-state-xhs.json'));
+const STATE_PATH = getArg('--state-path', path.join(process.env.HOME, '.swat/playwright/storage-state.json'));
 const SCREENSHOT_DIR = getArg('--screenshot-dir', '/tmp/xhs-login');
 const TIMEOUT = parseInt(getArg('--timeout', '120')) * 1000;
 

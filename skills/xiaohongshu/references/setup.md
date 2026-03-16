@@ -8,7 +8,7 @@ Xiaohongshu requires QR code login via the mobile app.
 
 ### Check
 ```bash
-stat ~/.swat/browser-state-xhs.json
+stat ~/.swat/playwright/storage-state.json
 ```
 If the file exists, auth is likely valid (may still be expired — squads will detect and fail if so).
 

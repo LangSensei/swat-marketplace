@@ -8,11 +8,11 @@ prereq: references/setup.md
 
 ## Storage State
 
-This skill requires a pre-authenticated browser state at `~/.swat/browser-state-xhs.json`. If missing or expired, fail the operation — debrief will notify the user to re-authenticate via OpenClaw.
+This skill requires a pre-authenticated browser state at `~/.swat/playwright/storage-state.json`. If missing or expired, fail the operation — debrief will notify the user to re-authenticate via OpenClaw.
 
 Use with playwright MCP:
 ```
---storage-state ~/.swat/browser-state-xhs.json
+--storage-state ~/.swat/playwright/storage-state.json
 ```
 
 ## Common Operations
