@@ -1,19 +1,54 @@
 #!/usr/bin/env node
-// xiaohongshu-login.js — Login to Xiaohongshu via QR code
-// Usage: node xiaohongshu-login.js [--state-path <path>] [--screenshot-dir <dir>] [--timeout <seconds>]
+// auth.js — Xiaohongshu authentication helper
+// Usage:
+//   node auth.js --check                    Check if storage state is valid
+//   node auth.js --login [--timeout 120]    QR code login flow
 
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
 
 const args = process.argv.slice(2);
+function hasFlag(name) { return args.includes(name); }
 function getArg(name, defaultVal) {
   const idx = args.indexOf(name);
   return idx >= 0 && args[idx + 1] ? args[idx + 1] : defaultVal;
 }
 
 const STATE_PATH = getArg('--state-path', path.join(process.env.HOME, '.swat/playwright/storage-state.json'));
-const SCREENSHOT_DIR = getArg('--screenshot-dir', '/tmp/xhs-login');
+
+// --- Check mode ---
+if (hasFlag('--check')) {
+  if (!fs.existsSync(STATE_PATH)) {
+    console.log('MISSING');
+    process.exit(1);
+  }
+  try {
+    const state = JSON.parse(fs.readFileSync(STATE_PATH, 'utf8'));
+    const now = Date.now() / 1000;
+    const valid = (state.cookies || []).filter(c =>
+      c.domain.includes('xiaohongshu') && (c.expires === -1 || c.expires > now)
+    );
+    if (valid.length > 0) {
+      console.log('OK');
+      process.exit(0);
+    } else {
+      console.log('EXPIRED');
+      process.exit(1);
+    }
+  } catch (e) {
+    console.log('INVALID');
+    process.exit(1);
+  }
+}
+
+// --- Login mode ---
+if (!hasFlag('--login')) {
+  console.error('Usage: node auth.js --check | --login [--timeout 120] [--state-path <path>]');
+  process.exit(1);
+}
+
+const SCREENSHOT_DIR = getArg('--screenshot-dir', '/tmp/xhs-auth');
 const TIMEOUT = parseInt(getArg('--timeout', '120')) * 1000;
 
 fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
@@ -27,25 +62,17 @@ fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
   const page = await context.newPage();
 
   try {
-    // Step 1: Navigate to xiaohongshu
     await page.goto('https://www.xiaohongshu.com', { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(2000);
 
-    // Step 2: Look for login trigger — click if found
-    const loginSelectors = ['text=登录', '.login-btn', '[class*="login"]', 'text=Log in'];
-    for (const sel of loginSelectors) {
+    // Click login button if present
+    for (const sel of ['text=登录', '.login-btn', '[class*="login"]', 'text=Log in']) {
       const btn = await page.$(sel);
-      if (btn) {
-        await btn.click();
-        await page.waitForTimeout(3000);
-        break;
-      }
+      if (btn) { await btn.click(); await page.waitForTimeout(3000); break; }
     }
 
-    // Step 3: Find QR code image
+    // Capture QR code
     await page.screenshot({ path: path.join(SCREENSHOT_DIR, 'qr-page.png') });
-
-    // Try to locate the QR code specifically
     const qrEl = await page.$('img[src*="qrcode"]') || await page.$('.qrcode-img') || await page.$('[class*="qr"] img');
     if (qrEl) {
       await qrEl.screenshot({ path: path.join(SCREENSHOT_DIR, 'qr-code.png') });
@@ -56,36 +83,25 @@ fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
     console.log('PAGE_SCREENSHOT=' + path.join(SCREENSHOT_DIR, 'qr-page.png'));
     console.log('WAITING_FOR_SCAN');
 
-    // Step 4: Poll for login success
+    // Poll for login success
     const start = Date.now();
     while (Date.now() - start < TIMEOUT) {
       await page.waitForTimeout(3000);
-
-      // Check URL change (logged in users get redirected)
-      const url = page.url();
-
-      // Check for user-specific elements that only appear after real login
       const loggedIn = await page.evaluate(() => {
-        // Look for cookie that indicates login
         const hasCookie = document.cookie.includes('customer_id') || document.cookie.includes('access-token');
-        // Look for user menu that only appears when logged in
         const userMenu = document.querySelector('[class*="user-menu"]') || document.querySelector('[class*="sidebar-user"]');
-        // Look for "发布" button which only shows for logged-in users
         const publishBtn = document.querySelector('[class*="publish"]');
         return hasCookie || (userMenu !== null) || (publishBtn !== null);
       });
-
       if (loggedIn) {
         console.log('LOGIN_SUCCESS');
+        fs.mkdirSync(path.dirname(STATE_PATH), { recursive: true });
         await context.storageState({ path: STATE_PATH });
         console.log('STATE_SAVED=' + STATE_PATH);
         break;
       }
-
-      // Save periodic screenshot for debugging
       await page.screenshot({ path: path.join(SCREENSHOT_DIR, 'current.png') });
     }
-
     if (Date.now() - start >= TIMEOUT) {
       console.log('LOGIN_TIMEOUT');
     }

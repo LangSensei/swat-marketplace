@@ -51,22 +51,14 @@ Xiaohongshu requires QR code login via the mobile app.
 
 ### Check
 ```bash
-node -e "
-const fs = require('fs');
-const f = process.env.HOME + '/.swat/playwright/storage-state.json';
-if (!fs.existsSync(f)) { console.log('MISSING'); process.exit(1); }
-const s = JSON.parse(fs.readFileSync(f));
-const now = Date.now() / 1000;
-const valid = s.cookies.filter(c => c.domain.includes('xiaohongshu') && (c.expires === -1 || c.expires > now));
-console.log(valid.length > 0 ? 'OK' : 'EXPIRED');
-if (valid.length === 0) process.exit(1);
-"
+NODE_PATH=$(npm root -g) node scripts/auth.js --check
 ```
+Outputs `OK`, `EXPIRED`, or `MISSING`.
 
 ### Steps
-1. Run the login script:
+1. Run the auth script:
    ```bash
-   NODE_PATH=$(npm root -g) node scripts/auth.js --timeout 120
+   NODE_PATH=$(npm root -g) node scripts/auth.js --login --timeout 120
    ```
 2. Script outputs `QR_SCREENSHOT=<path>` — send this image to the user
 3. User scans QR code with Xiaohongshu mobile app
