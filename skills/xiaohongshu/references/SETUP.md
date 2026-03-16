@@ -51,9 +51,17 @@ Xiaohongshu requires QR code login via the mobile app.
 
 ### Check
 ```bash
-stat ~/.swat/playwright/storage-state.json
+node -e "
+const fs = require('fs');
+const f = process.env.HOME + '/.swat/playwright/storage-state.json';
+if (!fs.existsSync(f)) { console.log('MISSING'); process.exit(1); }
+const s = JSON.parse(fs.readFileSync(f));
+const now = Date.now() / 1000;
+const valid = s.cookies.filter(c => c.domain.includes('xiaohongshu') && (c.expires === -1 || c.expires > now));
+console.log(valid.length > 0 ? 'OK' : 'EXPIRED');
+if (valid.length === 0) process.exit(1);
+"
 ```
-If the file exists, auth is likely valid (may still be expired — squads will detect and fail if so).
 
 ### Steps
 1. Run the login script:
