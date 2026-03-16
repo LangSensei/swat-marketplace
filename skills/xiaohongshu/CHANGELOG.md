@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.1
+- auth.js: screenshot dir now uses UID suffix (`xhs-auth-<uid>`) to avoid permission conflicts in multi-user environments
+
 ## 1.1.0
 - auth.js: support optional SMS verification after QR scan
 - SMS popup detected via `input.r-input-inner` (no phase state machine needed)
