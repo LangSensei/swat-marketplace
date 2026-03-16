@@ -1,6 +1,6 @@
 ---
 name: xiaohongshu-research
-version: "1.0.0"
+version: "1.1.0"
 description: Xiaohongshu research and knowledge extraction — search posts, rank relevant results, synthesize structured notes
 dependencies:
   skills: [xiaohongshu]
@@ -55,11 +55,20 @@ Xiaohongshu topic research, post analysis, and structured knowledge extraction f
 ### Research Workflow
 
 1. **Parse the brief** — Identify the query, desired learning goal, and any ranking criteria such as recency, engagement, or authority.
-2. **Search the topic** — Use the `xiaohongshu` skill to search for the keyword or topic and gather a candidate set of posts.
+2. **Search the topic** — Use the `xiaohongshu` skill CLI scripts to search (not playwright MCP directly — scripts have built-in anti-detection):
+   ```bash
+   NODE_PATH=$(npm root -g) node skills/xiaohongshu/scripts/search.js \
+     --keyword "关键词" --output results.json --screenshot search.png
+   ```
 3. **Rank results** — Select the most relevant 5-10 posts using the brief's priorities and observable signals such as engagement, topical fit, and author credibility.
-4. **Extract evidence** — For each selected post, capture factual metadata and a concise summary of the core claims, examples, and noteworthy details.
+4. **Extract evidence** — For each selected post, fetch detail and screenshot:
+   ```bash
+   NODE_PATH=$(npm root -g) node skills/xiaohongshu/scripts/detail.js \
+     --id <note_id> --xsec-token <token> --output detail-<id>.json --screenshot detail-<id>.png
+   ```
+   Capture factual metadata and a concise summary of the core claims, examples, and noteworthy details.
 5. **Synthesize knowledge** — Group repeated ideas into themes, note disagreement or uncertainty, and turn post-level evidence into structured learning notes.
-6. **Deliver the report** — Present the query, selection criteria, analyzed posts, synthesized themes, and practical takeaways.
+6. **Deliver the report** — Embed screenshots in `report.html` as base64 data URIs (`<img src="data:image/png;base64,...">`) so the report is fully self-contained. Do NOT use file path references. Screenshots of key posts make the report visually rich and verifiable.
 
 ### Post Selection Guidance
 
