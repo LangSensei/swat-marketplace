@@ -1,7 +1,10 @@
 # Changelog
 
-## 1.0.0 (2026-03-16)
+## 1.1.0
+- auth.js: support optional SMS verification after QR scan
+- SMS popup detected via `input.r-input-inner` (no phase state machine needed)
+- Code delivered via signal file (`/tmp/xhs-sms-code.txt`), auto-submits
+- SETUP.md updated with full login flow documentation
 
-- Initial release
-- Add Xiaohongshu browser automation skill for search, post detail, profile, and trending workflows
-- Document authentication, storage state, and rate-limit handling expectations
+## 1.0.0
+- Initial release: QR code login, storage-state persistence, --check/--login modes
