@@ -1,0 +1,5 @@
+{
+  "type": "stdio",
+  "command": "bash",
+  "args": ["-c", "npx @playwright/mcp@latest --headless --storage-state $HOME/.swat/playwright/storage-state.json"]
+}
