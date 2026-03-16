@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0
+- search.js: keyword search with anti-captcha route interception, stealth patches, API response capture
+- detail.js: note detail extraction (API capture + DOM fallback)
+- SKILL.md: document CLI scripts usage, anti-detection features
+
 ## 1.1.1
 - auth.js: screenshot dir now uses UID suffix (`xhs-auth-<uid>`) to avoid permission conflicts in multi-user environments
 
