@@ -2,7 +2,19 @@
 // auth.js — Xiaohongshu authentication helper
 // Usage:
 //   node auth.js --check                    Check if storage state is valid
-//   node auth.js --login [--timeout 180]    QR code login flow
+//   node auth.js --login [--timeout 300]    QR code login flow (interactive)
+//
+// Login flow:
+//   1. Opens xiaohongshu.com, clicks login, captures QR code screenshot
+//   2. Outputs QR_SCREENSHOT=<path> — operator sends this to user to scan
+//   3. User scans QR with Xiaohongshu app and confirms on phone
+//   4. Either:
+//      a) Direct success — cookies set, done
+//      b) SMS verification popup appears (overlay on top of login modal)
+//         Script outputs SMS_VERIFICATION_NEEDED
+//         Write 6-digit code to --sms-code-path (default /tmp/xhs-sms-code.txt)
+//         Code auto-submits after filling (no button click needed)
+//   5. On success: saves storage state and outputs LOGIN_SUCCESS + STATE_SAVED=<path>
 
 const path = require('path');
 const fs = require('fs');
@@ -15,6 +27,7 @@ function getArg(name, defaultVal) {
 }
 
 const STATE_PATH = getArg('--state-path', path.join(process.env.HOME, '.swat/playwright/storage-state.json'));
+const SMS_CODE_PATH = getArg('--sms-code-path', '/tmp/xhs-sms-code.txt');
 
 // --- Check mode ---
 if (hasFlag('--check')) {
@@ -43,16 +56,17 @@ if (hasFlag('--check')) {
 
 // --- Login mode ---
 if (!hasFlag('--login')) {
-  console.error('Usage: node auth.js --check | --login [--timeout 180] [--state-path <path>]');
+  console.error('Usage: node auth.js --check | --login [--timeout 300] [--state-path <path>] [--sms-code-path <path>]');
   process.exit(1);
 }
 
 const { chromium } = require('playwright');
 
 const SCREENSHOT_DIR = getArg('--screenshot-dir', '/tmp/xhs-auth');
-const TIMEOUT = parseInt(getArg('--timeout', '180')) * 1000;
+const TIMEOUT = parseInt(getArg('--timeout', '300')) * 1000;
 
 fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
+if (fs.existsSync(SMS_CODE_PATH)) fs.unlinkSync(SMS_CODE_PATH);
 
 (async () => {
   const browser = await chromium.launch({ headless: true });
@@ -63,19 +77,14 @@ fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
   const page = await ctx.newPage();
 
   try {
-    // Step 1: Navigate (60s timeout — xiaohongshu loads slowly)
+    // Step 1: Navigate
     await page.goto('https://www.xiaohongshu.com', { waitUntil: 'domcontentloaded', timeout: 60000 });
     await page.waitForTimeout(3000);
 
-    // Step 2: Click login button
-    const loginSelectors = ['text=登录', '.login-btn', '[class*="login"]', 'text=Log in'];
-    for (const sel of loginSelectors) {
+    // Step 2: Click login
+    for (const sel of ['text=登录', '.login-btn', '[class*="login"]']) {
       const btn = await page.$(sel);
-      if (btn) {
-        await btn.click();
-        await page.waitForTimeout(3000);
-        break;
-      }
+      if (btn) { await btn.click(); await page.waitForTimeout(3000); break; }
     }
 
     // Step 3: Capture QR code
@@ -90,18 +99,20 @@ fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
     console.log('PAGE_SCREENSHOT=' + path.join(SCREENSHOT_DIR, 'qr-page.png'));
     console.log('WAITING_FOR_SCAN');
 
-    // Step 4: Poll for login success using ctx.cookies()
+    // Step 4: Poll for auth success or SMS verification
     const start = Date.now();
+    let smsNotified = false;
+
     while (Date.now() - start < TIMEOUT) {
       await page.waitForTimeout(3000);
+      await page.screenshot({ path: path.join(SCREENSHOT_DIR, 'current.png') });
 
-      // Check cookies for auth tokens
+      // Check login success
       const cookies = await ctx.cookies();
       const hasAuth = cookies.some(c =>
         c.domain.includes('xiaohongshu') &&
         (c.name.includes('customer') || c.name.includes('access') || c.name.includes('token'))
       );
-
       if (hasAuth) {
         console.log('LOGIN_SUCCESS');
         fs.mkdirSync(path.dirname(STATE_PATH), { recursive: true });
@@ -110,12 +121,38 @@ fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
         break;
       }
 
-      // Save periodic screenshot
-      await page.screenshot({ path: path.join(SCREENSHOT_DIR, 'current.png') });
+      // Detect SMS verification popup (class="r-input-inner", English placeholder)
+      // This popup overlays on top of the login modal after QR scan + app confirm
+      const smsInput = await page.$('input.r-input-inner');
+      if (smsInput && !smsNotified) {
+        const visible = await smsInput.isVisible().catch(() => false);
+        if (visible) {
+          smsNotified = true;
+          console.log('SMS_VERIFICATION_NEEDED');
+          console.log('SMS_SCREENSHOT=' + path.join(SCREENSHOT_DIR, 'current.png'));
+        }
+      }
+
+      // Poll for SMS code file
+      if (smsNotified && fs.existsSync(SMS_CODE_PATH)) {
+        const code = fs.readFileSync(SMS_CODE_PATH, 'utf8').trim();
+        if (code.length >= 4) {
+          console.log('SMS_CODE_RECEIVED=' + code);
+          const input = await page.$('input.r-input-inner');
+          if (input) {
+            await input.fill(code);
+            console.log('SMS_CODE_FILLED');
+            // No button click needed — auto-submits after filling
+          }
+          try { fs.unlinkSync(SMS_CODE_PATH); } catch {}
+          await page.waitForTimeout(5000);
+        }
+      }
     }
 
     if (Date.now() - start >= TIMEOUT) {
       console.log('LOGIN_TIMEOUT');
+      await page.screenshot({ path: path.join(SCREENSHOT_DIR, 'timeout.png') });
     }
   } catch (err) {
     console.error('ERROR=' + err.message);
