@@ -40,8 +40,8 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 
 ### References
 
-- **[TEMPLATE.md](https://github.com/LangSensei/swat-v2/blob/master/blueprints/squads/_framework/TEMPLATE.md)** — all new squads must follow this format exactly
-- **[PROTOCOL.md](https://github.com/LangSensei/swat-v2/blob/master/blueprints/squads/_framework/PROTOCOL.md)** — understand what the framework already provides; do not duplicate protocol behavior in MANIFEST
+- **[TEMPLATE.md](https://github.com/LangSensei/swat-v2/blob/main/blueprints/squads/_framework/TEMPLATE.md)** — all new squads must follow this format exactly
+- **[PROTOCOL.md](https://github.com/LangSensei/swat-v2/blob/main/blueprints/squads/_framework/PROTOCOL.md)** — understand what the framework already provides; do not duplicate protocol behavior in MANIFEST
 
 ### Creating a Squad
 

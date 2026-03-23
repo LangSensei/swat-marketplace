@@ -53,7 +53,7 @@ Development and maintenance of the SWAT v2 codebase.
 
 ### Delivery
 
-1. Push and open PR: `git push origin HEAD && gh pr create --title "..." --body "..." --base master`
+1. Push and open PR: `git push origin HEAD && gh pr create --title "..." --body "..." --base main`
    - If resuming an existing branch with an open PR, push and comment on the existing PR instead of creating a new one
 2. PR description must include: What, Why, Changes, How to Test
 3. Clean up worktree (mandatory): `cd ~/.swat/repos/swat-v2 && git worktree remove "$(pwd)/repo" --force`
@@ -62,7 +62,7 @@ Development and maintenance of the SWAT v2 codebase.
 
 ### Constraints
 
-- **Never push directly to master** — always open a PR
+- **Never push directly to the default branch** — always open a PR
 - **All code and markdown in English** — no Chinese in source files
 - **Go module**: `github.com/LangSensei/swat`
 - **Commit style**: conventional commits (feat:, fix:, refactor:, docs:, etc.)

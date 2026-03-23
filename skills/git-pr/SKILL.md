@@ -1,6 +1,6 @@
 ---
 name: git-pr
-version: "1.1.0"
+version: "1.2.0"
 description: Git branch management and GitHub PR workflow using worktrees
 dependencies:
   skills: []
@@ -31,14 +31,14 @@ Each operation gets its own worktree — isolated branch, shared .git objects, m
 
 ### Mode A: New Branch (default)
 
-Use when starting a fresh PR from master.
+Use when starting a fresh PR from the default branch.
 
 ```bash
 BRANCH="swat/{operation-id}"
 WORK_DIR="$(pwd)"  # operation dir
 
 cd "$REPO_DIR"
-git worktree add -b "$BRANCH" "$WORK_DIR/repo" origin/master
+git worktree add -b "$BRANCH" "$WORK_DIR/repo" origin/main
 
 cd "$WORK_DIR/repo"
 # ... make changes ...
@@ -63,9 +63,30 @@ git checkout -B "$EXISTING_BRANCH" "origin/$EXISTING_BRANCH"
 
 **How to decide:** If the operation brief contains a branch name or PR reference with an existing branch, use Mode B. Otherwise use Mode A.
 
+### Mode C: Read-Only
+
+Use when only reading repo code — no changes, no commits, no PR.
+
+```bash
+WORK_DIR="$(pwd)"
+
+cd "$REPO_DIR"
+git worktree add "$WORK_DIR/repo" origin/main --detach
+
+cd "$WORK_DIR/repo"
+# ... read files, grep, explore ...
+# Do NOT commit or push.
+
+# Cleanup at seal:
+cd "$REPO_DIR"
+git worktree remove "$WORK_DIR/repo" --force
+```
+
+**How to decide:** If the operation only needs to read source code for analysis (no writes, no PR), use Mode C.
+
 ## Worktree Cleanup
 
-**Mandatory at seal time.** After push, the worktree has no purpose — the remote branch is the source of truth. Squads using this skill must clean up in their playbook's seal/delivery phase.
+**Mandatory at seal time.** After push (Mode A/B) or after reading (Mode C), clean up. Squads using this skill must clean up in their playbook's seal/delivery phase.
 
 ```bash
 cd "$REPO_DIR"
@@ -83,7 +104,7 @@ git push origin HEAD
 ## Open PR
 
 ```bash
-gh pr create --title "feat: ..." --body "..." --base master
+gh pr create --title "feat: ..." --body "..." --base main
 ```
 
 ## Conventional Commits
@@ -117,7 +138,7 @@ Steps to verify.
 
 ## Rules
 
-- **Never push directly to master** — always open a PR
+- **Never push directly to the default branch** — always open a PR
 - **One logical change per commit**
 - **PR title follows conventional commits**
 - **Always clone/fetch to `~/.swat/repos/`** — never clone into operation dir directly
