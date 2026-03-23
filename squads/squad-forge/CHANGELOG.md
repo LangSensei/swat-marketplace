@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 (2026-03-23)
+
+- Fix incorrect TEMPLATE.md path in squad creation step (referenced non-existent `squads/squad-forge/TEMPLATE.md`, now points to References section)
+
 ## 1.0.0 (2026-03-09)
 
 - Initial release
