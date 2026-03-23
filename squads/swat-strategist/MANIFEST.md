@@ -36,21 +36,33 @@ Strategic analysis and improvement proposals for the SWAT system. Researches ind
 
 ### Setup
 
-Use the git-pr skill to set up both repos for reading:
+Use the git-pr skill to set up both repos as Mode C (`--detach`) worktrees for read-only access:
 
-- `https://github.com/LangSensei/swat-v2` — SWAT codebase (commander, plugin, protocol, blueprints)
-- `https://github.com/LangSensei/swat-marketplace` — squad and skill definitions
-
-Read files from bare clones using `git show`:
+- `https://github.com/LangSensei/swat-v2` → `$WORK_DIR/swat-v2-repo`
+- `https://github.com/LangSensei/swat-marketplace` → `$WORK_DIR/marketplace-repo`
 
 ```bash
-git -C "$HOME/.swat/repos/swat-v2" show origin/main:<path>
-git -C "$HOME/.swat/repos/swat-marketplace" show origin/main:<path>
+WORK_DIR="$(pwd)"  # operation dir
+
+for REPO_NAME in swat-v2 swat-marketplace; do
+  REPO_URL="https://github.com/LangSensei/$REPO_NAME"
+  REPO_DIR="$HOME/.swat/repos/$REPO_NAME"
+  [ -d "$REPO_DIR" ] && git -C "$REPO_DIR" fetch --all --prune \
+    || git clone --bare "$REPO_URL" "$REPO_DIR"
+  git -C "$REPO_DIR" worktree add --detach "$WORK_DIR/${REPO_NAME}-repo" origin/main
+done
+```
+
+Browse the worktree directories directly using `grep`, `find`, `cat`, or view/glob tools. At seal, remove both worktrees:
+
+```bash
+git -C "$HOME/.swat/repos/swat-v2" worktree remove "$WORK_DIR/swat-v2-repo" --force
+git -C "$HOME/.swat/repos/swat-marketplace" worktree remove "$WORK_DIR/marketplace-repo" --force
 ```
 
 ### Workflow
 
-1. **Understand current state** — Read SWAT code relevant to the research question. Use `git show origin/main:<path>` on the bare clone to read without creating a worktree.
+1. **Understand current state** — Browse `$WORK_DIR/swat-v2-repo` to read SWAT code relevant to the research question. Use `grep`, `find`, or view tools directly on the worktree directories.
 2. **Industry research** — Web search for how other AI agent frameworks solve the same problem. Search for recent papers, GitHub repos, blog posts, and documentation.
 3. **Comparative analysis** — Map SWAT's approach against industry approaches: architecture, orchestration model, tool use, memory, planning, and collaboration patterns.
 4. **Proposal** — Produce 3-7 concrete, actionable improvement proposals. For each proposal, include: problem statement, current SWAT approach, industry best practice, specific recommendation, and trade-off analysis (cost, risk, benefit).
