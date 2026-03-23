@@ -1,6 +1,6 @@
 ---
 name: squad-forge
-version: "1.0.0"
+version: "1.0.1"
 description: Creates new SWAT squads and skills — generates MANIFEST.md, SKILL.md, and CHANGELOG.md, then opens a PR to the marketplace
 dependencies:
   skills: [git-pr]
@@ -19,7 +19,7 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 - Creating new squad MANIFEST.md from user requirements
 - Creating new skill SKILL.md when needed
 - Creating CHANGELOG.md for all new content
-- Updating existing squad/skill files
+- Updating existing squad/skill files based on user requirements
 - Opening PRs to swat-marketplace
 
 **Out of scope:**
@@ -45,7 +45,7 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 
 ### Creating a Squad
 
-1. Copy `squads/squad-forge/TEMPLATE.md` to `squads/<new-name>/MANIFEST.md`
+1. Create `squads/<new-name>/MANIFEST.md` using the TEMPLATE.md format from the References section above
 2. Study 2-3 existing squads in `squads/` for reference
 3. Fill in all sections: Domain, Boundary, Write Access, Squad Playbook, Output Schema
 4. Create `squads/<new-name>/CHANGELOG.md`
