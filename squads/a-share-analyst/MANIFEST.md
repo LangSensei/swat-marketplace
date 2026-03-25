@@ -1,6 +1,6 @@
 ---
 name: a-share-analyst
-version: "1.2.0"
+version: "1.3.0"
 description: A-share stock analysis — technical, fundamental, moat assessment, valuation, and portfolio synthesis
 dependencies:
   skills: [eastmoney-data, fund-holdings, sina-quote]
@@ -22,6 +22,7 @@ A-share (中国A股) stock market analysis and research.
 - Valuation analysis (historical PE/PB percentile, comparison to sector and historical averages)
 - Decision recommendation (hold / add / reduce with reasoning)
 - ETF/fund analysis (holdings decomposition, weighted fundamentals, sector assessment)
+- Holding review / tracking (持仓复核) — incremental updates for existing positions
 - Stock screening (filter by financial metrics)
 - Portfolio synthesis — read multiple completed operation reports and produce a combined portfolio analysis
 
@@ -39,22 +40,38 @@ A-share (中国A股) stock market analysis and research.
 
 ### General Rules
 
-- Always use Python for data processing and calculations
+- Always use `python3` (not `python`) for data processing and calculations
 - **Write files using Python**, not shell heredoc (`cat << EOF`). Heredoc with HTML/JS content triggers shell expansion security blocks. Use `with open("report.html", "w") as f: f.write(content)` instead.
 - Install pandas and numpy if not available: `pip install pandas numpy`
 - All monetary values in CNY
 - Present numbers in human-readable format (e.g., 1.2万亿 for market cap)
 - Report language: Chinese (analysis audience is Chinese investors)
+- Reports are self-contained HTML files with inline CSS. Use structured tables, cards, and color-coded recommendation tags — no external dependencies, no JavaScript required
 - For portfolio synthesis, the prior reports are in sibling operation directories under the same squad
+
+### Data Sourcing Strategy
+
+Data sources have different reliability profiles. Use this priority order:
+
+1. **Real-time prices** — sina-quote skill (`hq.sinajs.cn`): reliable for both A-shares (`sh601318`/`sz002352`) and ETFs (`sh512800`/`sh513180`)
+2. **K-line history** — yfinance: use `{code}.SS` for Shanghai, `{code}.SZ` for Shenzhen. Fetch 240 trading days (~1 year) for sufficient indicator calculation depth
+3. **Fundamentals (PE/PB/ROE)** — yfinance `.info` fields (`trailingPE`, `priceToBook`, `returnOnEquity`). Cross-check with eastmoney-data skill for individual stock quotes when available
+4. **ETF holdings** — fund-holdings skill via `fundf10.eastmoney.com` (use HTTP, not HTTPS — HTTPS times out). Parse JS response with regex to extract HTML table content
+5. **Individual holding fundamentals for ETFs** — yfinance for each holding stock. For HK-listed holdings, use `str(int(code)) + '.HK'` (strip leading zeros)
+6. **eastmoney-data skill** — usable for low-frequency single-stock requests (quote snapshots, daily K-line). Do NOT rely on batch/concurrent requests — they trigger empty responses or `RemoteDisconnected`. When eastmoney fails, fall back to yfinance
+
+**Bank-specific data quirk:** Eastmoney PE/PB for bank stocks are sometimes scaled by 100× (e.g., `675` = `6.75x`). If PE > 100 or PB > 10, divide by 100. Verify ROE by computing `PB / PE × 100`.
 
 ### Individual Stock Analysis
 
+For first-time analysis of a stock/ETF the squad has not previously analyzed:
+
 1. **Identify target** — Parse stock code/name from the task brief
-2. **Gather data** — Use eastmoney-data skill APIs to fetch:
-   - K-line history (120 days daily)
-   - Real-time quote and financial summary
-   - Peer stocks for sector comparison
-3. **Technical analysis** — Calculate indicators using Python:
+2. **Gather data** — Follow the Data Sourcing Strategy above:
+   - K-line history (240 trading days daily)
+   - Real-time quote via sina-quote
+   - Fundamentals via yfinance (with eastmoney cross-check)
+3. **Technical analysis** — Calculate indicators using Python (pandas):
    - MA5, MA10, MA20, MA60
    - MACD (DIF, DEA, histogram)
    - RSI (6, 12, 24-day)
@@ -67,62 +84,98 @@ A-share (中国A股) stock market analysis and research.
    - Profitability: ROE, gross margin, net margin, trends over time
    - Growth: revenue and profit YoY, consistency
    - Financial health: debt ratio, cash flow quality
+   - For insurance stocks: supplement with P/EV (price-to-embedded-value) ratio
 5. **Moat assessment** — Analyze:
    - What is the company's competitive advantage? (brand, cost, switching costs, network effect, scale)
    - Industry position: market share, barriers to entry
    - Sustainability: is the moat widening or narrowing?
    - Management quality: capital allocation track record
+   - Use web search for industry data and competitive landscape
 6. **Decision recommendation** — Based on all analysis:
    - Current valuation vs intrinsic value estimate
    - Risk factors (industry, policy, competition, cyclical)
    - Clear recommendation: **hold / add / reduce** with reasoning
+   - Define specific price levels: entry zone, add zone, reduce zone, stop-loss
    - If the brief contains investor preferences, tailor the recommendation accordingly
+   - If the brief contains position data (shares, cost), include P&L calculation with transaction costs (万一佣金 min ¥5, 千一印花税)
 
-Report should include: stock overview (name, code, sector, market cap), price chart with key indicators, technical summary, fundamental summary, moat assessment, decision recommendation, key risks.
+Report should include: stock overview (name, code, sector, market cap), technical summary with key indicator values, fundamental summary table, moat assessment, decision recommendation with price levels, key risks.
+
+### Holding Review / Tracking (持仓复核)
+
+When reviewing an existing position that has been previously analyzed (the brief mentions "持仓复核", "跟踪", "走势复核", or references prior operations):
+
+1. **Load prior context** — Read classifier enrichment section in OPERATION.md (contains prior operation summaries, price evolution, previous recommendations). If not present, read the most recent prior operation for this stock
+2. **Fetch current price** — Use sina-quote for the latest/real-time price
+3. **Calculate technical indicators** — Same indicator set as first-time analysis (MA/MACD/RSI/KDJ/Bollinger), computed from 240-day K-line via yfinance
+4. **Compare to prior analysis** — Build an explicit before/after comparison table:
+   - Price change since last review
+   - RSI/MACD signal evolution (direction, not just value)
+   - Whether prior support/resistance levels held or were broken
+5. **Confirm fundamentals** — Check if fundamentals (PE/PB/ROE) changed materially since last analysis. If unchanged (typical for reviews within days/weeks), state "基本面不变" and carry forward prior values. Only re-fetch if >2 weeks elapsed or earnings event occurred
+6. **P&L calculation** — Compute current unrealized gain/loss:
+   - Market value = shares × current price
+   - Cost basis = shares × average cost
+   - Unrealized P&L (absolute ¥ and %)
+   - Break-even sell price including transaction costs (万一佣金 min ¥5, 千一印花税)
+   - Delta vs prior review P&L
+7. **Check prior trigger conditions** — Explicitly verify whether previous operation's add/reduce conditions were triggered (e.g., "上次建议37.50减仓条件：未触发"). If support levels were broken, recalibrate the entire price framework downward
+8. **Update recommendation** — Adjust entry/exit price levels based on current technical/fundamental state. Prioritize continuity with prior recommendations unless conditions materially changed. Include:
+   - Updated add zone, reduce zone, stop-loss
+   - Portfolio-level risk context if applicable (sector concentration, single-stock weight)
+
+Report should include: price overview, technical indicator snapshot, P&L status, comparison table vs prior review, updated recommendation with price levels.
 
 ### ETF / Fund Analysis
 
 When the target is an ETF (code starts with 51xxxx, 15xxxx, 56xxxx, etc.) or the brief mentions "ETF":
 
 1. **Identify ETF** — Parse fund code from the task brief
-2. **Fetch ETF price data** — Use eastmoney-data K-line API (ETFs use same secid format as stocks)
+2. **Fetch ETF price data** — Use sina-quote for real-time price; yfinance for K-line history (240 days)
 3. **Technical analysis** — Same indicators as individual stocks (MA, MACD, RSI, KDJ, Bollinger)
 4. **Fetch holdings** — Use fund-holdings skill to get top 10 holdings with weights
 5. **Weighted fundamental analysis** — For each top holding (weight > 2%):
-   - Fetch PE, PB, ROE, dividend yield via eastmoney-data
+   - Fetch PE, PB, ROE, dividend yield via yfinance
    - Calculate weighted average PE, PB, ROE for the ETF
+   - For ETFs with outlier holdings (e.g., loss-making or extreme-PE stocks), also report a "core holdings" metric excluding outliers
 6. **Sector assessment** — Analyze the sector the ETF tracks:
    - Overall sector valuation vs historical
    - Key drivers and risks for the sector
 7. **Cost basis analysis** — If the brief includes cost and shares:
    - Calculate current P&L (unrealized gain/loss)
-   - Break-even price, current yield
+   - Break-even price including transaction costs
 8. **Decision recommendation** — Based on all analysis:
    - Sector outlook
    - Weighted valuation assessment (cheap/fair/expensive vs history)
-   - Clear recommendation: **hold / add / reduce** with reasoning
+   - Clear recommendation: **hold / add / reduce** with reasoning and price levels
 
-Report should include: ETF overview, price chart, holdings breakdown table (top 10 with weight, PE, PB), weighted fundamental summary, cost basis P&L (if applicable), decision recommendation.
+Report should include: ETF overview, holdings breakdown table (top 10 with weight, PE, PB), weighted fundamental summary, cost basis P&L (if applicable), decision recommendation.
 
 ### Portfolio Synthesis
 
-When the brief mentions "portfolio synthesis" or "组合分析" and provides paths to prior reports:
+When the brief mentions "portfolio synthesis", "组合分析", or "调仓" and provides paths to prior reports:
 
-1. **Read prior reports** — Load all referenced report.html files and OPERATION.md summaries
-2. **Individual recap** — For each holding, extract: stock name, current price, PE, PB, ROE, technical trend, moat rating, individual recommendation
-3. **Portfolio overview** — Analyze:
-   - Sector distribution and concentration risk
+1. **Read prior reports** — Load all referenced report.html files and OPERATION.md summaries. Reuse prior operation data (PE/PB/ROE/moat/recommendations) — no need to re-run individual analysis
+2. **Refresh prices only** — Use sina-quote to fetch current prices for all holdings. Compute updated P&L for each position
+3. **Individual recap** — For each holding, extract: stock name, current price, PE, PB, ROE, technical trend, moat rating, individual recommendation
+4. **Portfolio overview** — Analyze:
+   - Sector distribution and concentration risk (flag single-stock >25%, single-sector >40%)
    - Overall valuation level (weighted average PE/PB)
    - Correlation between holdings (are they in similar sectors/themes?)
    - Strongest and weakest holdings
-4. **Portfolio-level recommendation** — Suggest:
+5. **Portfolio-level recommendation** — Suggest:
    - Rebalancing ideas (reduce overweight sectors, add to underweight)
    - Which holdings to prioritize adding/reducing
    - Overall risk assessment
+   - If rebalancing involves trades, include transaction cost estimates (佣金 + 印花税)
 
-Report should include: portfolio dashboard with all holdings, sector distribution, overall metrics, recommendations.
+**Cost basis verification:** If the brief provides position data, cross-check against the most recent holding review operations to ensure consistent cost basis. Inconsistent cost data leads to distorted P&L and rebalancing recommendations.
+
+Report should include: portfolio dashboard with all holdings, sector distribution, overall metrics, P&L summary, recommendations.
 
 ### Screening
+
+*(Optional — used when the brief requests stock screening by financial criteria)*
 
 1. **Parse criteria** — Extract screening conditions from task brief
 2. **Fetch stock list** — Use full A-share list API
@@ -133,14 +186,14 @@ Report should include: top matches with key metrics.
 
 ## Output Schema
 
-Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
+Captain must fill these frontmatter fields in `OPERATION.md` at seal time. For portfolio operations, use the primary/largest holding or leave blank with a comment.
 
 ```yaml
-stock_code: # target stock/ETF code (e.g., "600519")
-stock_name: # target name (e.g., "贵州茅台")
-pe_ttm: # trailing PE ratio
-pb: # price-to-book ratio
-roe: # return on equity (%)
-moat_rating: # moat assessment (★ to ★★★★★)
-recommendation: # hold / add / reduce
+stock_code: # target stock/ETF code (e.g., "600519"). For portfolios: primary holding or "portfolio"
+stock_name: # target name (e.g., "贵州茅台"). For portfolios: brief description
+pe_ttm: # trailing PE ratio (number, e.g., 7.68)
+pb: # price-to-book ratio (number, e.g., 1.08)
+roe: # return on equity in % (number, e.g., 12.19)
+moat_rating: # moat assessment: ★ to ★★★★★ (first-time analysis) or "unchanged" (holding review)
+recommendation: # hold / add / reduce / watch
 ```
