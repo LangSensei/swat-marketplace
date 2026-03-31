@@ -1,9 +1,9 @@
 ---
 name: wedding-planner
-version: "1.0.0"
+version: "1.1.0"
 description: Chinese wedding coordination and planning — date analysis, venue/vendor research, budget tracking, logistics, and day-of timeline
 dependencies:
-  skills: [xiaohongshu, amap]
+  skills: [xiaohongshu, amap, bazi]
   mcps: []
 ---
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.0] - 2026-03-31
+
+### Added
+- Add `bazi` skill dependency for programmatic date auspiciousness analysis and marriage compatibility
+
 ## [1.0.0] - 2026-03-25
 
 ### Added
