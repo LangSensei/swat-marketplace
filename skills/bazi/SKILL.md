@@ -4,7 +4,7 @@ version: "1.0.0"
 description: Chinese traditional calendar and BaZi (Four Pillars of Destiny) skill. Provides CLI scripts for birth chart analysis, marriage compatibility, and auspicious date selection. Wraps the china-testing/bazi library with lunar-python.
 prereq: references/SETUP.md
 dependencies:
-  skills: []
+  skills: [git-pr]
 ---
 
 # BaZi Skill
@@ -15,10 +15,16 @@ Chinese traditional calendar calculations, BaZi (Four Pillars of Destiny) analys
 
 ## Setup
 
+Use git-pr skill Mode C (read-only) to clone the bazi calculation engine to a shared location:
+
 ```bash
-# Clone the bazi calculation engine (one-time)
-SKILL_DIR="$(dirname "$(realpath "$0")")/.."  # adjust to skill root
-git clone https://github.com/china-testing/bazi.git "$SKILL_DIR/references/bazi-repo"
+# Set up shared bazi repo (one-time, via git-pr Mode C)
+REPO_DIR="$HOME/.swat/repos/china-testing-bazi"
+if [ ! -d "$REPO_DIR" ]; then
+  git clone --bare https://github.com/china-testing/bazi.git "$REPO_DIR"
+fi
+cd "$REPO_DIR" && mkdir -p worktrees
+git worktree add --detach worktrees/readonly c425f0c
 
 # Install Python dependencies
 pip3 install lunar-python colorama bidict --break-system-packages
@@ -43,7 +49,7 @@ python3 scripts/bazi-analysis.py --date 1990-05-15 --hour 10
 python3 scripts/bazi-analysis.py --date 1992-08-20 --hour 14 --female
 ```
 
-**Options:** `--date` (required, YYYY-MM-DD), `--hour` (0-23, default 12), `--female`
+**Options:** `--date` (required, YYYY-MM-DD), `--hour` (0-23, omit if unknown), `--female`
 
 **Output fields:**
 - `four_pillars` — year/month/day/hour pillars with stems, branches, hidden stems, nayin, ten deities
@@ -138,5 +144,5 @@ python3 scripts/date-selection.py --event business --year 2026 --month-start 1 -
 - All scripts accept solar (Gregorian) dates — lunar conversion is automatic
 - All scripts support `--help` for usage information
 - Output is always JSON to stdout; errors go to stderr
-- The bazi reference repo must be cloned to `references/bazi-repo/` (see Setup)
-- Birth hour significantly affects the hour pillar and some deity calculations; use 12 (noon) if unknown
+- The bazi reference repo is cloned via git-pr Mode C to `~/.swat/repos/china-testing-bazi/worktrees/readonly/` (see Setup)
+- Birth hour significantly affects the hour pillar; when omitted, the hour pillar is marked as "unknown" with `hour_known: false`

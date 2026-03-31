@@ -15,6 +15,7 @@ from lib import (
     solar_to_lunar, get_bazi, get_element, get_nayin, get_zodiac,
     get_hidden_stems, get_ten_deity, output_json, error_exit,
     CN_ELEMENT_EN, CN_ZODIAC_EN, TEN_DEITY_EN, TWELVE_STAGES_EN,
+    bilingual, bilingual_element, bilingual_zodiac, bilingual_deity, bilingual_stage,
 )
 
 
@@ -41,8 +42,7 @@ def get_twelve_stage(day_master, zhi):
     """Get the twelve-stage-of-life for day master at given branch."""
     from ganzhi import ten_deities
     stage_cn = ten_deities.get(day_master, {}).get(zhi, "")
-    stage_en = TWELVE_STAGES_EN.get(stage_cn, stage_cn)
-    return {"chinese": stage_cn, "english": stage_en}
+    return bilingual_stage(stage_cn)
 
 
 def compute_dayun(lunar, is_male):
@@ -76,7 +76,6 @@ def compute_dayun(lunar, is_male):
         element = CN_ELEMENT_EN.get(gan5.get(gan, ""), "")
 
         deity_cn = ten_deities.get(me, {}).get(gan, "")
-        deity_en = TEN_DEITY_EN.get(deity_cn, deity_cn)
 
         stage = get_twelve_stage(me, zhi)
 
@@ -84,9 +83,9 @@ def compute_dayun(lunar, is_male):
             "ganzhi": ganzhi,
             "stem": gan,
             "branch": zhi,
-            "element": element,
+            "element": bilingual_element(element) if element else {"cn": "", "en": ""},
             "nayin": nayin,
-            "ten_deity": {"chinese": deity_cn, "english": deity_en},
+            "ten_deity": bilingual_deity(deity_cn),
             "twelve_stage": stage,
         })
 
@@ -94,22 +93,36 @@ def compute_dayun(lunar, is_male):
 
 
 def analyze(year, month, day, hour, is_male):
-    """Run full bazi analysis and return structured dict."""
-    lunar = solar_to_lunar(year, month, day, hour)
+    """Run full bazi analysis and return structured dict.
+    
+    When hour is None, the hour pillar is marked as unknown and only
+    3 pillars (year, month, day) are computed.
+    """
+    hour_known = hour is not None
+    effective_hour = hour if hour_known else 12  # use noon for lunar conversion only
+
+    lunar = solar_to_lunar(year, month, day, effective_hour)
     ba = get_bazi(lunar)
 
     from datas import gan5, nayins, days60
     from ganzhi import Gan, Zhi, ten_deities
 
-    gans = [ba.getYearGan(), ba.getMonthGan(), ba.getDayGan(), ba.getTimeGan()]
-    zhis = [ba.getYearZhi(), ba.getMonthZhi(), ba.getDayZhi(), ba.getTimeZhi()]
+    gans = [ba.getYearGan(), ba.getMonthGan(), ba.getDayGan()]
+    zhis = [ba.getYearZhi(), ba.getMonthZhi(), ba.getDayZhi()]
+
+    if hour_known:
+        gans.append(ba.getTimeGan())
+        zhis.append(ba.getTimeZhi())
 
     me = gans[2]  # day master
     me_element_cn = gan5.get(me, "")
     me_element_en = CN_ELEMENT_EN.get(me_element_cn, me_element_cn)
 
     pillars = []
-    pillar_names = ["year", "month", "day", "hour"]
+    pillar_names = ["year", "month", "day"]
+    if hour_known:
+        pillar_names.append("hour")
+
     for i, name in enumerate(pillar_names):
         gan = gans[i]
         zhi = zhis[i]
@@ -119,38 +132,53 @@ def analyze(year, month, day, hour, is_male):
         nayin = nayins.get((gan, zhi), "")
 
         if i == 2:
-            deity_cn = "--"
-            deity_en = "Self"
+            deity = {"cn": "--", "en": "Self"}
         else:
             deity_cn = ten_deities.get(me, {}).get(gan, "")
-            deity_en = TEN_DEITY_EN.get(deity_cn, deity_cn)
+            deity = bilingual_deity(deity_cn)
 
         hidden = {}
         from datas import zhi5
         for hg, strength in zhi5.get(zhi, {}).items():
             hg_el = CN_ELEMENT_EN.get(gan5.get(hg, ""), "")
             hg_deity_cn = ten_deities.get(me, {}).get(hg, "")
-            hg_deity_en = TEN_DEITY_EN.get(hg_deity_cn, hg_deity_cn)
             hidden[hg] = {
-                "element": hg_el,
+                "element": bilingual_element(hg_el) if hg_el else {"cn": "", "en": ""},
                 "strength": strength,
-                "ten_deity": {"chinese": hg_deity_cn, "english": hg_deity_en},
+                "ten_deity": bilingual_deity(hg_deity_cn),
             }
 
         stage = get_twelve_stage(me, zhi)
+        zodiac_cn = get_zodiac(zhi)
 
         pillars.append({
             "name": name,
             "ganzhi": ganzhi,
-            "stem": {"chinese": gan, "element": gan_el},
+            "stem": {"chinese": gan, "element": bilingual_element(gan_el) if gan_el else {"cn": "", "en": ""}},
             "branch": {
                 "chinese": zhi,
-                "zodiac": CN_ZODIAC_EN.get(get_zodiac(zhi), get_zodiac(zhi)),
+                "zodiac": bilingual_zodiac(zodiac_cn) if zodiac_cn else {"cn": "", "en": ""},
                 "hidden_stems": hidden,
             },
             "nayin": nayin,
-            "ten_deity": {"chinese": deity_cn, "english": deity_en},
+            "ten_deity": deity,
             "twelve_stage": stage,
+        })
+
+    # Add unknown hour pillar placeholder when hour is not provided
+    if not hour_known:
+        pillars.append({
+            "name": "hour",
+            "ganzhi": "unknown",
+            "stem": {"chinese": "unknown", "element": {"cn": "unknown", "en": "unknown"}},
+            "branch": {
+                "chinese": "unknown",
+                "zodiac": {"cn": "unknown", "en": "unknown"},
+                "hidden_stems": {},
+            },
+            "nayin": "unknown",
+            "ten_deity": {"cn": "unknown", "en": "unknown"},
+            "twelve_stage": {"cn": "unknown", "en": "unknown"},
         })
 
     element_scores = compute_element_scores(gans, zhis)
@@ -190,6 +218,7 @@ def analyze(year, month, day, hour, is_male):
         "input": {
             "solar_date": f"{year:04d}-{month:02d}-{day:02d}",
             "hour": hour,
+            "hour_known": hour_known,
             "gender": "male" if is_male else "female",
         },
         "lunar_date": {
@@ -198,17 +227,15 @@ def analyze(year, month, day, hour, is_male):
             "day": lunar.getDay(),
             "display": str(lunar),
         },
-        "zodiac": {
-            "chinese": get_zodiac(zhis[0]),
-            "english": CN_ZODIAC_EN.get(get_zodiac(zhis[0]), ""),
-        },
+        "zodiac": bilingual_zodiac(get_zodiac(zhis[0])),
         "day_master": {
             "stem": me,
-            "element": {"chinese": me_el, "english": me_element_en},
+            "element": bilingual_element(me_element_en),
             "strength": strength,
         },
         "four_pillars": pillars,
         "five_elements": element_scores,
+        "hour_known": hour_known,
         "major_luck_periods": dayun,
         "day_pillar_interpretation": day_interp[:200] if day_interp else "",
     }
@@ -228,8 +255,8 @@ def main():
     )
     parser.add_argument("--date", required=True,
                         help="Solar (Gregorian) birth date in YYYY-MM-DD format")
-    parser.add_argument("--hour", type=int, default=12,
-                        help="Birth hour (0-23, default: 12 for unknown)")
+    parser.add_argument("--hour", type=int, default=None,
+                        help="Birth hour (0-23). If omitted, hour pillar is marked as unknown.")
     parser.add_argument("--female", action="store_true", default=False,
                         help="Set gender to female (default: male)")
 
@@ -241,7 +268,7 @@ def main():
     except (ValueError, IndexError):
         error_exit("Invalid date format. Use YYYY-MM-DD (e.g., 1990-05-15)")
 
-    if not (0 <= args.hour <= 23):
+    if args.hour is not None and not (0 <= args.hour <= 23):
         error_exit("Hour must be 0-23")
 
     try:

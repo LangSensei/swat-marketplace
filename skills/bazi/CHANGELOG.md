@@ -2,7 +2,15 @@
 
 ## 1.0.0 (2026-03-31)
 
-- Initial release
+### Improvements (pre-release revision)
+
+- **Shared repo via git-pr:** Use git-pr skill Mode C (read-only worktree) for the china-testing/bazi dependency instead of cloning into the skill directory. Shared location: `~/.swat/repos/china-testing-bazi/worktrees/readonly/`, pinned to commit `c425f0c`.
+- **Unknown birth hour handling:** When `--hour` is omitted, the hour pillar is marked as "unknown" instead of silently defaulting to noon. Output includes `hour_known: false` flag. Compatibility analysis skips hour-dependent comparisons when either person's hour is unknown.
+- **Transparent compatibility scoring:** Added `score_breakdown` to compatibility output showing per-dimension scores and weights: zodiac compatibility (20%), day master relationship (25%), spouse palace (25%), five-element complementarity (15%), nayin compatibility (15%).
+- **Bilingual output:** All scripts now output bilingual `{cn, en}` pairs for zodiac animals, five elements, ten deities, twelve stages, and jianchu (12-day cycle) names. Includes pinyin for jianchu names.
+
+### Initial release
+
 - Add shared library (`scripts/lib/__init__.py`) for bazi repo path setup and common helpers
 - Add BaZi analysis script (`scripts/bazi-analysis.py`) — four pillars, day master, five elements, nayin, major luck periods
 - Add marriage compatibility script (`scripts/compatibility.py`) — zodiac harmony, day master relationship, spouse palace, five-element complementarity, overall rating

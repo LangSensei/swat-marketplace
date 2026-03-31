@@ -10,7 +10,10 @@ import json
 
 # Add the bazi reference repo to Python path
 SKILL_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-BAZI_REPO = os.path.join(SKILL_DIR, "references", "bazi-repo")
+BAZI_REPO = os.path.expanduser("~/.swat/repos/china-testing-bazi/worktrees/readonly")
+if not os.path.isdir(BAZI_REPO):
+    # Fallback to local references dir for development
+    BAZI_REPO = os.path.join(SKILL_DIR, "references", "bazi-repo")
 if os.path.isdir(BAZI_REPO):
     sys.path.insert(0, BAZI_REPO)
 
@@ -113,3 +116,59 @@ TWELVE_STAGES_EN = {
     "\u6b7b": "Death", "\u5893": "Tomb", "\u7edd": "Extinction",
     "\u80ce": "Embryo", "\u517b": "Nurture", "\u957f": "Growth",
 }
+
+# Reverse mappings: English → Chinese
+EN_ELEMENT_CN = {v: k for k, v in CN_ELEMENT_EN.items()}
+EN_ZODIAC_CN = {v: k for k, v in CN_ZODIAC_EN.items()}
+EN_DEITY_CN = {v: k for k, v in TEN_DEITY_EN.items()}
+EN_STAGES_CN = {v: k for k, v in TWELVE_STAGES_EN.items()}
+
+# Jianchu (12-day cycle) bilingual names
+JIANCHU_BILINGUAL = {
+    0: {"cn": "\u5efa", "en": "Establish", "pinyin": "jian"},
+    1: {"cn": "\u9664", "en": "Remove", "pinyin": "chu"},
+    2: {"cn": "\u6ee1", "en": "Full", "pinyin": "man"},
+    3: {"cn": "\u5e73", "en": "Balance", "pinyin": "ping"},
+    4: {"cn": "\u5b9a", "en": "Stable", "pinyin": "ding"},
+    5: {"cn": "\u6267", "en": "Hold", "pinyin": "zhi"},
+    6: {"cn": "\u7834", "en": "Break", "pinyin": "po"},
+    7: {"cn": "\u5371", "en": "Danger", "pinyin": "wei"},
+    8: {"cn": "\u6210", "en": "Success", "pinyin": "cheng"},
+    9: {"cn": "\u6536", "en": "Receive", "pinyin": "shou"},
+    10: {"cn": "\u5f00", "en": "Open", "pinyin": "kai"},
+    11: {"cn": "\u95ed", "en": "Close", "pinyin": "bi"},
+}
+
+
+def bilingual(cn, en_map):
+    """Create a bilingual {cn, en} dict from a Chinese string and mapping."""
+    en = en_map.get(cn, cn)
+    return {"cn": cn, "en": en}
+
+
+def bilingual_element(cn_or_en):
+    """Create bilingual element from either Chinese or English input."""
+    if cn_or_en in CN_ELEMENT_EN:
+        return {"cn": cn_or_en, "en": CN_ELEMENT_EN[cn_or_en]}
+    if cn_or_en in EN_ELEMENT_CN:
+        return {"cn": EN_ELEMENT_CN[cn_or_en], "en": cn_or_en}
+    return {"cn": cn_or_en, "en": cn_or_en}
+
+
+def bilingual_zodiac(cn_or_en):
+    """Create bilingual zodiac from either Chinese or English input."""
+    if cn_or_en in CN_ZODIAC_EN:
+        return {"cn": cn_or_en, "en": CN_ZODIAC_EN[cn_or_en]}
+    if cn_or_en in EN_ZODIAC_CN:
+        return {"cn": EN_ZODIAC_CN[cn_or_en], "en": cn_or_en}
+    return {"cn": cn_or_en, "en": cn_or_en}
+
+
+def bilingual_deity(cn):
+    """Create bilingual ten deity from Chinese input."""
+    return {"cn": cn, "en": TEN_DEITY_EN.get(cn, cn)}
+
+
+def bilingual_stage(cn):
+    """Create bilingual twelve stage from Chinese input."""
+    return {"cn": cn, "en": TWELVE_STAGES_EN.get(cn, cn)}

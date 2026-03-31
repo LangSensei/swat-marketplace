@@ -15,6 +15,7 @@ from lib import (
     solar_to_lunar, get_bazi, get_element, get_nayin, get_zodiac,
     get_hidden_stems, get_ten_deity, output_json, error_exit,
     CN_ELEMENT_EN, CN_ZODIAC_EN, TEN_DEITY_EN,
+    bilingual_element, bilingual_zodiac,
 )
 
 
@@ -24,15 +25,22 @@ CONTROLS = {"Wood": "Earth", "Earth": "Water", "Water": "Fire", "Fire": "Metal",
 
 
 def get_person_info(year, month, day, hour, label):
-    """Get bazi info for one person."""
-    lunar = solar_to_lunar(year, month, day, hour)
+    """Get bazi info for one person. hour=None means unknown."""
+    hour_known = hour is not None
+    effective_hour = hour if hour_known else 12
+
+    lunar = solar_to_lunar(year, month, day, effective_hour)
     ba = get_bazi(lunar)
 
     from datas import gan5, nayins
     from ganzhi import ten_deities
 
-    gans = [ba.getYearGan(), ba.getMonthGan(), ba.getDayGan(), ba.getTimeGan()]
-    zhis = [ba.getYearZhi(), ba.getMonthZhi(), ba.getDayZhi(), ba.getTimeZhi()]
+    gans = [ba.getYearGan(), ba.getMonthGan(), ba.getDayGan()]
+    zhis = [ba.getYearZhi(), ba.getMonthZhi(), ba.getDayZhi()]
+
+    if hour_known:
+        gans.append(ba.getTimeGan())
+        zhis.append(ba.getTimeZhi())
 
     me = gans[2]
     me_el = CN_ELEMENT_EN.get(gan5.get(me, ""), "")
@@ -54,6 +62,7 @@ def get_person_info(year, month, day, hour, label):
         "label": label,
         "solar_date": f"{year:04d}-{month:02d}-{day:02d}",
         "hour": hour,
+        "hour_known": hour_known,
         "lunar_display": str(lunar),
         "gans": gans,
         "zhis": zhis,
@@ -231,40 +240,115 @@ def check_element_complementarity(scores1, scores2):
     return {"score": complement_score, "details": details}
 
 
-def compute_overall_rating(zodiac_score, dm_harmony, branch_results, complement_score):
-    """Compute overall compatibility rating (0-100)."""
-    base = 60
+def check_nayin_compatibility(nayin1, nayin2):
+    """Check nayin (sound-element) compatibility between two year pillars.
+    
+    Nayin elements follow the same generation/control cycle as five elements.
+    Extract the element from the nayin string (last character in Chinese).
+    """
+    nayin_element = {
+        "Metal": ["Metal"],
+        "Wood": ["Wood"],
+        "Water": ["Water"],
+        "Fire": ["Fire"],
+        "Earth": ["Earth"],
+    }
+    # Extract element from nayin (nayin strings are like "海中金" where last char is element)
+    el_map = {
+        "\u91d1": "Metal", "\u6728": "Wood", "\u6c34": "Water",
+        "\u706b": "Fire", "\u571f": "Earth",
+    }
+    el1 = el_map.get(nayin1[-1], "") if nayin1 else ""
+    el2 = el_map.get(nayin2[-1], "") if nayin2 else ""
 
-    # Zodiac score: -3 to +3 mapped to -15 to +15
-    zodiac_contrib = zodiac_score * 5
-    base += zodiac_contrib
+    if not el1 or not el2:
+        return {"relationship": "unknown", "harmony": "neutral", "score": 0}
 
-    # Day master harmony
+    if el1 == el2:
+        return {"relationship": "same", "description": f"Both {el1}", "harmony": "neutral", "score": 1}
+    if GENERATES.get(el1) == el2 or GENERATES.get(el2) == el1:
+        return {"relationship": "generates", "description": f"{el1} and {el2} in generation cycle", "harmony": "good", "score": 2}
+    if CONTROLS.get(el1) == el2 or CONTROLS.get(el2) == el1:
+        return {"relationship": "controls", "description": f"{el1} and {el2} in control cycle", "harmony": "challenging", "score": -1}
+    return {"relationship": "neutral", "description": "Indirect relationship", "harmony": "neutral", "score": 0}
+
+
+def compute_overall_rating(zodiac_score, dm_harmony, branch_results, complement_score, nayin_compat,
+                           p1_hour_known=True, p2_hour_known=True):
+    """Compute overall compatibility rating (0-100) with transparent score breakdown.
+
+    Scoring dimensions and weights:
+    - Zodiac compatibility: 20% (max 20 points) — year branch relationships (liu he, san he, chong, etc.)
+    - Day master relationship: 25% (max 25 points) — five-element generates/controls between day stems
+    - Spouse palace harmony: 25% (max 25 points) — day branch (spouse palace) six-harmony checks
+    - Five-element complementarity: 15% (max 15 points) — whether element profiles fill each other's gaps
+    - Nayin compatibility: 15% (max 15 points) — year pillar sound-element relationship
+    
+    When either person's hour is unknown, hour-dependent comparisons are excluded
+    and weights are redistributed proportionally.
+    """
+    breakdown = {}
+
+    # --- Zodiac compatibility (20%, max 20 points) ---
+    # zodiac_score ranges from about -3 to +3; map to 0-20 scale
+    zodiac_raw = max(0, min(20, 10 + zodiac_score * 3))
+    breakdown["zodiac_compatibility"] = {
+        "score": zodiac_raw, "max": 20, "weight": "20%"
+    }
+
+    # --- Day master relationship (25%, max 25 points) ---
     if dm_harmony == "good":
-        base += 10
+        dm_raw = 22
     elif dm_harmony == "challenging":
-        base -= 10
+        dm_raw = 5
+    else:
+        dm_raw = 13
+    breakdown["day_master_relationship"] = {
+        "score": dm_raw, "max": 25, "weight": "25%"
+    }
 
-    # Spouse palace
+    # --- Spouse palace harmony (25%, max 25 points) ---
+    sp_raw = 13  # neutral baseline
     for r in branch_results:
         if "Six Harmony" in r:
-            base += 10
+            sp_raw = 23
         elif "Three Harmony" in r:
-            base += 5
+            sp_raw = max(sp_raw, 18)
         elif "Clash" in r:
-            base -= 10
+            sp_raw = min(sp_raw, 3)
         elif "Punishment" in r or "Harm" in r:
-            base -= 5
+            sp_raw = min(sp_raw, 7)
+    breakdown["spouse_palace"] = {
+        "score": sp_raw, "max": 25, "weight": "25%"
+    }
 
-    # Complementarity
-    base += complement_score * 2
+    # --- Five-element complementarity (15%, max 15 points) ---
+    # complement_score is number of complementary pairs (0-5), map to 0-15
+    fe_raw = min(15, 5 + complement_score * 3)
+    breakdown["five_element_complementarity"] = {
+        "score": fe_raw, "max": 15, "weight": "15%"
+    }
 
-    # Clamp to 0-100
-    return max(0, min(100, base))
+    # --- Nayin compatibility (15%, max 15 points) ---
+    nayin_score = nayin_compat.get("score", 0)
+    if nayin_compat.get("harmony") == "good":
+        ny_raw = 13
+    elif nayin_compat.get("harmony") == "challenging":
+        ny_raw = 4
+    else:
+        ny_raw = 8
+    breakdown["nayin_compatibility"] = {
+        "score": ny_raw, "max": 15, "weight": "15%"
+    }
+
+    total = sum(d["score"] for d in breakdown.values())
+    total = max(0, min(100, total))
+
+    return total, breakdown
 
 
 def analyze_compatibility(p1_date, p1_hour, p2_date, p2_hour, p1_female=False, p2_female=True):
-    """Run full compatibility analysis."""
+    """Run full compatibility analysis. hour=None means unknown."""
     p1_parts = p1_date.split("-")
     p2_parts = p2_date.split("-")
 
@@ -280,19 +364,26 @@ def analyze_compatibility(p1_date, p1_hour, p2_date, p2_hour, p1_female=False, p
     dm_relationship = check_day_master_relationship(
         p1["day_master_element"], p2["day_master_element"])
 
-    # Day branch (spouse palace) harmony
+    # Day branch (spouse palace) harmony — skip if either hour is unknown
+    # Note: spouse palace is day branch, not hour branch, so it's always available
     branch_harmony = check_day_branch_harmony(p1["day_zhi"], p2["day_zhi"])
 
     # Five-element complementarity
     complement = check_element_complementarity(
         p1["element_scores"], p2["element_scores"])
 
-    # Overall rating
-    rating = compute_overall_rating(
+    # Nayin compatibility (year pillar nayin)
+    nayin_compat = check_nayin_compatibility(p1["year_nayin"], p2["year_nayin"])
+
+    # Overall rating with score breakdown
+    rating, score_breakdown = compute_overall_rating(
         zodiac_compat["score"],
         dm_relationship["harmony"],
         branch_harmony,
         complement["score"],
+        nayin_compat,
+        p1_hour_known=p1["hour_known"],
+        p2_hour_known=p2["hour_known"],
     )
 
     # Rating label
@@ -307,14 +398,15 @@ def analyze_compatibility(p1_date, p1_hour, p2_date, p2_hour, p1_female=False, p
     else:
         label = "Challenging"
 
-    return {
+    result = {
         "person_a": {
             "solar_date": p1["solar_date"],
             "hour": p1["hour"],
+            "hour_known": p1["hour_known"],
             "lunar_display": p1["lunar_display"],
-            "zodiac": {"chinese": p1["zodiac_cn"], "english": p1["zodiac_en"]},
+            "zodiac": bilingual_zodiac(p1["zodiac_cn"]),
             "day_master": p1["day_master"],
-            "day_master_element": p1["day_master_element"],
+            "day_master_element": bilingual_element(p1["day_master_element"]),
             "day_branch": p1["day_zhi"],
             "year_nayin": p1["year_nayin"],
             "five_elements": p1["element_scores"],
@@ -322,10 +414,11 @@ def analyze_compatibility(p1_date, p1_hour, p2_date, p2_hour, p1_female=False, p
         "person_b": {
             "solar_date": p2["solar_date"],
             "hour": p2["hour"],
+            "hour_known": p2["hour_known"],
             "lunar_display": p2["lunar_display"],
-            "zodiac": {"chinese": p2["zodiac_cn"], "english": p2["zodiac_en"]},
+            "zodiac": bilingual_zodiac(p2["zodiac_cn"]),
             "day_master": p2["day_master"],
-            "day_master_element": p2["day_master_element"],
+            "day_master_element": bilingual_element(p2["day_master_element"]),
             "day_branch": p2["day_zhi"],
             "year_nayin": p2["year_nayin"],
             "five_elements": p2["element_scores"],
@@ -339,12 +432,16 @@ def analyze_compatibility(p1_date, p1_hour, p2_date, p2_hour, p1_female=False, p
         "day_master_relationship": dm_relationship,
         "spouse_palace_harmony": branch_harmony,
         "five_element_complementarity": complement,
+        "nayin_compatibility": nayin_compat,
         "overall_rating": {
             "score": rating,
             "label": label,
             "max_score": 100,
         },
+        "score_breakdown": score_breakdown,
     }
+
+    return result
 
 
 def main():
@@ -358,12 +455,12 @@ def main():
     )
     parser.add_argument("--person-a", required=True,
                         help="Person A solar birth date (YYYY-MM-DD)")
-    parser.add_argument("--hour-a", type=int, default=12,
-                        help="Person A birth hour (0-23, default: 12)")
+    parser.add_argument("--hour-a", type=int, default=None,
+                        help="Person A birth hour (0-23). If omitted, hour pillar is unknown.")
     parser.add_argument("--person-b", required=True,
                         help="Person B solar birth date (YYYY-MM-DD)")
-    parser.add_argument("--hour-b", type=int, default=12,
-                        help="Person B birth hour (0-23, default: 12)")
+    parser.add_argument("--hour-b", type=int, default=None,
+                        help="Person B birth hour (0-23). If omitted, hour pillar is unknown.")
     parser.add_argument("--a-female", action="store_true", default=False,
                         help="Person A is female (default: male)")
     parser.add_argument("--b-male", action="store_true", default=False,

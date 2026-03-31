@@ -1,2 +1,3 @@
-# Cloned upstream repo (installed at setup time)
+# Cloned upstream repo (only needed for local development without git-pr)
 references/bazi-repo/
+__pycache__/

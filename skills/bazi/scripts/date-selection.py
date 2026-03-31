@@ -15,24 +15,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "lib"))
 from lib import (
     solar_to_lunar, get_bazi, get_element, get_nayin, get_zodiac,
     get_zodiac_zhi, output_json, error_exit, CN_ELEMENT_EN, CN_ZODIAC_EN,
+    bilingual_element, JIANCHU_BILINGUAL,
 )
 
-
-# 12-day cycle (jianchu) names and English translations
-JIANCHU_NAMES = {
-    0: ("jian", "Establish"),
-    1: ("chu", "Remove"),
-    2: ("man", "Full"),
-    3: ("ping", "Balance"),
-    4: ("ding", "Stable"),
-    5: ("zhi", "Hold"),
-    6: ("po", "Break"),
-    7: ("wei", "Danger"),
-    8: ("cheng", "Success"),
-    9: ("shou", "Receive"),
-    10: ("kai", "Open"),
-    11: ("bi", "Close"),
-}
 
 # Event types and their auspicious jianchu days (0-indexed)
 EVENT_JIANCHU_GOOD = {
@@ -127,7 +112,7 @@ def analyze_date(solar_year, solar_month, solar_day, event_type, bride_zhi_pinyi
     jianchu_data = jianchus.get(jianchu_idx, ("", ""))
     jianchu_cn = jianchu_data[0]
     jianchu_desc = jianchu_data[1] if len(jianchu_data) > 1 else ""
-    jianchu_en = JIANCHU_NAMES.get(jianchu_idx, ("", ""))
+    jianchu_bi = JIANCHU_BILINGUAL.get(jianchu_idx, {"cn": "", "en": "", "pinyin": ""})
 
     # Check if auspicious for event type
     good_days = EVENT_JIANCHU_GOOD.get(event_type, EVENT_JIANCHU_GOOD["general"])
@@ -149,6 +134,7 @@ def analyze_date(solar_year, solar_month, solar_day, event_type, bride_zhi_pinyi
     # Day element
     day_element_cn = gan5.get(day_gan, "")
     day_element_en = CN_ELEMENT_EN.get(day_element_cn, day_element_cn)
+    day_element_bi = bilingual_element(day_element_en) if day_element_en else {"cn": "", "en": ""}
 
     # Check for Tou Xiu days (head/tail match patterns)
     from datas import datouxiu, xiaotouxiu
@@ -166,10 +152,10 @@ def analyze_date(solar_year, solar_month, solar_day, event_type, bride_zhi_pinyi
 
     if is_auspicious_jianchu:
         score += 3
-        reasons.append(f"Favorable 12-day cycle: {jianchu_en[1]} ({jianchu_cn})")
+        reasons.append(f"Favorable 12-day cycle: {jianchu_bi['en']} ({jianchu_bi['cn']})")
     else:
         score -= 2
-        reasons.append(f"Unfavorable 12-day cycle: {jianchu_en[1]} ({jianchu_cn})")
+        reasons.append(f"Unfavorable 12-day cycle: {jianchu_bi['en']} ({jianchu_bi['cn']})")
 
     if jianchu_idx == 6:  # po (Break) - always bad
         score -= 3
@@ -216,13 +202,13 @@ def analyze_date(solar_year, solar_month, solar_day, event_type, bride_zhi_pinyi
             "display": str(lunar),
         },
         "day_ganzhi": day_ganzhi,
-        "day_element": day_element_en,
+        "day_element": day_element_bi,
         "nayin": nayin,
         "jianchu": {
             "index": jianchu_idx,
-            "chinese": jianchu_cn,
-            "english": jianchu_en[1],
-            "pinyin": jianchu_en[0],
+            "cn": jianchu_bi["cn"],
+            "en": jianchu_bi["en"],
+            "pinyin": jianchu_bi["pinyin"],
             "description": jianchu_desc[:150] if jianchu_desc else "",
         },
         "auspicious": auspicious,
