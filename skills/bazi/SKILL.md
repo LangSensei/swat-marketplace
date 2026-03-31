@@ -2,33 +2,26 @@
 name: bazi
 version: "1.0.0"
 description: Chinese traditional calendar and BaZi (Four Pillars of Destiny) skill. Provides CLI scripts for birth chart analysis, marriage compatibility, and auspicious date selection. Wraps the china-testing/bazi library with lunar-python.
-prereq: references/SETUP.md
+prereq: pip3 install lunar-python colorama bidict --break-system-packages
 dependencies:
-  skills: [git-pr]
+  skills: []
 ---
 
 # BaZi Skill
 
 Chinese traditional calendar calculations, BaZi (Four Pillars of Destiny) analysis, and auspicious date selection. All scripts accept solar (Gregorian) dates and handle Solar-Lunar conversion internally.
 
-**Requirements:** Python 3.8+, lunar-python, colorama, bidict. See `references/SETUP.md`.
+**Requirements:** Python 3.8+, git. All dependencies are set up automatically on first script execution.
 
 ## Setup
 
-Use git-pr skill Mode C (read-only) to clone the bazi calculation engine to a shared location:
+No manual setup needed. On first run, the shared library (`scripts/lib/__init__.py`) automatically:
 
-```bash
-# Set up shared bazi repo (one-time, via git-pr Mode C)
-REPO_DIR="$HOME/.swat/repos/china-testing-bazi"
-if [ ! -d "$REPO_DIR" ]; then
-  git clone --bare https://github.com/china-testing/bazi.git "$REPO_DIR"
-fi
-cd "$REPO_DIR" && mkdir -p worktrees
-git worktree add --detach worktrees/readonly c425f0c
+1. Checks that Python packages (`lunar-python`, `colorama`, `bidict`) are importable — prints a clear `pip3 install` command if any are missing
+2. Bare-clones `china-testing/bazi` to `~/.swat/repos/china-testing-bazi/`
+3. Creates a detached worktree at `~/.swat/repos/china-testing-bazi/worktrees/readonly/` pinned to commit `c425f0c`
 
-# Install Python dependencies
-pip3 install lunar-python colorama bidict --break-system-packages
-```
+This happens silently on first invocation. Subsequent runs reuse the cached clone.
 
 ## Scripts
 
@@ -144,5 +137,5 @@ python3 scripts/date-selection.py --event business --year 2026 --month-start 1 -
 - All scripts accept solar (Gregorian) dates — lunar conversion is automatic
 - All scripts support `--help` for usage information
 - Output is always JSON to stdout; errors go to stderr
-- The bazi reference repo is cloned via git-pr Mode C to `~/.swat/repos/china-testing-bazi/worktrees/readonly/` (see Setup)
+- The bazi reference repo is auto-provisioned to `~/.swat/repos/china-testing-bazi/worktrees/readonly/` on first run
 - Birth hour significantly affects the hour pillar; when omitted, the hour pillar is marked as "unknown" with `hour_known: false`

@@ -4,6 +4,10 @@
 
 ### Improvements (pre-release revision)
 
+- **Automatic repo setup:** The bazi calculation engine (`china-testing/bazi`) is now automatically cloned and set up on first script execution. No manual setup steps needed — `lib/__init__.py` handles bare clone to `~/.swat/repos/china-testing-bazi/` and detached worktree creation pinned to commit `c425f0c`.
+- **Automatic dependency check:** `lib/__init__.py` verifies that `lunar-python`, `colorama`, and `bidict` are importable at startup and prints a clear `pip3 install` command if any are missing.
+- **Removed SETUP.md:** Manual setup guide removed — replaced by fully automatic provisioning.
+- **Removed git-pr dependency:** No longer requires git-pr skill for setup since provisioning is self-contained.
 - **Shared repo via git-pr:** Use git-pr skill Mode C (read-only worktree) for the china-testing/bazi dependency instead of cloning into the skill directory. Shared location: `~/.swat/repos/china-testing-bazi/worktrees/readonly/`, pinned to commit `c425f0c`.
 - **Unknown birth hour handling:** When `--hour` is omitted, the hour pillar is marked as "unknown" instead of silently defaulting to noon. Output includes `hour_known: false` flag. Compatibility analysis skips hour-dependent comparisons when either person's hour is unknown.
 - **Transparent compatibility scoring:** Added `score_breakdown` to compatibility output showing per-dimension scores and weights: zodiac compatibility (20%), day master relationship (25%), spouse palace (25%), five-element complementarity (15%), nayin compatibility (15%).

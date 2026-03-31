@@ -1,3 +1,2 @@
-# Cloned upstream repo (only needed for local development without git-pr)
-references/bazi-repo/
+# Python bytecode
 __pycache__/

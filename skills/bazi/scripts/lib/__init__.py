@@ -3,17 +3,60 @@
 
 Handles sys.path setup so scripts can import from the bazi reference repo,
 plus common helper functions for structured JSON output.
+Auto-provisions the bazi repo on first run (bare clone + detached worktree).
 """
 import os
 import sys
 import json
+import subprocess
 
-# Add the bazi reference repo to Python path
+# Verify pip dependencies are importable
+_REQUIRED_PACKAGES = {
+    "lunar_python": "lunar-python",
+    "colorama": "colorama",
+    "bidict": "bidict",
+}
+_missing = []
+for _mod, _pkg in _REQUIRED_PACKAGES.items():
+    try:
+        __import__(_mod)
+    except ImportError:
+        _missing.append(_pkg)
+if _missing:
+    sys.stderr.write(
+        f"Error: missing Python packages: {', '.join(_missing)}\n"
+        f"Install with: pip3 install {' '.join(_missing)} --break-system-packages\n"
+    )
+    sys.exit(1)
+
 SKILL_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-BAZI_REPO = os.path.expanduser("~/.swat/repos/china-testing-bazi/worktrees/readonly")
+
+# Auto-provision the bazi calculation repo on first run
+_BAZI_BARE = os.path.expanduser("~/.swat/repos/china-testing-bazi")
+BAZI_REPO = os.path.join(_BAZI_BARE, "worktrees", "readonly")
+_PINNED_COMMIT = "c425f0c"
+
 if not os.path.isdir(BAZI_REPO):
-    # Fallback to local references dir for development
-    BAZI_REPO = os.path.join(SKILL_DIR, "references", "bazi-repo")
+    try:
+        if not os.path.isdir(_BAZI_BARE):
+            subprocess.run(
+                ["git", "clone", "--bare",
+                 "https://github.com/china-testing/bazi.git", _BAZI_BARE],
+                check=True, capture_output=True,
+            )
+        os.makedirs(os.path.join(_BAZI_BARE, "worktrees"), exist_ok=True)
+        subprocess.run(
+            ["git", "-C", _BAZI_BARE, "worktree", "add", "--detach",
+             BAZI_REPO, _PINNED_COMMIT],
+            check=True, capture_output=True,
+        )
+    except subprocess.CalledProcessError as exc:
+        sys.stderr.write(
+            f"Error: failed to set up bazi repo: {exc.stderr.decode().strip()}\n"
+            "Ensure git is installed and network is available.\n"
+        )
+        sys.exit(1)
+
 if os.path.isdir(BAZI_REPO):
     sys.path.insert(0, BAZI_REPO)
 
