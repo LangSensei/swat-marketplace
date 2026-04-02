@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.4.0 (2026-04-02)
+
+Investment philosophy alignment and sell-side logic improvements based on user feedback from portfolio review operations (20260327-509b179c, 20260401-e543f012, 20260401-3793f3a5).
+
+### Added
+- **Investment Philosophy Constraints section** — 5 explicit rules encoding Buffett value-investing philosophy. Overrides any individual analysis: no selling fundamentally sound holdings on position weight alone, no loss-selling on technicals alone, mandatory Devil's Advocate for all reduce recommendations. (Evidence: SF Express 002352 mechanical reductions despite improving technicals in 3 consecutive operations)
+- **Sell Decision Framework section** — two-path decision tree distinguishing profit-taking (Path A) from loss-cutting (Path B). Path B requires fundamental deterioration or stop-loss trigger, not technical signals. Includes explicit "justified" and "NOT justified" criteria for each path. (Evidence: same logic was applied to profitable and unprofitable positions in v1.3.0)
+- **Conviction-Weighted Concentration Thresholds** — replaces hard-coded 25% single-stock cap. Thresholds scale with moat rating: 50% for 5-star moat, 40% for 4-star, 30% for 3-star, 25% for 2-star, 15% for 1-star. Exceeding threshold is informational, not a sell trigger. (Evidence: Buffett held Apple at 49% of portfolio; fixed 25% cap from v1.3.0 based on single INTEL entry was too rigid)
+- **Devil's Advocate Step** — mandatory for all reduce recommendations across all workflows. Must list 3+ reasons NOT to sell, assign strength scores, and provide explicit verdict. If hold thesis is stronger, recommendation must change to hold. (Evidence: all 3 SF Express operations had one-directional analysis with no counter-arguments)
+- Sell framework integration in Individual Stock (step 6), Holding Review (step 8), ETF Analysis (step 8), and Portfolio Synthesis (steps 4-5) workflows
+- Report guidance updated to include sell path classification, Devil's Advocate analysis, and conviction-weighted threshold checks for reduce recommendations
+
+### Changed
+- Portfolio Synthesis step 4: "flag single-stock >25%, single-sector >40%" → conviction-weighted threshold assessment with dynamic limits per moat rating
+- Portfolio Synthesis step 5: "Rebalancing ideas (reduce overweight sectors)" → Sell Decision Framework application with independent sell condition requirement
+- Sector concentration limit: fixed 40% → dynamic 50% (if all holdings ★★★★+) / 40% (otherwise)
+
+### Not Changed
+- Domain, Boundary, Dependencies — no reason to modify
+- Data Sourcing Strategy, General Rules (except new philosophy constraints added as separate section)
+- Individual Stock, Holding Review, ETF Analysis core workflows — framework integrated as additions, not replacements
+- Output Schema — no new fields needed
+
 ## 1.3.0 (2026-03-25)
 
 Evidence-based playbook optimization from 33 completed operations analysis (squad-distill operation 20260325-e29e01d6).
