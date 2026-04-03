@@ -1,6 +1,6 @@
 ---
 name: debrief
-version: "1.1.0"
+version: "1.2.0"
 description: Operation completion gate — notify the user or dispatch the next task
 dependencies:
   skills: []
@@ -20,27 +20,29 @@ Never both. Never neither.
 
 When your operation is the final step (no further work needed), send a concise notification to the user with your key findings.
 
-### Shell
+### Why --file?
 
-```bash
-bash path/to/debrief/notify.sh "Operation complete: key findings here"
+Copilot CLI's bash tool corrupts multi-byte UTF-8 characters (Chinese, Japanese, Korean, etc.) when they appear in inline command arguments or heredoc blocks. Messages containing non-ASCII text get garbled or cause exit 127. The fix: always write the message to a file first using the `create` tool, then pass the file path to `notify.sh`.
+
+### Usage
+
+1. Write your message to a file using the `create` tool:
+
+```
+create file: /path/to/operators/captain/debrief-msg.txt
+content: "Operation complete: key findings here"
 ```
 
-### Direct curl
+2. Send the notification:
 
 ```bash
-curl -sS "http://127.0.0.1:${OPENCLAW_GATEWAY_PORT:-18789}/tools/invoke" \
-  -H "Authorization: Bearer ${OPENCLAW_GATEWAY_TOKEN}" \
-  -H "Content-Type: application/json" \
-  -d "{
-    \"tool\": \"message\",
-    \"args\": {
-      \"action\": \"send\",
-      \"channel\": \"telegram\",
-      \"target\": \"${OPENCLAW_NOTIFY_TARGET}\",
-      \"message\": \"your message here\"
-    }
-  }"
+bash path/to/debrief/notify.sh --file /path/to/operators/captain/debrief-msg.txt
+```
+
+With optional target and channel:
+
+```bash
+bash path/to/debrief/notify.sh --file /path/to/msg.txt --target CHAT_ID --channel telegram
 ```
 
 ### Notification Guidelines
@@ -64,10 +66,12 @@ Use swat_dispatch to create a new task with:
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `OPENCLAW_GATEWAY_PORT` | Yes | Gateway port (default: 18789) |
-| `OPENCLAW_GATEWAY_TOKEN` | Yes | Gateway auth token |
-| `OPENCLAW_NOTIFY_TARGET` | Yes | Default recipient (chat ID) |
-| `OPENCLAW_NOTIFY_CHANNEL` | No | Channel type (default: telegram) |
+| `OPENCLAW_GATEWAY_PORT` | No | Gateway port (default: from config or 18789) |
+| `OPENCLAW_GATEWAY_TOKEN` | No | Gateway auth token (default: from config) |
+| `OPENCLAW_NOTIFY_TARGET` | No | Default recipient chat ID (default: from config) |
+| `OPENCLAW_NOTIFY_CHANNEL` | No | Channel type (optional) |
+
+All variables fall back to `~/.openclaw/openclaw.json` if not set.
 
 ## Protocol Integration
 
@@ -82,6 +86,6 @@ Then in AGENTS.md or protocol:
 
 ```
 When your work is complete, follow the debrief skill:
-- If this is the final step → notify the user
+- If this is the final step → notify the user (write message to file, pass --file)
 - If further work is needed → dispatch the next task
 ```
