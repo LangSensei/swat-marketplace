@@ -1,20 +1,27 @@
 #!/bin/bash
 # notify.sh — Send a notification to the user via OpenClaw Gateway
-# Usage: bash notify.sh "your message" [--target CHAT_ID] [--channel telegram]
+# Usage: bash notify.sh --file /path/to/msg.txt [--target CHAT_ID] [--channel telegram]
+#
+# Message MUST be read from a file (--file). Inline message arguments are not
+# supported because Copilot CLI's bash tool corrupts multi-byte UTF-8 characters
+# when they appear in command strings.
 
 set -euo pipefail
 
 # --- Parse arguments ---
-MESSAGE=""
+MESSAGE_FILE=""
 TARGET=""
 CHANNEL=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --file)    MESSAGE_FILE="$2"; shift 2 ;;
     --target)  TARGET="$2"; shift 2 ;;
     --channel) CHANNEL="$2"; shift 2 ;;
     --help|-h)
-      echo "Usage: notify.sh \"message\" [--target CHAT_ID] [--channel CHANNEL]"
+      echo "Usage: notify.sh --file /path/to/msg.txt [--target CHAT_ID] [--channel CHANNEL]"
+      echo ""
+      echo "  --file FILE  Path to a text file containing the notification message (required)"
       echo ""
       echo "Environment variables (all optional — falls back to ~/.openclaw/openclaw.json):"
       echo "  OPENCLAW_GATEWAY_PORT   Gateway port (default: from config or 18789)"
@@ -23,14 +30,28 @@ while [[ $# -gt 0 ]]; do
       echo "  OPENCLAW_NOTIFY_CHANNEL Default channel (optional)"
       exit 0
       ;;
-    *) MESSAGE="$1"; shift ;;
+    *)
+      echo "❌ Unknown argument: $1" >&2
+      echo "   Inline message arguments are no longer supported." >&2
+      echo "   Write your message to a file and use: notify.sh --file /path/to/msg.txt" >&2
+      exit 1
+      ;;
   esac
 done
 
-if [[ -z "$MESSAGE" ]]; then
-  echo "❌ Usage: notify.sh \"message\" [--target CHAT_ID] [--channel CHANNEL]" >&2
+if [[ -z "$MESSAGE_FILE" ]]; then
+  echo "❌ Missing required --file parameter." >&2
+  echo "   Usage: notify.sh --file /path/to/msg.txt [--target CHAT_ID] [--channel CHANNEL]" >&2
   exit 1
 fi
+
+if [[ ! -f "$MESSAGE_FILE" ]]; then
+  echo "❌ File not found: $MESSAGE_FILE" >&2
+  exit 1
+fi
+
+# Read message from file (preserves UTF-8)
+MESSAGE=$(cat "$MESSAGE_FILE")
 
 # --- Resolve config from env or ~/.openclaw/openclaw.json ---
 OC_CONFIG="$HOME/.openclaw/openclaw.json"
