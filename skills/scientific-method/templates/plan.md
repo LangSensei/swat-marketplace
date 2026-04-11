@@ -2,7 +2,7 @@
 <!--
   WHAT: Your roadmap and thinking log. Tracks what you're investigating, your hypotheses, and conclusions.
   WHY: After 50+ tool calls, your original goals get forgotten. This file keeps them fresh.
-  WHEN: Create FIRST, before starting any work. Update at every node transition.
+  WHEN: Create FIRST, before starting any work. Update at every step transition.
 -->
 
 ## Goal
@@ -17,9 +17,9 @@
 <!--
   WHAT: Quick snapshot of where you are right now.
   WHY: When re-reading plan before a decision, this tells you exactly where you are.
-  WHEN: Update EVERY time you move to a new node or Cycle.
+  WHEN: Update EVERY time you move to a new step or Cycle.
 -->
-- **Phase:** Understand
+- **Step:** Understand
 - **Cycle:** -
 - **Node:** -
 
@@ -130,7 +130,7 @@
 <!--
   REMINDERS:
   - Re-read this file before major decisions (attention manipulation — your context decays, this file doesn't)
-  - Update Current State when you move to a new node or Cycle
+  - Update Current State when you move to a new step or Cycle
   - Update progress.md Status fields when step status changes (pending → in_progress → complete)
   - If you discover a new sub-problem, add a new Cycle
 -->

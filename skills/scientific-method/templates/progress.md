@@ -2,13 +2,13 @@
 <!--
   WHAT: Your session log — a chronological record of what you did + status of each step.
   WHY: Answers "What have I done?" in the 5-Question Reboot Test. Enables recovery after session resets.
-  WHEN: Update at every node transition and after completing each Cycle.
+  WHEN: Update at every step transition and after completing each Cycle.
   STATUS: Each section tracks its own status (pending / in_progress / complete). This is the single source of truth for progress.
 -->
 
 ## Understand
 <!--
-  WHAT: What you did during the Understand phase.
+  WHAT: What you did during the Understand step.
   WHEN: Update as you work through Understand.
 -->
 - **Status:** pending
@@ -32,7 +32,7 @@
   WHEN: Update as you progress through H → P → T → C.
 -->
 - **Status:** pending
-- **Node:** Hypothesize / Predict / Test / Conclude
+- **Current:** Hypothesize / Predict / Test / Conclude
 - Actions taken:
   <!--
     EXAMPLE:
@@ -51,7 +51,7 @@
 
 ## Cycle 2: [Sub-problem]
 - **Status:** pending
-- **Node:** -
+- **Current:** -
 - Actions taken:
   -
 - Files created/modified:
@@ -66,7 +66,7 @@
 <!--
   WHAT: Structured record of tests/verifications you ran.
   WHY: Makes verification auditable. "I tested it" means nothing without specifics.
-  WHEN: During Test nodes in each Cycle. Add a row for each meaningful test.
+  WHEN: During Test steps in each Cycle. Add a row for each meaningful test.
   EXAMPLE:
     | 1 | Concurrent write test | 20 threads, 100 writes each | Lock-wait timeout | 3 timeouts in 100 writes | ✓ Confirms hypothesis |
 -->
@@ -94,7 +94,7 @@
 -->
 | Question | Answer |
 |----------|--------|
-| Where am I? | [Current cycle/node — see plan.md Current State] |
+| Where am I? | [Current cycle/step — see plan.md Current State] |
 | Where am I going? | [Remaining steps — check Status fields above] |
 | What's the goal? | [See plan.md Goal] |
 | What have I learned? | [See findings.md] |
@@ -107,4 +107,4 @@
   - Be specific about actions — "searched X" is better than "did research"
   - Include timestamps for errors to track when issues occurred
 -->
-*Update Status and actions at every node transition and after completing each Cycle.*
+*Update Status and actions at every step transition and after completing each Cycle.*
