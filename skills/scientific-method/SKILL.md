@@ -124,10 +124,10 @@ Multimodal content (images, browser results, screenshots) does not persist in co
 Before major decisions, re-read `plan.md`. This refreshes goals in your attention window. Context decays over long sessions — your files don't.
 
 ### Update Progress at Every Transition
-When moving between nodes (Understand → Decompose, Cycle N Hypothesize → Test, etc.), update `progress.md`. This is your recovery mechanism if the session resets.
+When moving between nodes (Understand → Decompose, Cycle N Hypothesize → Test, etc.), update `progress.md` — both the actions log and the **Status** field. Status in `progress.md` is the single source of truth for how far you've gotten.
 
 ### Log ALL Errors
-Every error goes in `plan.md` Errors table. Track what you tried. Never repeat a failed action — mutate the approach.
+Every error goes in `progress.md` Errors table. Track what you tried. Never repeat a failed action — mutate the approach.
 
 ### The 3-Strike Protocol
 
@@ -170,7 +170,7 @@ If you can answer these from your files, your state management is solid:
 
 | Question | Source |
 |----------|--------|
-| Where am I? | Current node in `progress.md` |
+| Where am I? | Current State in `plan.md` + Status in `progress.md` |
 | Where am I going? | Remaining Cycles in `plan.md` |
 | What's the goal? | Goal statement in `plan.md` |
 | What have I learned? | `findings.md` |

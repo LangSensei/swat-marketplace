@@ -130,6 +130,7 @@
 <!--
   REMINDERS:
   - Re-read this file before major decisions (attention manipulation — your context decays, this file doesn't)
-  - Update Cycle status in Decompose table as you progress: pending → in_progress → complete
+  - Update Current State when you move to a new node or Cycle
+  - Update progress.md Status fields when step status changes (pending → in_progress → complete)
   - If you discover a new sub-problem, add a new Cycle
 -->

@@ -7,7 +7,7 @@
 INPUT=$(cat)
 
 PLAN_FILE="plan.md"
-SKILL_DIR="$(dirname "$0")/.."
+SKILL_DIR="$(dirname "$0")/../.."
 PYTHON=$(command -v python3 || command -v python)
 
 if [ -f "$PLAN_FILE" ]; then
