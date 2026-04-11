@@ -1,14 +1,16 @@
 #!/bin/bash
 # scientific-method: Post-tool-use hook
-# Lightweight reminder to update findings after search/browse operations.
-# Tracks action count for 2-Action Rule enforcement.
+# Reminds the agent to update progress.md and plan.md after every tool use.
+# Additionally enforces 2-Action Rule for search/browse operations.
 # Always exits 0.
 
 INPUT=$(cat)
 
 TOOL_NAME=$(echo "$INPUT" | grep -o '"toolName"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*"toolName"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/')
 
-# Check if this is a search/browse/view tool
+MSG="[scientific-method] Update progress.md with what you just did. If a cycle node is now complete, update plan.md Current State."
+
+# Extra reminder for search/browse tools (2-Action Rule)
 if echo "$TOOL_NAME" | grep -qiE "search|browse|web|fetch|view|screenshot|image"; then
     COUNTER_FILE=".scientific_method_action_count"
     COUNT=0
@@ -19,10 +21,12 @@ if echo "$TOOL_NAME" | grep -qiE "search|browse|web|fetch|view|screenshot|image"
     echo "$COUNT" > "$COUNTER_FILE"
 
     if [ $((COUNT % 2)) -eq 0 ]; then
-        echo '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"[scientific-method] 2-Action Rule: You have done 2+ search/browse operations. Update findings.md NOW with what you discovered. Multimodal content will be lost if not written down."}}'
-        exit 0
+        MSG="$MSG Also update findings.md — you have done $COUNT search/browse operations. Write down what you discovered before it's lost from context."
     fi
 fi
 
-echo '{}'
+PYTHON=$(command -v python3 || command -v python)
+ESCAPED=$(echo "$MSG" | $PYTHON -c "import sys,json; print(json.dumps(sys.stdin.read(), ensure_ascii=False))" 2>/dev/null || echo "\"\"")
+
+echo "{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":$ESCAPED}}"
 exit 0

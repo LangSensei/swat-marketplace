@@ -1,5 +1,6 @@
 # scientific-method: Post-tool-use hook (PowerShell)
-# Tracks search/browse action count for 2-Action Rule enforcement.
+# Reminds the agent to update progress.md and plan.md after every tool use.
+# Additionally enforces 2-Action Rule for search/browse operations.
 
 $input = $Input | Out-String
 
@@ -9,6 +10,8 @@ try {
 } catch {
     $toolName = ""
 }
+
+$msg = "[scientific-method] Update progress.md with what you just did. If a cycle node is now complete, update plan.md Current State."
 
 if ($toolName -match 'search|browse|web|fetch|view|screenshot|image') {
     $counterFile = ".scientific_method_action_count"
@@ -20,10 +23,13 @@ if ($toolName -match 'search|browse|web|fetch|view|screenshot|image') {
     Set-Content $counterFile $count
 
     if ($count % 2 -eq 0) {
-        Write-Output '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"[scientific-method] 2-Action Rule: You have done 2+ search/browse operations. Update findings.md NOW with what you discovered. Multimodal content will be lost if not written down."}}'
-        exit 0
+        $msg += " Also update findings.md — you have done $count search/browse operations. Write down what you discovered before it's lost from context."
     }
 }
 
-Write-Output '{}'
+$python = if (Get-Command python3 -ErrorAction SilentlyContinue) { "python3" } else { "python" }
+$escaped = $msg | & $python -c "import sys,json; print(json.dumps(sys.stdin.read(), ensure_ascii=False))" 2>$null
+if (-not $escaped) { $escaped = '""' }
+
+Write-Output "{`"hookSpecificOutput`":{`"hookEventName`":`"PostToolUse`",`"additionalContext`":$escaped}}"
 exit 0
