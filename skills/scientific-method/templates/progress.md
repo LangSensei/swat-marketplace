@@ -1,0 +1,142 @@
+# Progress
+<!--
+  WHAT: Your session log — a chronological record of what you did + status of each step.
+  WHY: Answers "What have I done?" in the 5-Question Reboot Test. Enables recovery after session resets.
+  WHEN: Update at every step transition and after completing each Cycle.
+  STATUS: Each section tracks its own status (pending / in_progress / complete). This is the single source of truth for progress.
+-->
+
+## Understand
+<!--
+  WHAT: What you did during the Understand step.
+  WHEN: Update as you work through Understand.
+-->
+- **Status:** pending
+- Actions taken:
+  -
+- Files read:
+  -
+
+## Decompose
+<!--
+  WHAT: How you broke down the problem.
+  WHEN: Update after completing decomposition.
+-->
+- **Status:** pending
+- Actions taken:
+  -
+
+## Cycle 1: [Sub-problem]
+<!--
+  WHAT: Detailed log of what happened in this Cycle.
+  WHEN: Update each sub-step as you progress through H → P → T → C.
+-->
+
+### Hypothesize
+- **Status:** pending
+- Actions taken:
+  -
+
+### Predict
+- **Status:** pending
+- Actions taken:
+  -
+
+### Test
+- **Status:** pending
+- Actions taken:
+  <!--
+    EXAMPLE:
+      - Searched MySQL docs for isolation level behavior
+      - Read OrderService.ts source code
+      - Ran concurrent load test with 20 threads
+  -->
+  -
+- Files created/modified:
+  <!--
+    EXAMPLE:
+      - findings.md (added MySQL isolation findings)
+      - test/load_test.sh (created)
+  -->
+  -
+
+### Conclude
+- **Status:** pending
+- Actions taken:
+  -
+
+## Cycle 2: [Sub-problem]
+
+### Hypothesize
+- **Status:** pending
+- Actions taken:
+  -
+
+### Predict
+- **Status:** pending
+- Actions taken:
+  -
+
+### Test
+- **Status:** pending
+- Actions taken:
+  -
+- Files created/modified:
+  -
+
+### Conclude
+- **Status:** pending
+- Actions taken:
+  -
+
+## Synthesize
+- **Status:** pending
+- Actions taken:
+  -
+
+## Test Results
+<!--
+  WHAT: Structured record of tests/verifications you ran.
+  WHY: Makes verification auditable. "I tested it" means nothing without specifics.
+  WHEN: During Test steps in each Cycle. Add a row for each meaningful test.
+  EXAMPLE:
+    | 1 | Concurrent write test | 20 threads, 100 writes each | Lock-wait timeout | 3 timeouts in 100 writes | ✓ Confirms hypothesis |
+-->
+| Cycle | Test | Input | Expected | Actual | Status |
+|-------|------|-------|----------|--------|--------|
+| | | | | | |
+
+## Errors
+<!--
+  WHAT: Every error encountered, attempt number, and resolution.
+  WHY: Prevents repeating mistakes. Builds knowledge across the session.
+  WHEN: Add IMMEDIATELY when an error occurs.
+  EXAMPLE:
+    | 2026-01-15 10:35 | Connection refused to test DB | 1 | DB container wasn't started — ran docker compose up |
+-->
+| Timestamp | Error | Attempt | Resolution |
+|-----------|-------|---------|------------|
+| | | 1 | |
+
+## 5-Question Reboot Check
+<!--
+  WHAT: Five questions that verify your context is solid.
+  WHY: If you can answer all 5 from your files, you can resume effectively.
+  WHEN: Update periodically, especially when resuming after a break or context reset.
+-->
+| Question | Answer |
+|----------|--------|
+| Where am I? | [Current cycle/step — check Status fields above] |
+| Where am I going? | [Remaining steps — check Status fields above] |
+| What's the goal? | [See plan.md Goal] |
+| What have I learned? | [See findings.md] |
+| What have I done? | [See log above] |
+
+---
+<!--
+  REMINDER:
+  - Update Status at EVERY step transition (including within Cycles: H → P → T → C)
+  - Be specific about actions — "searched X" is better than "did research"
+  - Include timestamps for errors to track when issues occurred
+-->
+*Update Status and actions at every step transition.*
