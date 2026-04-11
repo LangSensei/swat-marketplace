@@ -25,6 +25,14 @@
         "timeout": 5
       }
     ],
+    "agentStop": [
+      {
+        "type": "command",
+        "bash": "hooks/scripts/agent-stop.sh",
+        "powershell": "hooks/scripts/agent-stop.ps1",
+        "timeout": 10
+      }
+    ],
     "errorOccurred": [
       {
         "type": "command",
