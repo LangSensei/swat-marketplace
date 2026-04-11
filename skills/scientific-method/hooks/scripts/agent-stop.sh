@@ -1,6 +1,7 @@
 #!/bin/bash
 # scientific-method: Agent stop hook
-# Checks if the task reached Synthesis. If not, reminds agent to continue.
+# Counts complete vs total cycles in plan.md Decompose table.
+# If incomplete, reminds agent to continue.
 # Always exits 0.
 
 INPUT=$(cat)
@@ -12,13 +13,20 @@ if [ ! -f "$PLAN_FILE" ]; then
     exit 0
 fi
 
-# Check if Current State indicates completion
-if grep -q "Phase:.*Synthe" "$PLAN_FILE" 2>/dev/null; then
-    echo '{"hookSpecificOutput":{"hookEventName":"AgentStop","additionalContext":"[scientific-method] Task complete. Ensure plan.md Synthesis and Decisions sections are filled before stopping."}}'
-elif grep -q "Phase:.*Conclude" "$PLAN_FILE" 2>/dev/null; then
-    echo '{"hookSpecificOutput":{"hookEventName":"AgentStop","additionalContext":"[scientific-method] Task complete. Ensure plan.md Synthesis and Decisions sections are filled before stopping."}}'
+# Count cycle statuses from the Decompose table
+TOTAL=$(grep -cE '^\|[[:space:]]*[0-9]+' "$PLAN_FILE" 2>/dev/null || echo "0")
+COMPLETE=$(grep -cE '^\|.*\|[[:space:]]*complete[[:space:]]*\|' "$PLAN_FILE" 2>/dev/null || echo "0")
+IN_PROGRESS=$(grep -cE '^\|.*\|[[:space:]]*in_progress[[:space:]]*\|' "$PLAN_FILE" 2>/dev/null || echo "0")
+PENDING=$(grep -cE '^\|.*\|[[:space:]]*pending[[:space:]]*\|' "$PLAN_FILE" 2>/dev/null || echo "0")
+
+: "${TOTAL:=0}"
+: "${COMPLETE:=0}"
+
+if [ "$COMPLETE" -eq "$TOTAL" ] && [ "$TOTAL" -gt 0 ]; then
+    MSG="[scientific-method] ALL CYCLES COMPLETE ($COMPLETE/$TOTAL). Fill in Synthesis and Decisions sections in plan.md before stopping."
 else
-    echo '{"hookSpecificOutput":{"hookEventName":"AgentStop","additionalContext":"[scientific-method] Task NOT complete. Update progress.md with current status, then read plan.md and continue working on remaining cycles."}}'
+    MSG="[scientific-method] Task incomplete ($COMPLETE/$TOTAL cycles done, $IN_PROGRESS in progress, $PENDING pending). Update progress.md with current status, then read plan.md and continue working on remaining cycles."
 fi
 
+echo "{\"hookSpecificOutput\":{\"hookEventName\":\"AgentStop\",\"additionalContext\":\"$MSG\"}}"
 exit 0

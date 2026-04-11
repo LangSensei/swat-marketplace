@@ -1,5 +1,6 @@
 # scientific-method: Agent stop hook (PowerShell)
-# Checks if the task reached Synthesis. If not, reminds agent to continue.
+# Counts complete vs total cycles in plan.md Decompose table.
+# If incomplete, reminds agent to continue.
 
 $input = $Input | Out-String
 
@@ -10,12 +11,21 @@ if (-not (Test-Path $planFile)) {
     exit 0
 }
 
-$content = Get-Content $planFile -Raw -ErrorAction SilentlyContinue
+$content = Get-Content $planFile -ErrorAction SilentlyContinue
 
-if ($content -match 'Phase:.*Synthe' -or $content -match 'Phase:.*Conclude') {
-    Write-Output '{"hookSpecificOutput":{"hookEventName":"AgentStop","additionalContext":"[scientific-method] Task complete. Ensure plan.md Synthesis and Decisions sections are filled before stopping."}}'
+$total = ($content | Select-String '^\|[\s]*\d+' | Measure-Object).Count
+$complete = ($content | Select-String '^\|.*\|[\s]*complete[\s]*\|' | Measure-Object).Count
+$inProgress = ($content | Select-String '^\|.*\|[\s]*in_progress[\s]*\|' | Measure-Object).Count
+$pending = ($content | Select-String '^\|.*\|[\s]*pending[\s]*\|' | Measure-Object).Count
+
+if ($total -eq 0) { $total = 0 }
+if ($complete -eq 0) { $complete = 0 }
+
+if ($complete -eq $total -and $total -gt 0) {
+    $msg = "[scientific-method] ALL CYCLES COMPLETE ($complete/$total). Fill in Synthesis and Decisions sections in plan.md before stopping."
 } else {
-    Write-Output '{"hookSpecificOutput":{"hookEventName":"AgentStop","additionalContext":"[scientific-method] Task NOT complete. Update progress.md with current status, then read plan.md and continue working on remaining cycles."}}'
+    $msg = "[scientific-method] Task incomplete ($complete/$total cycles done, $inProgress in progress, $pending pending). Update progress.md with current status, then read plan.md and continue working on remaining cycles."
 }
 
+Write-Output "{`"hookSpecificOutput`":{`"hookEventName`":`"AgentStop`",`"additionalContext`":`"$msg`"}}"
 exit 0
