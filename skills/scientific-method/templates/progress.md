@@ -1,19 +1,9 @@
 # Progress
 <!--
-  WHAT: Your session log — a chronological record of what you did and where you are.
+  WHAT: Your session log — a chronological record of what you did.
   WHY: Answers "What have I done?" in the 5-Question Reboot Test. Enables recovery after session resets.
   WHEN: Update at every node transition and after completing each Cycle.
 -->
-
-## Current State
-<!--
-  WHAT: Quick snapshot of where you are right now.
-  WHY: First thing to read when resuming. Tells you exactly where to pick up.
-  WHEN: Update EVERY time you move to a new node or Cycle.
--->
-- **Phase:** Understand
-- **Cycle:** -
-- **Node:** -
 
 ## Understand
 <!--

@@ -13,6 +13,16 @@
 -->
 [One sentence describing the end state]
 
+## Current State
+<!--
+  WHAT: Quick snapshot of where you are right now.
+  WHY: When re-reading plan before a decision, this tells you exactly where you are.
+  WHEN: Update EVERY time you move to a new node or Cycle.
+-->
+- **Phase:** Understand
+- **Cycle:** -
+- **Node:** -
+
 ## Key Questions
 <!--
   WHAT: Questions you need to answer to complete the task.
