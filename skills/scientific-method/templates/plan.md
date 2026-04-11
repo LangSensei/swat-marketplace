@@ -21,7 +21,6 @@
 -->
 - **Step:** Understand
 - **Cycle:** -
-- **Node:** -
 
 ## Key Questions
 <!--

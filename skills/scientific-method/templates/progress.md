@@ -29,10 +29,21 @@
 ## Cycle 1: [Sub-problem]
 <!--
   WHAT: Detailed log of what happened in this Cycle.
-  WHEN: Update as you progress through H → P → T → C.
+  WHEN: Update each sub-step as you progress through H → P → T → C.
 -->
+
+### Hypothesize
 - **Status:** pending
-- **Current:** Hypothesize / Predict / Test / Conclude
+- Actions taken:
+  -
+
+### Predict
+- **Status:** pending
+- Actions taken:
+  -
+
+### Test
+- **Status:** pending
 - Actions taken:
   <!--
     EXAMPLE:
@@ -49,12 +60,33 @@
   -->
   -
 
-## Cycle 2: [Sub-problem]
+### Conclude
 - **Status:** pending
-- **Current:** -
+- Actions taken:
+  -
+
+## Cycle 2: [Sub-problem]
+
+### Hypothesize
+- **Status:** pending
+- Actions taken:
+  -
+
+### Predict
+- **Status:** pending
+- Actions taken:
+  -
+
+### Test
+- **Status:** pending
 - Actions taken:
   -
 - Files created/modified:
+  -
+
+### Conclude
+- **Status:** pending
+- Actions taken:
   -
 
 ## Synthesize
@@ -94,7 +126,7 @@
 -->
 | Question | Answer |
 |----------|--------|
-| Where am I? | [Current cycle/step — see plan.md Current State] |
+| Where am I? | [Current cycle/step — check Status fields above] |
 | Where am I going? | [Remaining steps — check Status fields above] |
 | What's the goal? | [See plan.md Goal] |
 | What have I learned? | [See findings.md] |
@@ -103,8 +135,8 @@
 ---
 <!--
   REMINDER:
-  - Update Status at EVERY step transition
+  - Update Status at EVERY step transition (including within Cycles: H → P → T → C)
   - Be specific about actions — "searched X" is better than "did research"
   - Include timestamps for errors to track when issues occurred
 -->
-*Update Status and actions at every step transition and after completing each Cycle.*
+*Update Status and actions at every step transition.*
