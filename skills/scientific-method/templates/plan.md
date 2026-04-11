@@ -126,24 +126,10 @@
 |----------|-----------|
 | | |
 
-## Errors
-<!--
-  WHAT: Every error encountered, attempt number, and resolution.
-  WHY: Prevents repeating mistakes. Builds knowledge across the session.
-  WHEN: Add IMMEDIATELY when an error occurs.
-  EXAMPLE:
-    | Connection refused to test DB | 1 | DB container wasn't started — ran docker compose up |
--->
-| Error | Attempt | Resolution |
-|-------|---------|------------|
-| | 1 | |
-
 ---
 <!--
   REMINDERS:
   - Re-read this file before major decisions (attention manipulation — your context decays, this file doesn't)
   - Update Cycle status in Decompose table as you progress: pending → in_progress → complete
-  - Log ALL errors — they prevent repetition
-  - Never repeat a failed action — mutate your approach
   - If you discover a new sub-problem, add a new Cycle
 -->

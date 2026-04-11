@@ -62,6 +62,30 @@
 - Actions taken:
   -
 
+## Test Results
+<!--
+  WHAT: Structured record of tests/verifications you ran.
+  WHY: Makes verification auditable. "I tested it" means nothing without specifics.
+  WHEN: During Test nodes in each Cycle. Add a row for each meaningful test.
+  EXAMPLE:
+    | 1 | Concurrent write test | 20 threads, 100 writes each | Lock-wait timeout | 3 timeouts in 100 writes | ✓ Confirms hypothesis |
+-->
+| Cycle | Test | Input | Expected | Actual | Status |
+|-------|------|-------|----------|--------|--------|
+| | | | | | |
+
+## Errors
+<!--
+  WHAT: Every error encountered, attempt number, and resolution.
+  WHY: Prevents repeating mistakes. Builds knowledge across the session.
+  WHEN: Add IMMEDIATELY when an error occurs.
+  EXAMPLE:
+    | 2026-01-15 10:35 | Connection refused to test DB | 1 | DB container wasn't started — ran docker compose up |
+-->
+| Timestamp | Error | Attempt | Resolution |
+|-----------|-------|---------|------------|
+| | | 1 | |
+
 ## 5-Question Reboot Check
 <!--
   WHAT: Five questions that verify your context is solid.
