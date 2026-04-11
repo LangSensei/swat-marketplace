@@ -24,5 +24,9 @@ if ($complete -eq $total -and $total -gt 0) {
     $msg = "[scientific-method] Task incomplete ($complete/$total steps done, $inProgress in progress, $pending pending). Update progress.md, then read plan.md and continue."
 }
 
-Write-Output "{`"hookSpecificOutput`":{`"hookEventName`":`"AgentStop`",`"additionalContext`":`"$msg`"}}"
+$python = if (Get-Command python3 -ErrorAction SilentlyContinue) { "python3" } else { "python" }
+$escaped = $msg | & $python -c "import sys,json; print(json.dumps(sys.stdin.read(), ensure_ascii=False))" 2>$null
+if (-not $escaped) { $escaped = '""' }
+
+Write-Output "{`"hookSpecificOutput`":{`"hookEventName`":`"AgentStop`",`"additionalContext`":$escaped}}"
 exit 0

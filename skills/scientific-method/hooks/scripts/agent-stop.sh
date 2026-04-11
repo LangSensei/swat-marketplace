@@ -28,5 +28,7 @@ else
     MSG="[scientific-method] Task incomplete ($COMPLETE/$TOTAL steps done, $IN_PROGRESS in progress, $PENDING pending). Update progress.md, then read plan.md and continue."
 fi
 
-echo "{\"hookSpecificOutput\":{\"hookEventName\":\"AgentStop\",\"additionalContext\":\"$MSG\"}}"
+PYTHON=$(command -v python3 || command -v python)
+ESCAPED=$(echo "$MSG" | $PYTHON -c "import sys,json; print(json.dumps(sys.stdin.read(), ensure_ascii=False))" 2>/dev/null || echo "\"\"")
+echo "{\"hookSpecificOutput\":{\"hookEventName\":\"AgentStop\",\"additionalContext\":$ESCAPED}}"
 exit 0

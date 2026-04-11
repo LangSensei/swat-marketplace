@@ -25,7 +25,8 @@ try {
 
 if ($errorMsg) {
     $context = "[scientific-method] Error detected: $errorMsg. Log this in progress.md under ## Errors with the resolution."
-    $escaped = $context | python -c "import sys,json; print(json.dumps(sys.stdin.read(), ensure_ascii=False))" 2>$null
+    $python = if (Get-Command python3 -ErrorAction SilentlyContinue) { "python3" } else { "python" }
+    $escaped = $context | & $python -c "import sys,json; print(json.dumps(sys.stdin.read(), ensure_ascii=False))" 2>$null
     if (-not $escaped) { $escaped = '""' }
     Write-Output "{`"hookSpecificOutput`":{`"hookEventName`":`"ErrorOccurred`",`"additionalContext`":$escaped}}"
 } else {
