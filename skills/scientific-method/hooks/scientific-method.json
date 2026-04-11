@@ -4,32 +4,32 @@
     "sessionStart": [
       {
         "type": "command",
-        "bash": ".github/hooks/scripts/session-start.sh",
-        "powershell": ".github/hooks/scripts/session-start.ps1",
+        "bash": "hooks/scripts/session-start.sh",
+        "powershell": "hooks/scripts/session-start.ps1",
         "timeout": 15
       }
     ],
     "preToolUse": [
       {
         "type": "command",
-        "bash": ".github/hooks/scripts/staleness-check.sh",
-        "powershell": ".github/hooks/scripts/staleness-check.ps1",
+        "bash": "hooks/scripts/pre-tool-use.sh",
+        "powershell": "hooks/scripts/pre-tool-use.ps1",
         "timeout": 5
       }
     ],
     "postToolUse": [
       {
         "type": "command",
-        "bash": ".github/hooks/scripts/post-tool-use.sh",
-        "powershell": ".github/hooks/scripts/post-tool-use.ps1",
+        "bash": "hooks/scripts/post-tool-use.sh",
+        "powershell": "hooks/scripts/post-tool-use.ps1",
         "timeout": 5
       }
     ],
     "errorOccurred": [
       {
         "type": "command",
-        "bash": ".github/hooks/scripts/error-occurred.sh",
-        "powershell": ".github/hooks/scripts/error-occurred.ps1",
+        "bash": "hooks/scripts/error-occurred.sh",
+        "powershell": "hooks/scripts/error-occurred.ps1",
         "timeout": 5
       }
     ]
