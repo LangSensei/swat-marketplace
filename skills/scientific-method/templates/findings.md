@@ -5,17 +5,6 @@
   WHEN: Update after ANY discovery. Especially after 2 view/browser/search operations (2-Action Rule).
 -->
 
-## Key Findings
-<!--
-  WHAT: The most important discoveries — things that directly affect your conclusions.
-  WHY: Separates signal from noise. When reviewing findings, start here.
-  WHEN: Promote findings here when they answer a Key Question or change your hypothesis.
-  EXAMPLE:
-    - The 500 error only occurs when two requests write to the `orders` table within 50ms
-    - The application uses READ COMMITTED isolation — no deadlocks, but lost updates possible
--->
--
-
 ## Research Findings
 <!--
   WHAT: Discoveries from web searches, documentation, code reading, exploration.
