@@ -25,8 +25,8 @@ A cognitive framework for tasks that require reasoning, research, or exploration
 
 | Location | What Goes There |
 |----------|----------------|
-| Skill directory (`skills/scientific-method/`) | SKILL.md and templates |
-| Your working directory | `plan.md`, `findings.md`, `progress.md` |
+| Skill directory | SKILL.md, templates, and hooks |
+| Your working directory | `plan.md`, `findings.md`, `progress.md` (created per task) |
 
 ## File Responsibilities
 
@@ -45,6 +45,8 @@ Before starting any complex task:
 1. **Create `plan.md`** — Use [templates/plan.md](templates/plan.md) as starting point
 2. **Create `findings.md`** — Use [templates/findings.md](templates/findings.md) as starting point
 3. **Create `progress.md`** — Use [templates/progress.md](templates/progress.md) as starting point
+4. **Fill in `plan.md` Goal** — One sentence describing what you're trying to achieve
+5. **Follow the framework below** — Start with Understand, then Decompose, then Cycles
 
 ## The Framework
 
@@ -76,6 +78,8 @@ Break the problem into sub-problems. This is mandatory — even "simple" tasks b
 - Don't decompose generically ("research → analyze → report") — decompose by **actual sub-questions**
 
 **Output:** `plan.md` Decompose table filled in with Cycles. Update `progress.md` Understand Status → `complete`, Decompose Status → `complete`.
+
+> **Status transition rule:** When you start a step, mark it `in_progress`. When you finish it and move to the next, mark it `complete`. The step you're entering becomes `in_progress`.
 
 ### 3. Cycle (repeat for each sub-problem)
 
