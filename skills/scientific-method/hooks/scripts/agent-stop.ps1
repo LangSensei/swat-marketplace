@@ -1,30 +1,27 @@
 # scientific-method: Agent stop hook (PowerShell)
-# Counts complete vs total cycles in plan.md Decompose table.
+# Counts complete vs total steps in progress.md (Status fields).
 # If incomplete, reminds agent to continue.
 
 $input = $Input | Out-String
 
-$planFile = "plan.md"
+$progressFile = "progress.md"
 
-if (-not (Test-Path $planFile)) {
+if (-not (Test-Path $progressFile)) {
     Write-Output '{}'
     exit 0
 }
 
-$content = Get-Content $planFile -ErrorAction SilentlyContinue
+$content = Get-Content $progressFile -ErrorAction SilentlyContinue
 
-$total = ($content | Select-String '^\|[\s]*\d+' | Measure-Object).Count
-$complete = ($content | Select-String '^\|.*\|[\s]*complete[\s]*\|' | Measure-Object).Count
-$inProgress = ($content | Select-String '^\|.*\|[\s]*in_progress[\s]*\|' | Measure-Object).Count
-$pending = ($content | Select-String '^\|.*\|[\s]*pending[\s]*\|' | Measure-Object).Count
-
-if ($total -eq 0) { $total = 0 }
-if ($complete -eq 0) { $complete = 0 }
+$total = ($content | Select-String '\*\*Status:\*\*' | Measure-Object).Count
+$complete = ($content | Select-String '\*\*Status:\*\* complete' | Measure-Object).Count
+$inProgress = ($content | Select-String '\*\*Status:\*\* in_progress' | Measure-Object).Count
+$pending = ($content | Select-String '\*\*Status:\*\* pending' | Measure-Object).Count
 
 if ($complete -eq $total -and $total -gt 0) {
-    $msg = "[scientific-method] ALL CYCLES COMPLETE ($complete/$total). Fill in Synthesis and Decisions sections in plan.md before stopping."
+    $msg = "[scientific-method] ALL STEPS COMPLETE ($complete/$total). Ensure plan.md Synthesis and Decisions are filled before stopping."
 } else {
-    $msg = "[scientific-method] Task incomplete ($complete/$total cycles done, $inProgress in progress, $pending pending). Update progress.md with current status, then read plan.md and continue working on remaining cycles."
+    $msg = "[scientific-method] Task incomplete ($complete/$total steps done, $inProgress in progress, $pending pending). Update progress.md, then read plan.md and continue."
 }
 
 Write-Output "{`"hookSpecificOutput`":{`"hookEventName`":`"AgentStop`",`"additionalContext`":`"$msg`"}}"

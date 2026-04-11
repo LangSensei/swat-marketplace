@@ -1,8 +1,9 @@
 # Progress
 <!--
-  WHAT: Your session log — a chronological record of what you did.
+  WHAT: Your session log — a chronological record of what you did + status of each step.
   WHY: Answers "What have I done?" in the 5-Question Reboot Test. Enables recovery after session resets.
   WHEN: Update at every node transition and after completing each Cycle.
+  STATUS: Each section tracks its own status (pending / in_progress / complete). This is the single source of truth for progress.
 -->
 
 ## Understand
@@ -10,6 +11,7 @@
   WHAT: What you did during the Understand phase.
   WHEN: Update as you work through Understand.
 -->
+- **Status:** pending
 - Actions taken:
   -
 - Files read:
@@ -20,6 +22,7 @@
   WHAT: How you broke down the problem.
   WHEN: Update after completing decomposition.
 -->
+- **Status:** pending
 - Actions taken:
   -
 
@@ -28,6 +31,7 @@
   WHAT: Detailed log of what happened in this Cycle.
   WHEN: Update as you progress through H → P → T → C.
 -->
+- **Status:** pending
 - **Node:** Hypothesize / Predict / Test / Conclude
 - Actions taken:
   <!--
@@ -46,6 +50,7 @@
   -
 
 ## Cycle 2: [Sub-problem]
+- **Status:** pending
 - **Node:** -
 - Actions taken:
   -
@@ -53,6 +58,7 @@
   -
 
 ## Synthesize
+- **Status:** pending
 - Actions taken:
   -
 
@@ -88,8 +94,8 @@
 -->
 | Question | Answer |
 |----------|--------|
-| Where am I? | [Current phase/cycle/node — see Current State above] |
-| Where am I going? | [Remaining Cycles — see plan.md Decompose table] |
+| Where am I? | [Current cycle/node — see plan.md Current State] |
+| Where am I going? | [Remaining steps — check Status fields above] |
 | What's the goal? | [See plan.md Goal] |
 | What have I learned? | [See findings.md] |
 | What have I done? | [See log above] |
@@ -97,8 +103,8 @@
 ---
 <!--
   REMINDER:
-  - Update Current State at EVERY node transition
+  - Update Status at EVERY step transition
   - Be specific about actions — "searched X" is better than "did research"
   - Include timestamps for errors to track when issues occurred
 -->
-*Update at every node transition and after completing each Cycle.*
+*Update Status and actions at every node transition and after completing each Cycle.*

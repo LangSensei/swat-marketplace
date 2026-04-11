@@ -57,14 +57,14 @@
   WHY: Complex problems are solved by solving their parts. Explicit decomposition prevents aimless exploration.
   WHEN: After Understand. Update if you discover new sub-problems during Cycles.
   EXAMPLE:
-    | 1 | Reproduce the error locally | complete |
-    | 2 | Identify the failing query | in_progress |
-    | 3 | Test fix under load | pending |
+    | 1 | Reproduce the error locally |
+    | 2 | Identify the failing query |
+    | 3 | Test fix under load |
 -->
-| Cycle | Sub-problem | Status |
-|-------|-------------|--------|
-| 1 | | pending |
-| 2 | | pending |
+| Cycle | Sub-problem |
+|-------|-------------|
+| 1 | |
+| 2 | |
 
 ## Cycle 1: [Sub-problem]
 <!--
