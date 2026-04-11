@@ -28,6 +28,16 @@ A cognitive framework for tasks that require reasoning, research, or exploration
 | Skill directory (`skills/scientific-method/`) | SKILL.md and templates |
 | Your working directory | `plan.md`, `findings.md`, `progress.md` |
 
+## File Responsibilities
+
+| File | Role | Tracks |
+|------|------|--------|
+| `plan.md` | **How you think** | Goal, current state pointer, key questions, decomposition, hypotheses, conclusions, synthesis, decisions |
+| `findings.md` | **What you found** | Research findings, visual/browser findings, technical decisions, issues encountered, resources |
+| `progress.md` | **What you did** | Actions log per step, **status of each step** (single source of truth), test results, errors |
+
+One piece of information lives in one place. Don't duplicate status, errors, or findings across files.
+
 ## Quick Start
 
 Before starting any complex task:
@@ -54,7 +64,7 @@ Before anything else, understand what you're dealing with.
 - Record information gaps as **Key Questions** in `plan.md`
 - Identify constraints, assumptions, and success criteria
 
-**Output:** `plan.md` Goal + Key Questions + Understand section filled in.
+**Output:** `plan.md` Goal + Key Questions + Understand section filled in. Update `progress.md` Understand Status → `in_progress`.
 
 ### 2. Decompose
 
@@ -65,7 +75,7 @@ Break the problem into sub-problems. This is mandatory — even "simple" tasks b
 - Order Cycles by dependency (what needs to be answered first?)
 - Don't decompose generically ("research → analyze → report") — decompose by **actual sub-questions**
 
-**Output:** `plan.md` Decompose table filled in with Cycles.
+**Output:** `plan.md` Decompose table filled in with Cycles. Update `progress.md` Understand Status → `complete`, Decompose Status → `complete`.
 
 ### 3. Cycle (repeat for each sub-problem)
 
@@ -98,6 +108,7 @@ Was the hypothesis supported or rejected?
 - **Rejected:** Form a new hypothesis based on what you learned, repeat the Cycle
 - **Partially supported:** Note what held and what didn't, refine and repeat
 - Record conclusion in `plan.md` → Cycle N → Conclusion
+- Update `progress.md` Cycle N Status → `complete` (or stay `in_progress` if looping back)
 
 ### 4. Synthesize
 
@@ -108,7 +119,7 @@ After all Cycles are complete:
 - Produce the final answer or deliverable
 - Check: did you answer all Key Questions from Understand?
 
-**Output:** `plan.md` Synthesis section + final deliverable.
+**Output:** `plan.md` Synthesis section + final deliverable. Update `progress.md` Synthesize Status → `complete`.
 
 ## Critical Rules
 
@@ -145,8 +156,8 @@ AFTER 3 FAILURES: Escalate
   → Explain what you tried, share the error, ask for guidance.
 ```
 
-### Don't Skip Nodes
-Each node (Understand, Hypothesize, Predict, Test, Conclude) is a distinct cognitive action. Jumping from Understand straight to Test means you're guessing, not reasoning. The discipline of forming explicit hypotheses and predictions is what makes this framework work.
+### Don't Skip Steps
+Each step (Understand, Decompose, Hypothesize, Predict, Test, Conclude, Synthesize) is a distinct cognitive action. Jumping from Understand straight to Test means you're guessing, not reasoning. The discipline of forming explicit hypotheses and predictions is what makes this framework work.
 
 ### When to Loop Back
 - Hypothesis rejected → new hypothesis (stay in same Cycle)
@@ -160,7 +171,7 @@ Each node (Understand, Hypothesize, Predict, Test, Conclude) is a distinct cogni
 | Just wrote a file | DON'T read it back | Content still in context |
 | Viewed image/PDF | Write findings NOW | Multimodal → text before lost |
 | Browser returned data | Write to findings.md | Screenshots don't persist |
-| Starting new Cycle | Read plan + findings | Re-orient before hypothesizing |
+| Starting new Cycle | Read plan + findings + progress | Re-orient before hypothesizing |
 | Error occurred | Read relevant file | Need current state to fix |
 | Resuming after gap | Read all 3 files | Recover full state |
 
@@ -171,7 +182,7 @@ If you can answer these from your files, your state management is solid:
 | Question | Source |
 |----------|--------|
 | Where am I? | Current State in `plan.md` + Status in `progress.md` |
-| Where am I going? | Remaining Cycles in `plan.md` |
+| Where am I going? | Remaining steps — check Status fields in `progress.md` |
 | What's the goal? | Goal statement in `plan.md` |
 | What have I learned? | `findings.md` |
 | What have I done? | `progress.md` |
@@ -190,6 +201,6 @@ If you can answer these from your files, your state management is solid:
 
 ## Templates
 
-- [templates/plan.md](templates/plan.md) — Goal, decomposition, hypothesis tracking
-- [templates/findings.md](templates/findings.md) — Evidence and discoveries
-- [templates/progress.md](templates/progress.md) — Session log and recovery
+- [templates/plan.md](templates/plan.md) — Goal, decomposition, hypothesis tracking, current state
+- [templates/findings.md](templates/findings.md) — Evidence, discoveries, and resources
+- [templates/progress.md](templates/progress.md) — Session log, status tracking (single source of truth), errors
