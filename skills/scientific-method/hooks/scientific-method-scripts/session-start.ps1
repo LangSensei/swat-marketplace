@@ -5,7 +5,7 @@
 $input = $Input | Out-String
 
 $planFile = "plan.md"
-$skillDir = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+$skillDir = Join-Path ".github" "skills" "scientific-method"
 
 if (Test-Path $planFile) {
     $context = "[scientific-method] Resuming session. Read plan.md, findings.md, and progress.md to restore context."
