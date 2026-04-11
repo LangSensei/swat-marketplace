@@ -79,6 +79,8 @@ Break the problem into sub-problems. This is mandatory — even "simple" tasks b
 
 ### 3. Cycle (repeat for each sub-problem)
 
+When starting a Cycle, update `progress.md` Cycle N Status → `in_progress` and `plan.md` Current State.
+
 #### Hypothesize
 Based on what you know so far, propose an answer or approach.
 
@@ -93,6 +95,8 @@ If your hypothesis is correct, what would you expect to see?
 - Define concrete, observable predictions
 - These become your test criteria
 
+**Output:** `plan.md` → Cycle N → Prediction section.
+
 #### Test
 Execute the verification. This is where you actually do work.
 
@@ -100,6 +104,8 @@ Execute the verification. This is where you actually do work.
 - Record ALL discoveries in `findings.md` immediately
 - **2-Action Rule:** After every 2 search/browse/view operations, update `findings.md`
 - Visual/multimodal content must be transcribed to text immediately — it won't persist
+
+**Output:** `findings.md` updated with discoveries. `progress.md` Test Results table updated.
 
 #### Conclude
 Was the hypothesis supported or rejected?
@@ -135,7 +141,7 @@ Multimodal content (images, browser results, screenshots) does not persist in co
 Before major decisions, re-read `plan.md`. This refreshes goals in your attention window. Context decays over long sessions — your files don't.
 
 ### Update Progress at Every Transition
-When moving between nodes (Understand → Decompose, Cycle N Hypothesize → Test, etc.), update `progress.md` — both the actions log and the **Status** field. Status in `progress.md` is the single source of truth for how far you've gotten.
+When moving between steps (Understand → Decompose, Cycle N Hypothesize → Test, etc.), update `progress.md` — both the actions log and the **Status** field. Status in `progress.md` is the single source of truth for how far you've gotten. Also update `plan.md` Current State to reflect where you are.
 
 ### Log ALL Errors
 Every error goes in `progress.md` Errors table. Track what you tried. Never repeat a failed action — mutate the approach.
@@ -153,7 +159,8 @@ ATTEMPT 3: Broader Rethink
   → Question assumptions. Search for solutions. Consider revising the plan.
 
 AFTER 3 FAILURES: Escalate
-  → Explain what you tried, share the error, ask for guidance.
+  → Stop. Document what you tried in progress.md. Present the problem,
+    attempts, and errors to the user. Ask for guidance or alternative direction.
 ```
 
 ### Don't Skip Steps
@@ -196,7 +203,8 @@ If you can answer these from your files, your state management is solid:
 | Keep findings in your head | Write to `findings.md` immediately |
 | Repeat a failed approach | Log error, mutate approach |
 | Skip Predict ("I'll just see what happens") | Define what you expect to see |
-| Forget to update progress | Update at every node transition |
+| Forget to update progress | Update at every step transition |
+| Duplicate info across files | One piece of information, one file |
 | Start without a plan | Create `plan.md` FIRST |
 
 ## Templates
