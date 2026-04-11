@@ -10,8 +10,6 @@
   WHAT: What you did during the Understand phase.
   WHEN: Update as you work through Understand.
 -->
-- **Status:** in_progress
-- **Started:** [timestamp]
 - Actions taken:
   -
 - Files read:
@@ -22,7 +20,6 @@
   WHAT: How you broke down the problem.
   WHEN: Update after completing decomposition.
 -->
-- **Status:** pending
 - Actions taken:
   -
 
@@ -31,7 +28,6 @@
   WHAT: Detailed log of what happened in this Cycle.
   WHEN: Update as you progress through H → P → T → C.
 -->
-- **Status:** pending
 - **Node:** Hypothesize / Predict / Test / Conclude
 - Actions taken:
   <!--
@@ -50,7 +46,6 @@
   -
 
 ## Cycle 2: [Sub-problem]
-- **Status:** pending
 - **Node:** -
 - Actions taken:
   -
@@ -58,7 +53,6 @@
   -
 
 ## Synthesize
-- **Status:** pending
 - Actions taken:
   -
 
