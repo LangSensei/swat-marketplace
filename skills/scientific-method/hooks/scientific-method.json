@@ -4,40 +4,40 @@
     "sessionStart": [
       {
         "type": "command",
-        "bash": "hooks/scripts/session-start.sh",
-        "powershell": "hooks/scripts/session-start.ps1",
+        "bash": ".github/hooks/scientific-method-scripts/session-start.sh",
+        "powershell": ".github/hooks/scientific-method-scripts/session-start.ps1",
         "timeout": 15
       }
     ],
     "preToolUse": [
       {
         "type": "command",
-        "bash": "hooks/scripts/pre-tool-use.sh",
-        "powershell": "hooks/scripts/pre-tool-use.ps1",
+        "bash": ".github/hooks/scientific-method-scripts/pre-tool-use.sh",
+        "powershell": ".github/hooks/scientific-method-scripts/pre-tool-use.ps1",
         "timeout": 5
       }
     ],
     "postToolUse": [
       {
         "type": "command",
-        "bash": "hooks/scripts/post-tool-use.sh",
-        "powershell": "hooks/scripts/post-tool-use.ps1",
+        "bash": ".github/hooks/scientific-method-scripts/post-tool-use.sh",
+        "powershell": ".github/hooks/scientific-method-scripts/post-tool-use.ps1",
         "timeout": 5
       }
     ],
     "agentStop": [
       {
         "type": "command",
-        "bash": "hooks/scripts/agent-stop.sh",
-        "powershell": "hooks/scripts/agent-stop.ps1",
+        "bash": ".github/hooks/scientific-method-scripts/agent-stop.sh",
+        "powershell": ".github/hooks/scientific-method-scripts/agent-stop.ps1",
         "timeout": 10
       }
     ],
     "errorOccurred": [
       {
         "type": "command",
-        "bash": "hooks/scripts/error-occurred.sh",
-        "powershell": "hooks/scripts/error-occurred.ps1",
+        "bash": ".github/hooks/scientific-method-scripts/error-occurred.sh",
+        "powershell": ".github/hooks/scientific-method-scripts/error-occurred.ps1",
         "timeout": 5
       }
     ]
