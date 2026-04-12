@@ -12,7 +12,7 @@ Execute structured tasks by following predefined phases with step-by-step checkl
 
 - Tasks with known, repeatable procedures
 - Code review, content writing, squad creation
-- Any task where the phases are defined upfront by the squad playbook
+- Any task where the phases can be defined upfront
 
 ## Files
 
@@ -30,8 +30,8 @@ Execute structured tasks by following predefined phases with step-by-step checkl
 
 ## Quick Start
 
-1. Read your squad playbook (`.squad/MANIFEST.md`) to understand the phases
-2. Copy templates to your working directory and fill in Goal + Phases from the playbook
+1. Understand your task — read the assignment/brief to identify the phases
+2. Copy templates to your working directory and fill in Goal + Phases
 3. Execute phases in order — check off steps as you go
 4. Update findings.md after every 2 search/browse/view operations (2-Action Rule)
 5. Update progress.md with actions taken at each phase gate
@@ -39,7 +39,7 @@ Execute structured tasks by following predefined phases with step-by-step checkl
 ## Core Rules
 
 ### 1. Plan First
-Copy the templates. Fill in the phases from your squad playbook. Do not start execution without `plan.md`.
+Copy the templates. Fill in the phases from your task brief. Do not start execution without `plan.md`.
 
 ### 2. Execute in Order
 Phases are sequential. Do not skip ahead. Each phase must be completed before moving to the next, unless explicitly marked `[skipped] reason`.
@@ -69,7 +69,7 @@ Every error goes in `progress.md` Errors table. Track what you tried. Never repe
 Attempt 1: Diagnose & fix — read error, identify root cause, apply targeted fix
 Attempt 2: Alternative approach — different method, different tool
 Attempt 3: Broader rethink — question assumptions, search for solutions
-After 3 failures: Escalate — explain what you tried, share the error
+After 3 failures: Log in findings.md Issues Encountered — document what you tried and the blockers
 ```
 
 ## The 5-Question Reboot Test
