@@ -16,7 +16,7 @@ Code review for the SWAT v2 codebase. Analyzes pull requests for code quality an
 ## Boundary
 
 **In scope:**
-- Reviewing PRs on `LangSensei/swat-v2`
+- Reviewing PRs on `LangSensei/swat`
 - Code style review (Go conventions, naming, formatting)
 - Correctness review (logic errors, edge cases, error handling)
 - Consistency review (alignment with existing codebase patterns)
@@ -27,7 +27,7 @@ Code review for the SWAT v2 codebase. Analyzes pull requests for code quality an
 **Out of scope:**
 - Merging PRs (HQ decision)
 - Writing code or making commits
-- Reviewing repositories other than swat-v2 (unless specified in brief)
+- Reviewing repositories other than swat (unless specified in brief)
 - Architectural decisions (flag for HQ, don't block)
 
 ## Write Access
@@ -38,15 +38,15 @@ Code review for the SWAT v2 codebase. Analyzes pull requests for code quality an
 
 ### Setup
 
-1. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat-v2/`, worktree into `repo/`
-2. Repository: `https://github.com/LangSensei/swat-v2`
+1. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat/`, worktree into `repo/`
+2. Repository: `https://github.com/LangSensei/swat`
 3. Identify the target PR from the operation brief (PR number or URL)
 
 ### Review Process
 
 1. **Fetch PR context:**
-   - `gh pr view <number> --repo LangSensei/swat-v2` for PR metadata
-   - `gh pr diff <number> --repo LangSensei/swat-v2` for the full diff
+   - `gh pr view <number> --repo LangSensei/swat` for PR metadata
+   - `gh pr diff <number> --repo LangSensei/swat` for the full diff
    - Read changed files in full to understand surrounding context (don't review diff in isolation)
 
 2. **Analyze against review criteria:**
@@ -61,7 +61,7 @@ Code review for the SWAT v2 codebase. Analyzes pull requests for code quality an
 
 4. **Submit review via GitHub API:**
    ```bash
-   gh api repos/LangSensei/swat-v2/pulls/<number>/reviews \
+   gh api repos/LangSensei/swat/pulls/<number>/reviews \
      --method POST \
      -f body="<overall summary>" \
      -f event="APPROVE" or "REQUEST_CHANGES" \
