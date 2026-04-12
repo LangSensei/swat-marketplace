@@ -13,8 +13,8 @@ dependencies:
 All repos are cached at `~/.swat/repos/`. First time clones, subsequent operations reuse.
 
 ```bash
-REPO_NAME="<repo-name>"  # e.g. swat-v2
-REPO_URL="<repo-url>"    # e.g. https://github.com/LangSensei/swat-v2
+REPO_NAME="<repo-name>"  # e.g. swat
+REPO_URL="<repo-url>"    # e.g. https://github.com/LangSensei/swat
 REPO_DIR="$HOME/.swat/repos/$REPO_NAME"
 
 # First time: clone. Subsequent: fetch.

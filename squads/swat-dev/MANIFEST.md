@@ -1,7 +1,7 @@
 ---
 name: swat-dev
 version: "1.5.0"
-description: Self-development squad for the SWAT system — implements features, fixes bugs, and opens PRs on the swat-v2 repository
+description: Self-development squad for the SWAT system — implements features, fixes bugs, and opens PRs on the swat repository
 dependencies:
   skills: [scientific-method, go-dev, git-pr]
   mcps: [swat]
@@ -34,14 +34,14 @@ Development and maintenance of the SWAT v2 codebase.
 
 ## Write Access
 
-- `~/.swat/repos/swat-v2/` — worktree created via git-pr skill
+- `~/.swat/repos/swat/` — worktree created via git-pr skill
 
 ## Squad Playbook
 
 ### Setup
 
-1. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat-v2/`, worktree into `repo/`
-2. Repository: `https://github.com/LangSensei/swat-v2`
+1. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat/`, worktree into `repo/`
+2. Repository: `https://github.com/LangSensei/swat`
 3. If the brief specifies an existing branch (e.g. fixing review comments), use git-pr Mode B (resume existing branch) instead of creating a new one
 
 ### Development
@@ -56,7 +56,7 @@ Development and maintenance of the SWAT v2 codebase.
 1. Push and open PR: `git push origin HEAD && gh pr create --title "..." --body "..." --base main`
    - If resuming an existing branch with an open PR, push and comment on the existing PR instead of creating a new one
 2. PR description must include: What, Why, Changes, How to Test
-3. Clean up worktree (mandatory): `cd ~/.swat/repos/swat-v2 && git worktree remove "$(pwd)/repo" --force`
+3. Clean up worktree (mandatory): `cd ~/.swat/repos/swat && git worktree remove "$(pwd)/repo" --force`
 
 **Debrief hint:** Opening a PR typically means review is needed — prefer dispatch over notify.
 

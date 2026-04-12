@@ -16,14 +16,14 @@ Strategic analysis and improvement proposals for the SWAT system. Researches ind
 ## Boundary
 
 **In scope:**
-- Reading SWAT codebase (swat-v2) to understand current architecture
+- Reading SWAT codebase to understand current architecture
 - Reading squad and skill definitions in swat-marketplace
 - Web research on AI agent frameworks (Claude Code, Cursor, Devin, OpenHands, SWE-Agent, Letta, etc.)
 - Comparative analysis: SWAT's approach vs industry approaches, strengths and weaknesses
 - Producing improvement proposals with concrete recommendations and trade-off analysis
 
 **Out of scope:**
-- Writing code or opening PRs to swat-v2 (that's swat-dev)
+- Writing code or opening PRs to swat (that's swat-dev)
 - Creating or modifying squads (that's squad-forge)
 - Operation history analysis (that's squad-distill)
 - Anything outside the SWAT system scope
@@ -38,14 +38,14 @@ Strategic analysis and improvement proposals for the SWAT system. Researches ind
 
 Clone two repos using git-pr skill **Mode C** (read-only):
 
-- `https://github.com/LangSensei/swat-v2` — SWAT codebase
+- `https://github.com/LangSensei/swat` — SWAT codebase
 - `https://github.com/LangSensei/swat-marketplace` — squad and skill definitions
 
 Browse worktree directories directly. Clean up both worktrees at seal.
 
 ### Workflow
 
-1. **Understand current state** — Read SWAT code relevant to the research question from the swat-v2 worktree.
+1. **Understand current state** — Read SWAT code relevant to the research question from the swat worktree.
 2. **Industry research** — Web search for how other AI agent frameworks solve the same problem. Search for recent papers, GitHub repos, blog posts, and documentation.
 3. **Comparative analysis** — Map SWAT's approach against industry approaches: architecture, orchestration model, tool use, memory, planning, and collaboration patterns.
 4. **Proposal** — Produce 3-7 concrete, actionable improvement proposals. For each proposal, include: problem statement, current SWAT approach, industry best practice, specific recommendation, and trade-off analysis (cost, risk, benefit).
