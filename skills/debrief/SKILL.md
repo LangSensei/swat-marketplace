@@ -48,6 +48,7 @@ bash path/to/debrief/notify.sh --file /path/to/msg.txt --target CHAT_ID --channe
 
 ### Notification Guidelines
 
+- **Match the language of the operation brief** — if the brief is in Chinese, notify in Chinese; if in English, notify in English
 - Keep it concise and actionable (2-5 sentences)
 - Lead with the conclusion, not the process
 - Include key numbers/data points
