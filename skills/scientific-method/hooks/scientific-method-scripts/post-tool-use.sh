@@ -1,4 +1,6 @@
 #!/bin/bash
+
+export PYTHONIOENCODING=utf-8
 # scientific-method: Post-tool-use hook
 # Reminds the agent to update planning files after every tool use.
 # Always exits 0.

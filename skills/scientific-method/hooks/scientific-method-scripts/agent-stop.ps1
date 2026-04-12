@@ -1,4 +1,8 @@
 # scientific-method: Agent stop hook (PowerShell)
+
+# Ensure UTF-8 encoding for cross-platform compatibility
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$env:PYTHONIOENCODING = "utf-8"
 # Counts complete vs total steps in progress.md (Status fields).
 # If incomplete, reminds agent to continue.
 

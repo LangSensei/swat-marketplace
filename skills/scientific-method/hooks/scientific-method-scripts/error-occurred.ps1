@@ -1,4 +1,8 @@
 # scientific-method: Error hook (PowerShell)
+
+# Ensure UTF-8 encoding for cross-platform compatibility
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$env:PYTHONIOENCODING = "utf-8"
 # Reminds the agent to log errors in progress.md
 
 $input = $Input | Out-String

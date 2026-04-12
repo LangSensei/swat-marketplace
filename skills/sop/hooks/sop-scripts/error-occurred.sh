@@ -1,4 +1,6 @@
 #!/bin/bash
+
+export PYTHONIOENCODING=utf-8
 # sop: Error hook
 # Reminds the agent to log errors in progress.md
 # Always exits 0

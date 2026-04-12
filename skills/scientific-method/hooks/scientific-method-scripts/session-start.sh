@@ -1,4 +1,6 @@
 #!/bin/bash
+
+export PYTHONIOENCODING=utf-8
 # scientific-method: Session start hook
 # If plan.md exists: inject context for session recovery
 # If plan.md doesn't exist: inject SKILL.md so agent knows the framework

@@ -1,6 +1,6 @@
 ---
 name: sop
-version: "1.0.0"
+version: "1.0.1"
 description: Standard Operating Procedure — phase-based execution with step checklists for structured, repeatable tasks
 ---
 
