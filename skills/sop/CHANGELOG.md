@@ -1,5 +1,11 @@
 # SOP Skill — Changelog
 
+## 1.0.2 (2026-04-12)
+- Rewrite hooks to preToolUse only (postToolUse/sessionStart/errorOccurred/agentStop outputs are ignored by Copilot CLI)
+- Add staleness check: deny when plan.md/progress.md/findings.md not updated in 120s
+- Add context refresh: deny every 5 minutes with reminder to re-read AGENTS.md + .squad/
+- Remove 8 unused hook scripts (session-start, post-tool-use, error-occurred, agent-stop)
+
 ## 1.0.1 (2026-04-12)
 - Fix Windows encoding: ensure UTF-8 for PowerShell→Python pipe (fixes Chinese garbled output)
 - Add PYTHONIOENCODING=utf-8 to all hook scripts
