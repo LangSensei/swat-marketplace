@@ -11,6 +11,15 @@ $REFRESH_TS_FILE = ".context_refresh_ts"
 
 $now = [int][double]::Parse((Get-Date -UFormat %s))
 
+# Skip during final stages — if all but last (or all) phases are complete, allow freely
+if (Test-Path "plan.md") {
+    $phaseCount = (Select-String -Path "plan.md" -Pattern '^### Phase' | Measure-Object).Count
+    $completeCount = (Select-String -Path "plan.md" -Pattern '\*\*Status:\*\* complete' | Measure-Object).Count
+    if ($phaseCount -gt 0 -and $completeCount -ge ($phaseCount - 1)) {
+        Write-Output '{}'; exit 0
+    }
+}
+
 # First run: initialize timestamp, don't deny
 if (-not (Test-Path $REFRESH_TS_FILE)) {
     Set-Content -Path $REFRESH_TS_FILE -Value $now -NoNewline

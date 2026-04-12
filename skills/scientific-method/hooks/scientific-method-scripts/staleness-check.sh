@@ -24,6 +24,15 @@ case "$TOOL_ARGS" in
         echo '{}'; exit 0 ;;
 esac
 
+# Skip during final stages (Synthesize/Complete) — no more state file updates expected
+if [ -f "plan.md" ]; then
+    CURRENT_STATE=$(sed -n '/^## Current State/,/^## /{ /^\*\*Step:\*\*/s/.*\*\*Step:\*\* *//p; /^- \*\*Step:\*\*/s/.*\*\*Step:\*\* *//p; }' plan.md 2>/dev/null)
+    case "$CURRENT_STATE" in
+        *[Ss]ynthesize*|*[Cc]omplete*)
+            echo '{}'; exit 0 ;;
+    esac
+fi
+
 NOW=$(date +%s)
 STALE_FILES=""
 for f in plan.md progress.md findings.md; do

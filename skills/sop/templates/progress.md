@@ -3,11 +3,10 @@
   WHAT: Execution log — what you actually did, step by step.
   WHY: If the session restarts, this is how you recover state.
   WHEN: Update throughout execution. Fill in each phase section as you work through it.
-  NOTE: Phase names MUST match plan.md. Add/remove phase sections to stay in sync.
+  NOTE: Phase names MUST match plan.md. Status tracking lives in plan.md — this file is purely an action log.
 -->
 
 ## Phase 1: [Name]
-**Status:** not_started
 
 ### Actions
 <!--
@@ -19,13 +18,11 @@
 -->
 
 ## Phase 2: [Name]
-**Status:** not_started
 
 ### Actions
 <!-- Log every action taken. -->
 
 ## Phase 3: [Name]
-**Status:** not_started
 
 ### Actions
 <!-- Log every action taken. -->
@@ -53,8 +50,8 @@
 <!-- Update this after each phase gate. If you can fill this in, your context is solid. -->
 | Question | Answer |
 |----------|--------|
-| Where am I? | |
-| Where am I going? | |
-| What's the goal? | |
-| What have I found? | |
-| What have I done? | |
+| Where am I? | [Check plan.md Current State] |
+| Where am I going? | [Check plan.md — next not_started phases] |
+| What's the goal? | [See plan.md Goal] |
+| What have I found? | [See findings.md] |
+| What have I done? | [See log above] |

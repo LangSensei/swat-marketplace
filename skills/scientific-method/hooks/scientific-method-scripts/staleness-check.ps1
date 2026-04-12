@@ -15,6 +15,14 @@ if ($toolArgs -like "*plan.md*" -or $toolArgs -like "*progress.md*" -or $toolArg
     Write-Output '{}'; exit 0
 }
 
+# Skip during final stages (Synthesize/Complete) — no more state file updates expected
+if (Test-Path "plan.md") {
+    $currentState = (Select-String -Path "plan.md" -Pattern '\*\*Step:\*\*' -List | Select-Object -First 1).Line
+    if ($currentState -match '(?i)(synthesize|complete)') {
+        Write-Output '{}'; exit 0
+    }
+}
+
 $now = [int][double]::Parse((Get-Date -UFormat %s))
 
 $staleFiles = @()

@@ -1,6 +1,6 @@
 ---
 name: scientific-method
-version: "1.0.2"
+version: "1.0.3"
 description: Hypothesis-driven cognitive framework for complex reasoning and research tasks. Understand → Decompose → Cycle (Hypothesize → Predict → Test → Conclude) → Synthesize.
 ---
 
@@ -42,11 +42,14 @@ One piece of information lives in one place. Don't duplicate status, errors, or 
 
 Before starting any complex task:
 
-1. **Create `plan.md`** — Use [templates/plan.md](templates/plan.md) as starting point
-2. **Create `findings.md`** — Use [templates/findings.md](templates/findings.md) as starting point
-3. **Create `progress.md`** — Use [templates/progress.md](templates/progress.md) as starting point
-4. **Fill in `plan.md` Goal** — One sentence describing what you're trying to achieve
-5. **Follow the framework below** — Start with Understand, then Decompose, then Cycles
+1. **Copy templates** — Do NOT create these files from scratch. The templates contain required structure and comments. If the files already exist, skip this step.
+   ```
+   cp .github/skills/scientific-method/templates/plan.md .
+   cp .github/skills/scientific-method/templates/findings.md .
+   cp .github/skills/scientific-method/templates/progress.md .
+   ```
+2. **Fill in `plan.md` Goal** — One sentence describing what you're trying to achieve
+3. **Follow the framework below** — Start with Understand, then Decompose, then Cycles
 
 ## The Framework
 
@@ -210,9 +213,3 @@ If you can answer these from your files, your state management is solid:
 | Forget to update progress | Update at every step transition |
 | Duplicate info across files | One piece of information, one file |
 | Start without a plan | Create `plan.md` FIRST |
-
-## Templates
-
-- [templates/plan.md](templates/plan.md) — Goal, decomposition, hypothesis tracking, current state
-- [templates/findings.md](templates/findings.md) — Evidence, discoveries, and resources
-- [templates/progress.md](templates/progress.md) — Session log, status tracking (single source of truth), errors

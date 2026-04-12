@@ -11,6 +11,14 @@ $REFRESH_TS_FILE = ".context_refresh_ts"
 
 $now = [int][double]::Parse((Get-Date -UFormat %s))
 
+# Skip during final stages (Synthesize/Complete) — no more context refresh needed
+if (Test-Path "plan.md") {
+    $currentState = (Select-String -Path "plan.md" -Pattern '\*\*Step:\*\*' -List | Select-Object -First 1).Line
+    if ($currentState -match '(?i)(synthesize|complete)') {
+        Write-Output '{}'; exit 0
+    }
+}
+
 # First run: initialize timestamp, don't deny
 if (-not (Test-Path $REFRESH_TS_FILE)) {
     Set-Content -Path $REFRESH_TS_FILE -Value $now -NoNewline

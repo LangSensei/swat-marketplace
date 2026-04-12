@@ -24,6 +24,15 @@ case "$TOOL_ARGS" in
         echo '{}'; exit 0 ;;
 esac
 
+# Skip during final stages — if all but last (or all) phases are complete, allow freely
+if [ -f "plan.md" ]; then
+    PHASE_COUNT=$(grep -c '^### Phase' plan.md 2>/dev/null || echo "0")
+    COMPLETE_COUNT=$(grep -c '\*\*Status:\*\* complete' plan.md 2>/dev/null || echo "0")
+    if [ "$PHASE_COUNT" -gt 0 ] && [ "$COMPLETE_COUNT" -ge $((PHASE_COUNT - 1)) ]; then
+        echo '{}'; exit 0
+    fi
+fi
+
 NOW=$(date +%s)
 STALE_FILES=""
 for f in plan.md progress.md findings.md; do
