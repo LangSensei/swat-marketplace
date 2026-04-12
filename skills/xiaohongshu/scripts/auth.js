@@ -12,12 +12,13 @@
 //      a) Direct success — cookies set, done
 //      b) SMS verification popup appears (overlay on top of login modal)
 //         Script outputs SMS_VERIFICATION_NEEDED
-//         Write 6-digit code to --sms-code-path (default /tmp/xhs-sms-code.txt)
+//         Write 6-digit code to --sms-code-path (default <tmpdir>/xhs-sms-code.txt)
 //         Code auto-submits after filling (no button click needed)
 //   5. On success: saves storage state and outputs LOGIN_SUCCESS + STATE_SAVED=<path>
 
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
 const args = process.argv.slice(2);
 function hasFlag(name) { return args.includes(name); }
@@ -26,8 +27,8 @@ function getArg(name, defaultVal) {
   return idx >= 0 && args[idx + 1] ? args[idx + 1] : defaultVal;
 }
 
-const STATE_PATH = getArg('--state-path', path.join(process.env.HOME, '.swat/playwright/storage-state.json'));
-const SMS_CODE_PATH = getArg('--sms-code-path', '/tmp/xhs-sms-code.txt');
+const STATE_PATH = getArg('--state-path', path.join(os.homedir(), '.swat/playwright/storage-state.json'));
+const SMS_CODE_PATH = getArg('--sms-code-path', path.join(os.tmpdir(), 'xhs-sms-code.txt'));
 
 // --- Check mode ---
 if (hasFlag('--check')) {
@@ -62,7 +63,7 @@ if (!hasFlag('--login')) {
 
 const { chromium } = require('playwright');
 
-const SCREENSHOT_DIR = getArg('--screenshot-dir', path.join(require('os').tmpdir(), `xhs-auth-${process.getuid()}`));
+const SCREENSHOT_DIR = getArg('--screenshot-dir', path.join(os.tmpdir(), `xhs-auth-${os.userInfo().username}`));
 const TIMEOUT = parseInt(getArg('--timeout', '300')) * 1000;
 
 fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });

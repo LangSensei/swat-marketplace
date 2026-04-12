@@ -1,6 +1,6 @@
 ---
 name: amap
-version: "1.0.0"
+version: "1.0.1"
 description: Amap (Gaode Maps) Web Service API skill. Provides CLI scripts for POI search, route planning, geocoding, and weather queries. Zero dependencies — uses Node.js native fetch (Node 18+).
 prereq: references/SETUP.md
 dependencies:

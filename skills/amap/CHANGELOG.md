@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 (2026-04-12)
+
+- Fix Windows compatibility: `process.env.HOME` → `os.homedir()` in `scripts/lib/env.js`
+
 ## 1.0.0 (2026-03-25)
 
 - Initial release
