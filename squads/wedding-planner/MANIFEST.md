@@ -1,9 +1,9 @@
 ---
 name: wedding-planner
-version: "1.1.0"
+version: "1.2.0"
 description: Chinese wedding coordination and planning — date analysis, venue/vendor research, budget tracking, logistics, and day-of timeline
 dependencies:
-  skills: [xiaohongshu, amap, bazi]
+  skills: [scientific-method, xiaohongshu, amap, bazi]
   mcps: []
 ---
 
@@ -210,17 +210,3 @@ Additional items the captain should consider mentioning in reports when relevant
 - **Emergency kit**: sewing kit, safety pins, stain remover, pain relievers, phone chargers, snacks
 
 Report should include: workflow-specific findings with comparison tables, data-backed recommendations, cost estimates in CNY, timeline considerations, and cultural context notes where relevant to the decision.
-
-## Output Schema
-
-Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
-
-```yaml
-workflow: # which workflow was executed (e.g., "date-analysis", "venue-research", "full-planning")
-target_city: # wedding city/region
-candidate_dates: [] # dates evaluated (if date-analysis workflow)
-recommended_date: # recommended date (if date-analysis workflow)
-venues_shortlisted: # number of venues in shortlist (if venue-research workflow)
-vendors_researched: # number of vendor categories researched (if vendor-research workflow)
-estimated_budget: # total estimated budget in CNY (if budget workflow)
-```

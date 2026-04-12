@@ -1,9 +1,9 @@
 ---
 name: squad-distill
-version: "1.0.0"
+version: "1.1.0"
 description: Analyzes squad operation history to optimize MANIFEST playbooks, distill reusable skills, and prune stale INTEL — opens PRs to the marketplace
 dependencies:
-  skills: [git-pr]
+  skills: [sop, git-pr]
   mcps: []
 ---
 
@@ -82,7 +82,7 @@ Based on analysis, make changes to marketplace files:
 
 - Update Squad Playbook section with evidence-backed changes
 - Every change must cite the operation(s) that justify it
-- Do NOT change Domain, Boundary, or Output Schema unless explicitly requested
+- Do NOT change Domain, Boundary unless explicitly requested
 - Bump version (patch for small fixes, minor for significant playbook changes)
 
 #### Extract Skill (`extract-skill`)
@@ -118,17 +118,3 @@ Based on analysis, make changes to marketplace files:
 - **Do not duplicate PROTOCOL behavior** — seal steps, report generation, and planning file setup are handled by PROTOCOL.md. Changes to MANIFEST should only touch domain-specific knowledge in the Squad Playbook.
 
 Report should include: operations analyzed, patterns identified, changes made (with evidence), INTEL entries pruned, and recommendations for future distill cycles.
-
-## Output Schema
-
-Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
-
-```yaml
-target_squad: # squad being analyzed
-operations_analyzed: # number of operations reviewed
-manifest_changes: # number of playbook changes made
-skills_extracted: [] # list of new skill names (if any)
-intel_pruned: # number of INTEL entries removed
-pr_url: # GitHub PR link to marketplace
-pr_number: # PR number
-```

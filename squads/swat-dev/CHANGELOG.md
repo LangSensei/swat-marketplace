@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.5.0 — 2026-04-12
+
+### Changed
+- Add `scientific-method` skill dependency
+- Remove Output Schema section
+
+## 1.4.0 (2026-03-15)
+
+### Changed
+- Replace hardcoded swat_dispatch calls with debrief hints — let protocol debrief phase handle notify/dispatch
+
 ## 1.3.0 (2026-03-09)
 
 - Auto-dispatch to swat-review after every PR push (new or fix)

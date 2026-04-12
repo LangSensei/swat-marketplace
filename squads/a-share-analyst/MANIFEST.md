@@ -1,9 +1,9 @@
 ---
 name: a-share-analyst
-version: "1.4.0"
+version: "1.5.0"
 description: A-share stock analysis — technical, fundamental, moat assessment, valuation, and portfolio synthesis
 dependencies:
-  skills: [eastmoney-data, fund-holdings, sina-quote]
+  skills: [scientific-method, eastmoney-data, fund-holdings, sina-quote]
   mcps: []
 ---
 
@@ -254,17 +254,3 @@ Report should include: portfolio dashboard with all holdings, sector distributio
 4. **Rank** — Sort by relevant metric
 
 Report should include: top matches with key metrics.
-
-## Output Schema
-
-Captain must fill these frontmatter fields in `OPERATION.md` at seal time. For portfolio operations, use the primary/largest holding or leave blank with a comment.
-
-```yaml
-stock_code: # target stock/ETF code (e.g., "600519"). For portfolios: primary holding or "portfolio"
-stock_name: # target name (e.g., "贵州茅台"). For portfolios: brief description
-pe_ttm: # trailing PE ratio (number, e.g., 7.68)
-pb: # price-to-book ratio (number, e.g., 1.08)
-roe: # return on equity in % (number, e.g., 12.19)
-moat_rating: # moat assessment: ★ to ★★★★★ (first-time analysis) or "unchanged" (holding review)
-recommendation: # hold / add / reduce / watch
-```

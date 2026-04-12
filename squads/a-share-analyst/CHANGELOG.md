@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.0 — 2026-04-12
+
+### Changed
+- Add `scientific-method` skill dependency
+- Remove Output Schema section
+
 ## 1.4.0 (2026-04-02)
 
 Investment philosophy alignment and sell-side logic improvements based on user feedback from portfolio review operations.

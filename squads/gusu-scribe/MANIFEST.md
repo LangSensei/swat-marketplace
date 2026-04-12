@@ -1,9 +1,9 @@
 ---
 name: gusu-scribe
-version: "1.0.0"
+version: "1.1.0"
 description: Suzhou cultural prose writing — newspaper submissions, community publicity, and food exploration articles for the Gusu region
 dependencies:
-  skills: []
+  skills: [sop]
   mcps: []
 ---
 
@@ -187,15 +187,3 @@ Extracted from five seed articles (samples 2-5 plus sample 1 for food-only basel
 - "把[nature element]与[food quality]，都收进这一个早晨里"
 - "[flower] [verb], [food] [verb]. 姑苏的[season]，总是这般[quality adjective]，[quality adjective]，从[garden]到[street]，温柔不散。"
 - "春光正好，[flower]正[state]。寻个清晨，去[garden]看[flower]，再踱进[street/shop]，好吃的滋味向来限量，可得早点来哟。"
-
-## Output Schema
-
-Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
-
-```yaml
-workflow: # which workflow was executed (e.g., "style-analysis", "template-extraction", "gusu-morning-treats", "community-article", "full-pipeline")
-source_articles: # number of source articles analyzed (if any)
-article_generated: # true/false — whether a new article was generated
-article_topic: # topic of the generated article (if applicable)
-article_type: # "gusu-morning-treats" | "community-article" | "food-exploration" | "style-analysis-only"
-```
