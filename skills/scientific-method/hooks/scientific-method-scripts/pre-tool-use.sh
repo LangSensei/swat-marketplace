@@ -1,4 +1,6 @@
 #!/bin/bash
+
+export PYTHONIOENCODING=utf-8
 # scientific-method: Pre-tool-use hook
 # Injects the first 30 lines of plan.md to keep goals in context.
 # Never blocks tools — always allows.

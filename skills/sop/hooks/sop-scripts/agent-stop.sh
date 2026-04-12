@@ -1,4 +1,6 @@
 #!/bin/bash
+
+export PYTHONIOENCODING=utf-8
 # sop: Agent stop hook
 # Counts complete vs total phases in progress.md (Status fields).
 # If incomplete, reminds agent to continue.

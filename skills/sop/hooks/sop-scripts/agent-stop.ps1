@@ -1,4 +1,8 @@
 # sop: Agent stop hook
+
+# Ensure UTF-8 encoding for cross-platform compatibility
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$env:PYTHONIOENCODING = "utf-8"
 # Counts complete vs total phases in progress.md (Status fields).
 # If incomplete, reminds agent to continue.
 # Always exits 0.

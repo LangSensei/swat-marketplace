@@ -1,4 +1,6 @@
 #!/bin/bash
+
+export PYTHONIOENCODING=utf-8
 # scientific-method: Agent stop hook
 # Counts complete vs total steps in progress.md (Status fields).
 # If incomplete, reminds agent to continue.

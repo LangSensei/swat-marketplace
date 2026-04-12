@@ -1,4 +1,8 @@
 # scientific-method: Session start hook (PowerShell)
+
+# Ensure UTF-8 encoding for cross-platform compatibility
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$env:PYTHONIOENCODING = "utf-8"
 # If plan.md exists: inject context for session recovery
 # If plan.md doesn't exist: inject SKILL.md so agent knows the framework
 

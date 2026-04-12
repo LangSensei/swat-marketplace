@@ -1,4 +1,8 @@
 # scientific-method: Pre-tool-use hook (PowerShell)
+
+# Ensure UTF-8 encoding for cross-platform compatibility
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$env:PYTHONIOENCODING = "utf-8"
 # Injects the first 30 lines of plan.md to keep goals in context.
 # Never blocks tools — always allows.
 
