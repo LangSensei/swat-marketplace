@@ -1,43 +1,17 @@
 {
   "version": 1,
   "hooks": {
-    "sessionStart": [
-      {
-        "type": "command",
-        "bash": ".github/hooks/sop-scripts/session-start.sh",
-        "powershell": ".github/hooks/sop-scripts/session-start.ps1",
-        "timeout": 15
-      }
-    ],
     "preToolUse": [
       {
         "type": "command",
-        "bash": ".github/hooks/sop-scripts/pre-tool-use.sh",
-        "powershell": ".github/hooks/sop-scripts/pre-tool-use.ps1",
+        "bash": ".github/hooks/sop-scripts/staleness-check.sh",
+        "powershell": ".github/hooks/sop-scripts/staleness-check.ps1",
         "timeout": 5
-      }
-    ],
-    "postToolUse": [
+      },
       {
         "type": "command",
-        "bash": ".github/hooks/sop-scripts/post-tool-use.sh",
-        "powershell": ".github/hooks/sop-scripts/post-tool-use.ps1",
-        "timeout": 5
-      }
-    ],
-    "agentStop": [
-      {
-        "type": "command",
-        "bash": ".github/hooks/sop-scripts/agent-stop.sh",
-        "powershell": ".github/hooks/sop-scripts/agent-stop.ps1",
-        "timeout": 10
-      }
-    ],
-    "errorOccurred": [
-      {
-        "type": "command",
-        "bash": ".github/hooks/sop-scripts/error-occurred.sh",
-        "powershell": ".github/hooks/sop-scripts/error-occurred.ps1",
+        "bash": ".github/hooks/sop-scripts/context-refresh.sh",
+        "powershell": ".github/hooks/sop-scripts/context-refresh.ps1",
         "timeout": 5
       }
     ]
