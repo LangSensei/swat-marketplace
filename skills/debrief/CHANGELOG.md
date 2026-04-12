@@ -1,5 +1,19 @@
 # Debrief Skill — Changelog
 
+## 2.0.0 — 2026-04-12
+
+### Added
+- `notify.ps1` — PowerShell version of notify script for Windows support
+- OpenClaw auto-detection — scripts gracefully fall back to stdout when OpenClaw is not installed
+- Notification language matching — notify message should match the language of the operation brief
+
+### Changed
+- `SKILL.md` v2.0.0: simplified docs, cross-platform usage (bash + PowerShell), removed OpenClaw hard dependency
+- `notify.sh`: no longer exits with error when OpenClaw token or target is missing — prints to stdout instead
+
+### Removed
+- Protocol integration section from SKILL.md (now handled by PROTOCOL.md referencing the skill directly)
+
 ## 1.2.0 — 2026-04-03
 
 ### Breaking Changes
