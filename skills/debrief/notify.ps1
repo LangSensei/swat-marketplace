@@ -47,16 +47,22 @@ if (-not $Port) { $Port = "18789" }
 
 $Token = if ($env:OPENCLAW_GATEWAY_TOKEN) { $env:OPENCLAW_GATEWAY_TOKEN } else { Read-OcConfig "gateway.auth.token" }
 if (-not $Token) {
-    Write-Error "Cannot resolve gateway token from env or $OC_CONFIG"
-    exit 1
+    Write-Output "OpenClaw not detected - printing notification to stdout"
+    Write-Output "---"
+    Get-Content -Path $File -Raw -Encoding UTF8
+    Write-Output "---"
+    exit 0
 }
 
 if (-not $Target) {
     $Target = if ($env:OPENCLAW_NOTIFY_TARGET) { $env:OPENCLAW_NOTIFY_TARGET } else { Read-OcConfig "channels.telegram.allowFrom.0" }
 }
 if (-not $Target) {
-    Write-Error "Cannot resolve notify target from env, args, or $OC_CONFIG"
-    exit 1
+    Write-Output "No notify target configured - printing notification to stdout"
+    Write-Output "---"
+    Get-Content -Path $File -Raw -Encoding UTF8
+    Write-Output "---"
+    exit 0
 }
 
 if (-not $Channel) {

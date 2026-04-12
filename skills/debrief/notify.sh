@@ -74,14 +74,23 @@ read_oc_config() {
 PORT="${OPENCLAW_GATEWAY_PORT:-$(read_oc_config 'gateway.port')}"
 PORT="${PORT:-18789}"
 TOKEN="${OPENCLAW_GATEWAY_TOKEN:-$(read_oc_config 'gateway.auth.token')}"
+
+# --- OpenClaw detection: if no token, fall back to stdout ---
 if [[ -z "$TOKEN" ]]; then
-  echo "❌ Cannot resolve gateway token from env or $OC_CONFIG" >&2
-  exit 1
+  echo "ℹ️  OpenClaw not detected — printing notification to stdout"
+  echo "---"
+  cat "$MESSAGE_FILE"
+  echo "---"
+  exit 0
 fi
+
 TARGET="${TARGET:-${OPENCLAW_NOTIFY_TARGET:-$(read_oc_config 'channels.telegram.allowFrom.0')}}"
 if [[ -z "$TARGET" ]]; then
-  echo "❌ Cannot resolve notify target from env, args, or $OC_CONFIG" >&2
-  exit 1
+  echo "ℹ️  No notify target configured — printing notification to stdout"
+  echo "---"
+  cat "$MESSAGE_FILE"
+  echo "---"
+  exit 0
 fi
 CHANNEL="${CHANNEL:-${OPENCLAW_NOTIFY_CHANNEL:-}}"
 
