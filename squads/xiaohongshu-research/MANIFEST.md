@@ -1,9 +1,9 @@
 ---
 name: xiaohongshu-research
-version: "1.1.0"
+version: "1.2.0"
 description: Xiaohongshu research and knowledge extraction — search posts, rank relevant results, synthesize structured notes
 dependencies:
-  skills: [xiaohongshu]
+  skills: [scientific-method, xiaohongshu]
   mcps: []
 ---
 
@@ -85,15 +85,3 @@ Xiaohongshu topic research, post analysis, and structured knowledge extraction f
 - Summarize the final notes in a way that helps a reader learn the topic quickly without rereading every post.
 
 Report should include: the original query, search and ranking criteria, number of posts analyzed, a table or list of the selected posts, post-level evidence summaries, synthesized themes, notable disagreements or caveats, and concise learning notes with practical takeaways.
-
-## Output Schema
-
-Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
-
-```yaml
-search_query: # keyword or topic researched
-posts_analyzed: # number of Xiaohongshu posts included in the final synthesis
-research_focus: # topic / creator / product / trend
-top_post: # most relevant or highest-signal post title and author
-key_themes: [] # major synthesized learning themes
-```

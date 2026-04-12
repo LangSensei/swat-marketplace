@@ -1,9 +1,9 @@
 ---
 name: swat-dev
-version: "1.4.0"
+version: "1.5.0"
 description: Self-development squad for the SWAT system — implements features, fixes bugs, and opens PRs on the swat-v2 repository
 dependencies:
-  skills: [go-dev, git-pr]
+  skills: [scientific-method, go-dev, git-pr]
   mcps: [swat]
 ---
 
@@ -77,14 +77,3 @@ Development and maintenance of the SWAT v2 codebase.
 - **OPERATION.MD is a contract** — template field changes affect all squads, consider impact carefully
 
 Report should include: design decisions, implementation approach, justifications for key choices, and a summary of changes made.
-
-## Output Schema
-
-Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
-
-```yaml
-pr_url: # GitHub PR link
-pr_number: # PR number
-branch: # feature branch name
-files_changed: # number of files changed
-```

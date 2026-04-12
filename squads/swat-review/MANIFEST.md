@@ -1,9 +1,9 @@
 ---
 name: swat-review
-version: "1.1.0"
+version: "1.2.0"
 description: Code review squad — reviews PRs for style, correctness, and consistency, submits inline comments, and dispatches fix operations
 dependencies:
-  skills: [git-pr]
+  skills: [sop, git-pr]
   mcps: [swat]
 ---
 
@@ -96,15 +96,3 @@ Code review for the SWAT v2 codebase. Analyzes pull requests for code quality an
 - Distinguish blocking issues (request changes) from suggestions (comment only)
 - If the PR is fundamentally sound with only minor nits, approve with comments
 - One review per PR — don't submit partial reviews
-
-## Output Schema
-
-Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
-
-```yaml
-pr_url:          # GitHub PR link being reviewed
-pr_number:       # PR number
-verdict:         # approved / changes_requested
-comments_count:  # number of inline comments submitted
-followup_op:     # dispatched fix operation ID (empty if approved)
-```

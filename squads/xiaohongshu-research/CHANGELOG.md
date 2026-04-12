@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0 — 2026-04-12
+
+### Changed
+- Add `scientific-method` skill dependency
+- Remove Output Schema section
+
 ## 1.1.0 (2026-03-16)
 
 - Workflow updated: use CLI scripts (search.js, detail.js) instead of playwright MCP directly

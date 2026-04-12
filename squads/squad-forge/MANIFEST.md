@@ -1,9 +1,9 @@
 ---
 name: squad-forge
-version: "1.0.1"
+version: "1.0.2"
 description: Creates new SWAT squads and skills — generates MANIFEST.md, SKILL.md, and CHANGELOG.md, then opens a PR to the marketplace
 dependencies:
-  skills: [git-pr]
+  skills: [sop, git-pr]
   mcps: []
 ---
 
@@ -47,7 +47,7 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 
 1. Create `squads/<new-name>/MANIFEST.md` using the TEMPLATE.md format from the References section above
 2. Study 2-3 existing squads in `squads/` for reference
-3. Fill in all sections: Domain, Boundary, Write Access, Squad Playbook, Output Schema
+3. Fill in all sections: Domain, Boundary, Write Access, Squad Playbook
 4. Create `squads/<new-name>/CHANGELOG.md`
 
 ### Creating a Skill
@@ -73,7 +73,6 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 - **Reuse existing skills** — don't recreate what already exists
 - **One PR per operation**
 - **Do not duplicate PROTOCOL behavior** — seal steps, report generation instructions, and planning file setup are handled by PROTOCOL.md. MANIFEST should only contain domain-specific knowledge.
-- **Output Schema: squad-specific fields only** — do not include `summary`, `action_items`, `completed_at`, or other fields already in OPERATION.md template
 - **Write Access: squad-specific paths only** — do not list PROTOCOL defaults (operator directory, OPERATION.md). Use `(none — ...)` if no additional paths needed.
 - **Report content as guidance, not instructions** — use "Report should include: ..." to describe what belongs in the report. Do not write "Generate report.html" (PROTOCOL S3 handles that).
 - **Boundary format: In scope / Out of scope** — use `**In scope:**` and `**Out of scope:**` bullet groups
@@ -81,14 +80,3 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 - **One version bump per PR** — do not bump version in multiple commits within the same PR
 
 Report should include: design decisions, implementation approach, justifications for key choices, and a summary of changes made.
-
-## Output Schema
-
-Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
-
-```yaml
-pr_url: # GitHub PR link to marketplace
-pr_number: # PR number
-squads_created: [] # list of new squad names
-skills_created: [] # list of new skill names
-```

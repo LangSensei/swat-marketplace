@@ -1,9 +1,9 @@
 ---
 name: swat-strategist
-version: "1.0.0"
+version: "1.1.0"
 description: Strategic analysis and improvement proposals for the SWAT system — researches AI agent frameworks, compares with SWAT architecture, and produces actionable optimization proposals
 dependencies:
-  skills: [git-pr]
+  skills: [scientific-method, git-pr]
   mcps: []
 ---
 
@@ -63,13 +63,3 @@ Browse worktree directories directly. Clean up both worktrees at seal.
 - **Do not duplicate PROTOCOL behavior** — seal steps, report generation, and planning file setup are handled by PROTOCOL.md
 
 Report should include: research question, frameworks compared (summary table), SWAT current approach, gap analysis, proposals with trade-off tables, and a prioritized recommendation list.
-
-## Output Schema
-
-Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
-
-```yaml
-research_topic: # the question/direction investigated
-frameworks_compared: [] # list of frameworks/projects studied
-proposals: # number of concrete proposals made
-```

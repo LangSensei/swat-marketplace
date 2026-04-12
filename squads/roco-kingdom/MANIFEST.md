@@ -1,9 +1,9 @@
 ---
 name: roco-kingdom
-version: "1.0.0"
+version: "1.1.0"
 description: Roco Kingdom (洛克王国) game research and strategy — game mechanics learning, Xiaohongshu guide search, meta analysis
 dependencies:
-  skills: [xiaohongshu]
+  skills: [scientific-method, xiaohongshu]
   mcps: [playwright]
 ---
 
@@ -101,14 +101,3 @@ Before running any xiaohongshu searches, verify auth:
 NODE_PATH=$(npm root -g) node skills/xiaohongshu/scripts/auth.js --check
 ```
 Exit 0 = logged in. Exit 1 = expired — fail the operation immediately and debrief the user to re-authenticate. Do NOT attempt login from within this squad.
-
-## Output Schema
-
-Captain must fill these frontmatter fields in `OPERATION.md` during the operation:
-
-```yaml
-game_topic:          # specific topic researched (pet name, mechanic, event, etc.)
-research_sources:    # types of sources consulted (xhs, wiki, official, forum)
-xhs_posts_analyzed:  # number of Xiaohongshu posts included in the final synthesis
-key_findings: []     # list of main strategy or mechanic takeaways
-```
