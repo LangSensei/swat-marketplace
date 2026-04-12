@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.2.1 (2026-04-12)
+- Fix Windows compatibility: `process.env.HOME` → `os.homedir()`, `/tmp/` → `os.tmpdir()`, `process.getuid()` → `os.userInfo().username`
+
 ## 1.2.0
 - search.js: keyword search with anti-captcha route interception, stealth patches, API response capture
 - detail.js: note detail extraction (API capture + DOM fallback)

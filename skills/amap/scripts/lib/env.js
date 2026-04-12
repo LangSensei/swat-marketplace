@@ -5,7 +5,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const ENV_FILE = path.join(process.env.HOME, '.swat', '.env');
+const os = require('os');
+const ENV_FILE = path.join(os.homedir(), '.swat', '.env');
 const KEY_NAME = 'AMAP_WEBSERVICE_KEY';
 
 /**
