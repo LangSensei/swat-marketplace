@@ -10,6 +10,11 @@ Run checks in order — each step depends on the previous one.
 python3 --version 2>/dev/null && echo "OK"
 ```
 
+Windows:
+```powershell
+python --version 2>$null; if ($?) { echo "OK" }
+```
+
 ### Steps
 
 **Linux (Debian/Ubuntu):**
@@ -29,9 +34,11 @@ brew install python
 
 **Windows:**
 ```powershell
-winget install Python.Python.3.12
+winget install Python.Python.3
 ```
 Or download from https://www.python.org/downloads/ and run the installer (check "Add to PATH").
+
+> **Note:** On Windows, use `python` and `pip` instead of `python3` and `pip3` in all commands below.
 
 ## 2. Python Packages
 
@@ -42,6 +49,11 @@ lunar-python, colorama, and bidict are required for calendar calculations and ou
 python3 -c "import lunar_python, colorama, bidict" 2>/dev/null && echo "OK"
 ```
 
+Windows:
+```powershell
+python -c "import lunar_python, colorama, bidict" 2>$null; if ($?) { echo "OK" }
+```
+
 ### Steps
 ```bash
 pip3 install lunar-python colorama bidict
@@ -50,6 +62,11 @@ pip3 install lunar-python colorama bidict
 If your system uses externally managed Python (Debian 12+, Ubuntu 23.04+):
 ```bash
 pip3 install lunar-python colorama bidict --break-system-packages
+```
+
+Windows:
+```powershell
+pip install lunar-python colorama bidict
 ```
 
 ## 3. Git
