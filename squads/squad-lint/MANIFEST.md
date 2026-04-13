@@ -1,6 +1,6 @@
 ---
 name: squad-lint
-version: "1.0.2"
+version: "1.0.0"
 description: Validates structural compliance of squads and skills in swat-marketplace
 dependencies:
   skills: [sop, git-pr]
