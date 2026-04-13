@@ -6,11 +6,13 @@ Run checks in order — each step depends on the previous one.
 ## 1. Python 3.8+
 
 ### Check
+
+**Linux / macOS:**
 ```bash
 python3 --version 2>/dev/null && echo "OK"
 ```
 
-Windows:
+**Windows:**
 ```powershell
 python --version 2>$null; if ($?) { echo "OK" }
 ```
@@ -45,26 +47,29 @@ Or download from https://www.python.org/downloads/ and run the installer (check 
 lunar-python, colorama, and bidict are required for calendar calculations and output formatting.
 
 ### Check
+
+**Linux / macOS:**
 ```bash
 python3 -c "import lunar_python, colorama, bidict" 2>/dev/null && echo "OK"
 ```
 
-Windows:
+**Windows:**
 ```powershell
 python -c "import lunar_python, colorama, bidict" 2>$null; if ($?) { echo "OK" }
 ```
 
 ### Steps
+
 ```bash
 pip3 install lunar-python colorama bidict
 ```
 
-If your system uses externally managed Python (Debian 12+, Ubuntu 23.04+):
+**Linux (Debian 12+ / Ubuntu 23.04+):** If your system uses externally managed Python:
 ```bash
 pip3 install lunar-python colorama bidict --break-system-packages
 ```
 
-Windows:
+**Windows:**
 ```powershell
 pip install lunar-python colorama bidict
 ```
@@ -74,8 +79,15 @@ pip install lunar-python colorama bidict
 Required for cloning the bazi calculation engine on first run.
 
 ### Check
+
+**Linux / macOS:**
 ```bash
 git --version 2>/dev/null && echo "OK"
+```
+
+**Windows:**
+```powershell
+git --version 2>$null; if ($?) { echo "OK" }
 ```
 
 ### Steps
