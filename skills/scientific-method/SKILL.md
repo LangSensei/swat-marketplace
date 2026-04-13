@@ -1,6 +1,6 @@
 ---
 name: scientific-method
-version: "1.0.3"
+version: "1.0.4"
 description: Hypothesis-driven cognitive framework for complex reasoning and research tasks. Understand → Decompose → Cycle (Hypothesize → Predict → Test → Conclude) → Synthesize.
 ---
 
