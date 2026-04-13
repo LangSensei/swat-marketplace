@@ -15,10 +15,32 @@ if ($toolArgs -like "*plan.md*" -or $toolArgs -like "*progress.md*" -or $toolArg
     Write-Output '{}'; exit 0
 }
 
-# Skip during final stages (Synthesize/Complete) — no more state file updates expected
+# Final stages gate: when entering Synthesize/Complete, verify all prior steps are complete
 if (Test-Path "plan.md") {
     $currentState = (Select-String -Path "plan.md" -Pattern '\*\*Step:\*\*' -List | Select-Object -First 1).Line
     if ($currentState -match '(?i)(synthesize|complete)') {
+        $py = if (Get-Command python3 -ErrorAction SilentlyContinue) { "python3" } else { "python" }
+        $incomplete = & $py -c @"
+import re, sys
+with open('plan.md') as f:
+    statuses = re.findall(r'\*\*Status:\*\*\s*(\S+)', f.read())
+if len(statuses) <= 1:
+    sys.exit(0)
+incomplete = []
+for i, s in enumerate(statuses[:-1]):
+    if s != 'complete':
+        incomplete.append(f'Status #{i+1}: {s}')
+if incomplete:
+    print('; '.join(incomplete))
+"@ 2>$null
+        if ($incomplete) {
+            $msg = "QUALITY GATE: Cannot proceed to Synthesize — prior steps/cycles are not complete: ${incomplete}. Go back and complete all prior Cycles (Hypothesize -> Predict -> Test -> Conclude) before synthesizing."
+            $escaped = $msg | & $py -c "import sys,json; print(json.dumps(sys.stdin.read().strip(), ensure_ascii=False))" 2>$null
+            if (-not $escaped) { $escaped = "`"$msg`"" }
+            Write-Output "{`"permissionDecision`":`"deny`",`"permissionDecisionReason`":$escaped}"
+            exit 0
+        }
+        # All prior steps complete — skip staleness check during synthesis
         Write-Output '{}'; exit 0
     }
 }
