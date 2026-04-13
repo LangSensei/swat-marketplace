@@ -2,6 +2,7 @@
 name: go-dev
 version: "1.1.0"
 description: Go development workflow — build, test, module management
+prereq: references/SETUP.md
 dependencies:
   skills: []
 ---
