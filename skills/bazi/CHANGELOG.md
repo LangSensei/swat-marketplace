@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0 (2026-04-13)
+
+- **Add references/SETUP.md:** Standardized prerequisite guide with Check + Steps format for Python 3.8+, pip packages (lunar-python, colorama, bidict), and git. Follows the xiaohongshu SETUP.md convention.
+- **Update `prereq` in SKILL.md frontmatter:** Changed from inline pip command to `references/SETUP.md` for prerequisite management.
+- **Simplify Setup section in SKILL.md:** Now references SETUP.md for prerequisites instead of inline instructions.
+
 ## 1.0.0 (2026-03-31)
 
 ### Improvements (pre-release revision)

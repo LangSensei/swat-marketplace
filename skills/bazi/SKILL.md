@@ -1,8 +1,8 @@
 ---
 name: bazi
-version: "1.0.0"
+version: "1.1.0"
 description: Chinese traditional calendar and BaZi (Four Pillars of Destiny) skill. Provides CLI scripts for birth chart analysis, marriage compatibility, and auspicious date selection. Wraps the china-testing/bazi library with lunar-python.
-prereq: pip3 install lunar-python colorama bidict --break-system-packages
+prereq: references/SETUP.md
 dependencies:
   skills: []
 ---
@@ -15,17 +15,20 @@ Chinese traditional calendar calculations, BaZi (Four Pillars of Destiny) analys
 
 ## Setup
 
-No manual setup needed. On first run, the shared library (`scripts/lib/__init__.py`) automatically:
+**Install-time prerequisites** (Python 3.8+, pip packages, git) are documented in [references/SETUP.md](references/SETUP.md). Ensure these are satisfied before first use.
 
-1. Checks that Python packages (`lunar-python`, `colorama`, `bidict`) are importable — prints a clear `pip3 install` command if any are missing
-2. Bare-clones `china-testing/bazi` to `~/.swat/repos/china-testing-bazi/`
-3. Creates a detached worktree at `~/.swat/repos/china-testing-bazi/worktrees/readonly/` pinned to commit `c425f0c`
+**Runtime auto-provisioning** — on first run, the shared library (`scripts/lib/__init__.py`) automatically:
+
+1. Bare-clones `china-testing/bazi` to `~/.swat/repos/china-testing-bazi/`
+2. Creates a detached worktree at `~/.swat/repos/china-testing-bazi/worktrees/readonly/` pinned to commit `c425f0c`
 
 This happens silently on first invocation. Subsequent runs reuse the cached clone.
 
 ## Scripts
 
 All scripts output structured JSON to stdout. Errors go to stderr.
+
+> **Windows:** Replace `python3` with `python` in all commands below.
 
 ### BaZi Analysis (Single Person)
 
