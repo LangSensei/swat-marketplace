@@ -2,6 +2,7 @@
 name: bazi
 version: "1.1.0"
 description: Chinese traditional calendar and BaZi (Four Pillars of Destiny) skill. Provides CLI scripts for birth chart analysis, marriage compatibility, and auspicious date selection. Wraps the china-testing/bazi library with lunar-python.
+prereq: references/SETUP.md
 dependencies:
   skills: []
 ---
