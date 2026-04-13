@@ -1,6 +1,6 @@
 ---
 name: sop
-version: "1.0.2"
+version: "1.0.3"
 description: Standard Operating Procedure — phase-based execution with step checklists for structured, repeatable tasks
 ---
 
@@ -31,10 +31,16 @@ Execute structured tasks by following predefined phases with step-by-step checkl
 ## Quick Start
 
 1. Understand your task — read the assignment/brief to identify the phases
-2. Copy templates to your working directory and fill in Goal + Phases
-3. Execute phases in order — check off steps as you go
-4. Update findings.md after every 2 search/browse/view operations (2-Action Rule)
-5. Update progress.md with actions taken at each phase gate
+2. **Copy templates** — Do NOT create these files from scratch. The templates contain required structure and comments. If the files already exist, skip this step.
+   ```
+   cp .github/skills/sop/templates/plan.md .
+   cp .github/skills/sop/templates/findings.md .
+   cp .github/skills/sop/templates/progress.md .
+   ```
+3. Fill in Goal + Phases in `plan.md`
+4. Execute phases in order — check off steps as you go
+5. Update findings.md after every 2 search/browse/view operations (2-Action Rule)
+6. Update progress.md with actions taken at each phase gate
 
 ## Core Rules
 
@@ -84,10 +90,3 @@ If you can answer these from your files, your context is solid:
 | What have I found? | findings.md |
 | What have I done? | progress.md |
 
-## Templates
-
-Copy these to your working directory:
-
-- [templates/plan.md](templates/plan.md) — Phase/step tracking
-- [templates/findings.md](templates/findings.md) — Research and discoveries
-- [templates/progress.md](templates/progress.md) — Execution log

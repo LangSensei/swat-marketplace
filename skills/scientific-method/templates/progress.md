@@ -1,9 +1,9 @@
 # Progress
 <!--
-  WHAT: Your session log — a chronological record of what you did + status of each step.
+  WHAT: Your session log — a chronological record of what you did.
   WHY: Answers "What have I done?" in the 5-Question Reboot Test. Enables recovery after session resets.
   WHEN: Update at every step transition and after completing each Cycle.
-  STATUS: Each section tracks its own status (pending / in_progress / complete). This is the single source of truth for progress.
+  NOTE: Status tracking lives in plan.md (Current State). This file is purely an action log.
 -->
 
 ## Understand
@@ -11,7 +11,6 @@
   WHAT: What you did during the Understand step.
   WHEN: Update as you work through Understand.
 -->
-- **Status:** pending
 - Actions taken:
   -
 - Files read:
@@ -22,7 +21,6 @@
   WHAT: How you broke down the problem.
   WHEN: Update after completing decomposition.
 -->
-- **Status:** pending
 - Actions taken:
   -
 
@@ -33,17 +31,14 @@
 -->
 
 ### Hypothesize
-- **Status:** pending
 - Actions taken:
   -
 
 ### Predict
-- **Status:** pending
 - Actions taken:
   -
 
 ### Test
-- **Status:** pending
 - Actions taken:
   <!--
     EXAMPLE:
@@ -61,36 +56,30 @@
   -
 
 ### Conclude
-- **Status:** pending
 - Actions taken:
   -
 
 ## Cycle 2: [Sub-problem]
 
 ### Hypothesize
-- **Status:** pending
 - Actions taken:
   -
 
 ### Predict
-- **Status:** pending
 - Actions taken:
   -
 
 ### Test
-- **Status:** pending
 - Actions taken:
   -
 - Files created/modified:
   -
 
 ### Conclude
-- **Status:** pending
 - Actions taken:
   -
 
 ## Synthesize
-- **Status:** pending
 - Actions taken:
   -
 
@@ -126,8 +115,8 @@
 -->
 | Question | Answer |
 |----------|--------|
-| Where am I? | [Current cycle/step — check Status fields above] |
-| Where am I going? | [Remaining steps — check Status fields above] |
+| Where am I? | [Check plan.md Current State] |
+| Where am I going? | [Check plan.md — next not_started sections] |
 | What's the goal? | [See plan.md Goal] |
 | What have I learned? | [See findings.md] |
 | What have I done? | [See log above] |
@@ -135,8 +124,8 @@
 ---
 <!--
   REMINDER:
-  - Update Status at EVERY step transition (including within Cycles: H → P → T → C)
+  - Status tracking lives in plan.md — do NOT track status here
   - Be specific about actions — "searched X" is better than "did research"
   - Include timestamps for errors to track when issues occurred
 -->
-*Update Status and actions at every step transition.*
+*Log actions at every step transition.*

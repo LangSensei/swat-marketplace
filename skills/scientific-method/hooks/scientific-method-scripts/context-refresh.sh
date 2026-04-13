@@ -12,6 +12,15 @@ REFRESH_TS_FILE=".context_refresh_ts"
 
 NOW=$(date +%s)
 
+# Skip during final stages (Synthesize/Complete) — no more context refresh needed
+if [ -f "plan.md" ]; then
+    CURRENT_STATE=$(sed -n '/^## Current State/,/^## /{ /^\*\*Step:\*\*/s/.*\*\*Step:\*\* *//p; /^- \*\*Step:\*\*/s/.*\*\*Step:\*\* *//p; }' plan.md 2>/dev/null)
+    case "$CURRENT_STATE" in
+        *[Ss]ynthesize*|*[Cc]omplete*)
+            echo '{}'; exit 0 ;;
+    esac
+fi
+
 # First run: initialize timestamp, don't deny
 if [ ! -f "$REFRESH_TS_FILE" ]; then
     echo "$NOW" > "$REFRESH_TS_FILE"

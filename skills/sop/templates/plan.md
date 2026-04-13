@@ -18,11 +18,11 @@
   WHAT: Quick snapshot of where you are right now.
   WHY: When re-reading plan before a decision, this tells you exactly where you are.
   WHEN: Update EVERY time you complete a step or move to a new phase.
+  Phase: Use the phase name from your Phases section below
+  Step: Use the step name from the current phase checklist
 -->
 - **Phase:** Phase 1
 - **Step:** Step 1
-- **Status:** not_started
-- **Blockers:** none
 
 ## Phases
 <!--

@@ -12,6 +12,15 @@ REFRESH_TS_FILE=".context_refresh_ts"
 
 NOW=$(date +%s)
 
+# Skip during final stages — if all but last (or all) phases are complete, allow freely
+if [ -f "plan.md" ]; then
+    PHASE_COUNT=$(grep -c '^### Phase' plan.md 2>/dev/null || echo "0")
+    COMPLETE_COUNT=$(grep -c '\*\*Status:\*\* complete' plan.md 2>/dev/null || echo "0")
+    if [ "$PHASE_COUNT" -gt 0 ] && [ "$COMPLETE_COUNT" -ge $((PHASE_COUNT - 1)) ]; then
+        echo '{}'; exit 0
+    fi
+fi
+
 # First run: initialize timestamp, don't deny
 if [ ! -f "$REFRESH_TS_FILE" ]; then
     echo "$NOW" > "$REFRESH_TS_FILE"

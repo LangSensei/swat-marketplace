@@ -1,5 +1,13 @@
 # SOP Skill — Changelog
 
+## 1.0.3 (2026-04-12)
+- Quick Start: explicit cp commands — "Do NOT create from scratch", "If already exist, skip"
+- Remove redundant Templates section
+- Hooks: skip staleness-check + context-refresh when completed phases >= total - 1
+- plan.md: add Phase/Step guidance in Current State comments; remove redundant Status/Blockers from Current State
+- progress.md: remove all Status fields — status tracking consolidated in plan.md
+- progress.md: 5-Question Check points to plan.md
+
 ## 1.0.2 (2026-04-12)
 - Rewrite hooks to preToolUse only (postToolUse/sessionStart/errorOccurred/agentStop outputs are ignored by Copilot CLI)
 - Add staleness check: deny when plan.md/progress.md/findings.md not updated in 120s

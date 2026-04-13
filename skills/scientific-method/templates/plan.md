@@ -18,9 +18,11 @@
   WHAT: Quick snapshot of where you are right now.
   WHY: When re-reading plan before a decision, this tells you exactly where you are.
   WHEN: Update EVERY time you move to a new step or Cycle.
+  Step OPTIONS: Understand | Decompose | Hypothesize | Predict | Test | Conclude | Synthesize | Complete
+  Cycle OPTIONS: 0 (when not in a cycle) | 1 | 2 | 3 | ...
 -->
 - **Step:** Understand
-- **Cycle:** -
+- **Cycle:** 0
 
 ## Key Questions
 <!--
@@ -45,6 +47,7 @@
     - No error logs on the application server — suggests the issue is at DB level
     - Constraint: cannot change the database schema
 -->
+**Status:** not_started
 - What I know:
 - What I don't know:
 - Constraints:
@@ -60,6 +63,7 @@
     | 2 | Identify the failing query |
     | 3 | Test fix under load |
 -->
+**Status:** not_started
 | Cycle | Sub-problem |
 |-------|-------------|
 | 1 | |
@@ -70,6 +74,7 @@
   WHAT: One round of hypothesis-driven investigation for a specific sub-problem.
   WHY: Each Cycle is a self-contained reasoning unit. Keeps thinking structured.
   WHEN: Work through H → P → T → C in order. If hypothesis is rejected, add a new attempt below.
+  STATUS OPTIONS: not_started | in_progress | complete
 -->
 
 ### Hypothesis
@@ -78,6 +83,7 @@
   WHY: "I'll look into it" is not a hypothesis. "The error is caused by X because Y" is.
   EXAMPLE: "The 500 error is caused by a database deadlock because the update query doesn't use row-level locking."
 -->
+**Status:** not_started
 
 ### Prediction
 <!--
@@ -85,6 +91,7 @@
   WHY: Defines your test criteria. Without prediction, you can't tell if a test passed or failed.
   EXAMPLE: "If it's a deadlock, I should see lock-wait-timeout entries in the MySQL slow query log."
 -->
+**Status:** not_started
 
 ### Conclusion
 <!--
@@ -92,6 +99,7 @@
   WHY: Closes the loop. Makes the reasoning chain explicit.
   EXAMPLE: "REJECTED — No deadlock entries found. Slow query log shows the query completes in 2ms. The issue is elsewhere."
 -->
+**Status:** not_started
 
 <!-- If rejected, add another attempt: -->
 <!-- ### Hypothesis (Attempt 2) -->
@@ -101,10 +109,13 @@
 ## Cycle 2: [Sub-problem]
 
 ### Hypothesis
+**Status:** not_started
 
 ### Prediction
+**Status:** not_started
 
 ### Conclusion
+**Status:** not_started
 
 ## Synthesis
 <!--
@@ -112,6 +123,7 @@
   WHY: Individual Cycle conclusions may be fragments. Synthesis produces the deliverable.
   WHEN: After all Cycles are complete. Check against Key Questions — did you answer them all?
 -->
+**Status:** not_started
 
 ## Decisions
 <!--
@@ -130,6 +142,7 @@
   REMINDERS:
   - Re-read this file before major decisions (attention manipulation — your context decays, this file doesn't)
   - Update Current State when you move to a new step or Cycle
-  - Update progress.md Status fields when step status changes (pending → in_progress → complete)
+  - Update Status fields (not_started → in_progress → complete) in each section
+  - Log actions in progress.md at each step transition
   - If you discover a new sub-problem, add a new Cycle
 -->
