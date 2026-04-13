@@ -17,7 +17,7 @@ if ($toolArgs -like "*plan.md*" -or $toolArgs -like "*progress.md*" -or $toolArg
 
 # Final stages gate: when entering Synthesize/Complete, verify all prior steps are complete
 if (Test-Path "plan.md") {
-    $currentState = (Select-String -Path "plan.md" -Pattern '\*\*Step:\*\*' -List | Select-Object -First 1).Line
+    $currentState = (Select-String -Path "plan.md" -Pattern '\*\*Step:\*\*\s*(\S+)' -List | Select-Object -First 1).Matches.Groups[1].Value
     if ($currentState -match '(?i)(synthesize|complete)') {
         $statuses = Select-String -Path "plan.md" -Pattern '\*\*Status:\*\*\s*(\S+)' -AllMatches |
             ForEach-Object { $_.Matches.Groups[1].Value }

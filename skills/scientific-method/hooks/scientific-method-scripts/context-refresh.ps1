@@ -13,7 +13,7 @@ $now = [int][double]::Parse((Get-Date -UFormat %s))
 
 # Skip during final stages (Synthesize/Complete) — no more context refresh needed
 if (Test-Path "plan.md") {
-    $currentState = (Select-String -Path "plan.md" -Pattern '\*\*Step:\*\*' -List | Select-Object -First 1).Line
+    $currentState = (Select-String -Path "plan.md" -Pattern '\*\*Step:\*\*\s*(\S+)' -List | Select-Object -First 1).Matches.Groups[1].Value
     if ($currentState -match '(?i)(synthesize|complete)') {
         Write-Output '{}'; exit 0
     }

@@ -26,7 +26,7 @@ esac
 
 # Final stages gate: when entering Synthesize/Complete, verify all prior steps are complete
 if [ -f "plan.md" ]; then
-    CURRENT_STATE=$(sed -n '/^## Current State/,/^## /{ /^\*\*Step:\*\*/s/.*\*\*Step:\*\* *//p; /^- \*\*Step:\*\*/s/.*\*\*Step:\*\* *//p; }' plan.md 2>/dev/null)
+    CURRENT_STATE=$(grep -oP '\*\*Step:\*\*\s*\K\S+' plan.md 2>/dev/null | head -1)
     case "$CURRENT_STATE" in
         *[Ss]ynthesize*|*[Cc]omplete*)
             # Check all **Status:** fields — all except the last must be "complete"
