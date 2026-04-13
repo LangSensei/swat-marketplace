@@ -93,6 +93,15 @@
 -->
 **Status:** not_started
 
+### Test
+<!--
+  WHAT: Execute the verification. This is where you actually do work.
+  WHY: Hypothesis and prediction are thinking; testing is doing. Record all discoveries.
+  WHEN: After defining predictions. Update findings.md with every discovery.
+  EXAMPLE: "Searched MySQL slow query log for lock-wait-timeout entries. Found 0 matches in last 24h."
+-->
+**Status:** not_started
+
 ### Conclusion
 <!--
   WHAT: Was the hypothesis supported, rejected, or partially supported? Brief rationale.
@@ -104,6 +113,7 @@
 <!-- If rejected, add another attempt: -->
 <!-- ### Hypothesis (Attempt 2) -->
 <!-- ### Prediction (Attempt 2) -->
+<!-- ### Test (Attempt 2) -->
 <!-- ### Conclusion (Attempt 2) -->
 
 ## Cycle 2: [Sub-problem]
@@ -112,6 +122,15 @@
 **Status:** not_started
 
 ### Prediction
+**Status:** not_started
+
+### Test
+<!--
+  WHAT: Execute the verification. This is where you actually do work.
+  WHY: Hypothesis and prediction are thinking; testing is doing. Record all discoveries.
+  WHEN: After defining predictions. Update findings.md with every discovery.
+  EXAMPLE: "Searched MySQL slow query log for lock-wait-timeout entries. Found 0 matches in last 24h."
+-->
 **Status:** not_started
 
 ### Conclusion

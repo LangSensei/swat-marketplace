@@ -14,7 +14,7 @@ NOW=$(date +%s)
 
 # Skip during final stages (Synthesize/Complete) — no more context refresh needed
 if [ -f "plan.md" ]; then
-    CURRENT_STATE=$(sed -n '/^## Current State/,/^## /{ /^\*\*Step:\*\*/s/.*\*\*Step:\*\* *//p; /^- \*\*Step:\*\*/s/.*\*\*Step:\*\* *//p; }' plan.md 2>/dev/null)
+    CURRENT_STATE=$(grep -oP '\*\*Step:\*\*\s*\K\S+' plan.md 2>/dev/null | head -1)
     case "$CURRENT_STATE" in
         *[Ss]ynthesize*|*[Cc]omplete*)
             echo '{}'; exit 0 ;;

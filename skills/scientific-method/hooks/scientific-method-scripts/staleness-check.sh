@@ -24,11 +24,25 @@ case "$TOOL_ARGS" in
         echo '{}'; exit 0 ;;
 esac
 
-# Skip during final stages (Synthesize/Complete) — no more state file updates expected
+# Final stages gate: when entering Synthesize/Complete, verify all prior steps are complete
 if [ -f "plan.md" ]; then
-    CURRENT_STATE=$(sed -n '/^## Current State/,/^## /{ /^\*\*Step:\*\*/s/.*\*\*Step:\*\* *//p; /^- \*\*Step:\*\*/s/.*\*\*Step:\*\* *//p; }' plan.md 2>/dev/null)
+    CURRENT_STATE=$(grep -oP '\*\*Step:\*\*\s*\K\S+' plan.md 2>/dev/null | head -1)
     case "$CURRENT_STATE" in
         *[Ss]ynthesize*|*[Cc]omplete*)
+            # Check all **Status:** fields — all except the last must be "complete"
+            STATUSES=$(grep -oP '\*\*Status:\*\*\s*\K\S+' plan.md 2>/dev/null)
+            TOTAL=$(echo "$STATUSES" | wc -l)
+            if [ "$TOTAL" -gt 1 ]; then
+                INCOMPLETE=$(echo "$STATUSES" | head -n $((TOTAL - 1)) | grep -vn '^complete$' | sed 's/:/ /' | while read NUM VAL; do echo "Status #${NUM}: ${VAL}"; done)
+                if [ -n "$INCOMPLETE" ]; then
+                    INCOMPLETE_LIST=$(echo "$INCOMPLETE" | tr '\n' ';' | sed 's/;$//')
+                    MSG="QUALITY GATE: Cannot proceed to ${CURRENT_STATE} — prior steps/cycles are not complete: ${INCOMPLETE_LIST}. Go back and complete all prior Cycles (Hypothesize → Predict → Test → Conclude) before synthesizing."
+                    ESCAPED=$($PYTHON -c "import sys,json; print(json.dumps(sys.argv[1], ensure_ascii=False))" "$MSG" 2>/dev/null || echo "\"$MSG\"")
+                    echo "{\"permissionDecision\":\"deny\",\"permissionDecisionReason\":$ESCAPED}"
+                    exit 0
+                fi
+            fi
+            # All prior steps complete — skip staleness check during synthesis
             echo '{}'; exit 0 ;;
     esac
 fi

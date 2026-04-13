@@ -1,6 +1,6 @@
 ---
 name: scientific-method
-version: "1.0.3"
+version: "1.0.4"
 description: Hypothesis-driven cognitive framework for complex reasoning and research tasks. Understand → Decompose → Cycle (Hypothesize → Predict → Test → Conclude) → Synthesize.
 ---
 
@@ -172,6 +172,9 @@ AFTER 3 FAILURES: Escalate
 
 ### Don't Skip Steps
 Each step (Understand, Decompose, Hypothesize, Predict, Test, Conclude, Synthesize) is a distinct cognitive action. Jumping from Understand straight to Test means you're guessing, not reasoning. The discipline of forming explicit hypotheses and predictions is what makes this framework work.
+
+### Don't Skip Cycles
+Each Cycle in your Decompose table represents a distinct sub-problem. Execute them in order, one by one. Even if you gathered data for Cycle N+1 during Cycle N, you must still formally go through Hypothesize → Predict → Test → Conclude for every Cycle. Merging or skipping Cycles means your reasoning chain has gaps. A quality gate will deny tool use during Synthesize if prior steps/cycles are not marked complete.
 
 ### When to Loop Back
 - Hypothesis rejected → new hypothesis (stay in same Cycle)
