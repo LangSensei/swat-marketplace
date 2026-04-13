@@ -1,6 +1,6 @@
 ---
 name: squad-forge
-version: "1.0.2"
+version: "1.0.3"
 description: Creates new SWAT squads and skills — generates MANIFEST.md, SKILL.md, and CHANGELOG.md, then opens a PR to the marketplace
 dependencies:
   skills: [sop, git-pr]
@@ -66,6 +66,8 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 ### Delivery
 
 1. Push and open PR against `main`
+
+**Debrief hint:** Opening a PR typically means lint is needed — prefer dispatch over notify.
 
 ### Constraints
 

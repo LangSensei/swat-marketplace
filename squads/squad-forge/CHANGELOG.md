@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.3 — 2026-04-13
+
+### Added
+- Debrief hint in Delivery section: prefer dispatching to squad-lint over notify when opening PRs
+
 ## 1.0.2 — 2026-04-12
 
 ### Changed
