@@ -1,6 +1,6 @@
 ---
 name: squad-lint
-version: "1.0.1"
+version: "1.0.2"
 description: Validates structural compliance of squads and skills in swat-marketplace
 dependencies:
   skills: [sop, git-pr]
@@ -53,6 +53,7 @@ For each `skills/*/SKILL.md`:
 - `version` follows semver format (`X.Y.Z`)
 - If `dependencies.skills` is declared, each referenced skill exists in `skills/`
 - If `dependencies.mcps` is declared, each referenced MCP exists in `mcps/`
+- If `prereq` is declared in frontmatter, the referenced file must exist (e.g. `prereq: references/SETUP.md` means `skills/<name>/references/SETUP.md` must exist)
 
 #### Phase 2: MANIFEST.md Validation
 
@@ -67,11 +68,12 @@ For each `squads/*/MANIFEST.md`:
 
 #### Phase 3: Hook Configuration
 
-For each `squads/*/hooks/` or `skills/*/hooks/` directory:
-- If `hooks.json` exists, validate it is well-formed JSON
-- Each script referenced in `hooks.json` exists in the hooks directory
+For each `skills/*/hooks/` directory:
+- Hook JSON lives at `skills/<name>/hooks/<name>.json` (e.g. `skills/sop/hooks/sop.json`)
+- Hook scripts live at `skills/<name>/hooks/<name>-scripts/` (e.g. `skills/sop/hooks/sop-scripts/staleness-check.sh`)
+- If a hook JSON file exists, validate it is well-formed JSON
+- Each script referenced in the hook JSON exists in the corresponding scripts directory
 - Bash scripts (`.sh`) have a paired PowerShell script (`.ps1`) and vice versa
-- Scripts referenced in hooks.json are executable (have correct extension)
 
 #### Phase 4: CHANGELOG Validation
 
@@ -82,7 +84,7 @@ For each squad or skill directory:
 
 #### Phase 5: SETUP.md Validation
 
-For each `skills/*/SETUP.md` (if present):
+For each `skills/*/references/SETUP.md` (if present):
 - Each section has both a `Check` and `Steps` subsection
 - Platform labels are consistent (`Linux/macOS`, `Windows`)
 - No empty sections
