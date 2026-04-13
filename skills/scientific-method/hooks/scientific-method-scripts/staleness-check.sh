@@ -30,25 +30,17 @@ if [ -f "plan.md" ]; then
     case "$CURRENT_STATE" in
         *[Ss]ynthesize*|*[Cc]omplete*)
             # Check all **Status:** fields — all except the last must be "complete"
-            INCOMPLETE=$($PYTHON -c "
-import re, sys
-with open('plan.md') as f:
-    statuses = re.findall(r'\*\*Status:\*\*\s*(\S+)', f.read())
-if len(statuses) <= 1:
-    sys.exit(0)
-# All except the last must be complete
-incomplete = []
-for i, s in enumerate(statuses[:-1]):
-    if s != 'complete':
-        incomplete.append(f'Status #{i+1}: {s}')
-if incomplete:
-    print('; '.join(incomplete))
-" 2>/dev/null)
-            if [ -n "$INCOMPLETE" ]; then
-                MSG="QUALITY GATE: Cannot proceed to ${CURRENT_STATE} — prior steps/cycles are not complete: ${INCOMPLETE}. Go back and complete all prior Cycles (Hypothesize → Predict → Test → Conclude) before synthesizing."
-                ESCAPED=$($PYTHON -c "import sys,json; print(json.dumps(sys.argv[1], ensure_ascii=False))" "$MSG" 2>/dev/null || echo "\"$MSG\"")
-                echo "{\"permissionDecision\":\"deny\",\"permissionDecisionReason\":$ESCAPED}"
-                exit 0
+            STATUSES=$(grep -oP '\*\*Status:\*\*\s*\K\S+' plan.md 2>/dev/null)
+            TOTAL=$(echo "$STATUSES" | wc -l)
+            if [ "$TOTAL" -gt 1 ]; then
+                INCOMPLETE=$(echo "$STATUSES" | head -n $((TOTAL - 1)) | grep -vn '^complete$' | sed 's/:/ /' | while read NUM VAL; do echo "Status #${NUM}: ${VAL}"; done)
+                if [ -n "$INCOMPLETE" ]; then
+                    INCOMPLETE_LIST=$(echo "$INCOMPLETE" | tr '\n' ';' | sed 's/;$//')
+                    MSG="QUALITY GATE: Cannot proceed to ${CURRENT_STATE} — prior steps/cycles are not complete: ${INCOMPLETE_LIST}. Go back and complete all prior Cycles (Hypothesize → Predict → Test → Conclude) before synthesizing."
+                    ESCAPED=$($PYTHON -c "import sys,json; print(json.dumps(sys.argv[1], ensure_ascii=False))" "$MSG" 2>/dev/null || echo "\"$MSG\"")
+                    echo "{\"permissionDecision\":\"deny\",\"permissionDecisionReason\":$ESCAPED}"
+                    exit 0
+                fi
             fi
             # All prior steps complete — skip staleness check during synthesis
             echo '{}'; exit 0 ;;
