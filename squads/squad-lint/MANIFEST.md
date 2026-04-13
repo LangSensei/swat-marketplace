@@ -81,6 +81,7 @@ For each squad or skill directory:
 - `CHANGELOG.md` exists
 - Latest version entry in CHANGELOG matches the frontmatter `version`
 - CHANGELOG follows Keep a Changelog format (version header with date)
+- One PR should have at most one version bump per squad/skill — multiple version entries with the same date in CHANGELOG suggest unnecessary intermediate bumps
 
 #### Phase 5: SETUP.md Validation
 
@@ -101,7 +102,7 @@ For each `skills/*/references/SETUP.md` (if present):
 1. Compile all check results into a structured report
 2. Clean up worktree (mandatory): `cd ~/.swat/repos/swat-marketplace && git worktree remove "$(pwd)/repo" --force`
 
-**Debrief hint:** Lint complete — prefer notify.
+**Debrief hint:** All checks pass → notify. Failures found → dispatch fix operation (include file paths and failure details so squad-forge can address them).
 
 ### Constraints
 
