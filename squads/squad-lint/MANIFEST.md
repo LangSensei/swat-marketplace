@@ -1,9 +1,9 @@
 ---
 name: squad-lint
-version: "1.0.0"
+version: "1.0.1"
 description: Validates structural compliance of squads and skills in swat-marketplace
 dependencies:
-  skills: [sop]
+  skills: [sop, git-pr]
   mcps: []
 ---
 
@@ -99,7 +99,7 @@ For each `skills/*/SETUP.md` (if present):
 1. Compile all check results into a structured report
 2. Clean up worktree (mandatory): `cd ~/.swat/repos/swat-marketplace && git worktree remove "$(pwd)/repo" --force`
 
-**Debrief hint:** Opening a PR typically means lint is needed — prefer dispatch over notify.
+**Debrief hint:** Lint complete — prefer notify.
 
 ### Constraints
 

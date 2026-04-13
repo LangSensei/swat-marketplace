@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1 — 2026-04-13
+
+- Fix: replace incorrect debrief hint (squad-lint is read-only, never opens PRs)
+- Fix: add git-pr to dependencies (git-pr Mode C is used in Setup for read-only worktree)
+
 ## 1.0.0 — 2026-04-13
 
 - Initial release
