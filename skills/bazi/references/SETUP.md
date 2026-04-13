@@ -60,14 +60,11 @@ python -c "import lunar_python, colorama, bidict" 2>$null; if ($?) { echo "OK" }
 
 ### Steps
 
+**Linux / macOS:**
 ```bash
 pip3 install lunar-python colorama bidict
 ```
-
-**Linux (Debian 12+ / Ubuntu 23.04+):** If your system uses externally managed Python:
-```bash
-pip3 install lunar-python colorama bidict --break-system-packages
-```
+> If your system uses externally managed Python (Debian 12+, Ubuntu 23.04+), add `--break-system-packages`.
 
 **Windows:**
 ```powershell
