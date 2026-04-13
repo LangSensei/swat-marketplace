@@ -1,6 +1,6 @@
 ---
 name: go-dev
-version: "1.0.0"
+version: "1.1.0"
 description: Go development workflow — build, test, module management
 dependencies:
   skills: []
@@ -12,19 +12,19 @@ dependencies:
 
 ```bash
 # Build (verify compilation)
-PATH=/usr/local/go/bin:$PATH go build -o /dev/null .
+go build -o /dev/null .
 
 # Build with output
-PATH=/usr/local/go/bin:$PATH go build -o <binary> .
+go build -o <binary> .
 
 # Run tests
-PATH=/usr/local/go/bin:$PATH go test ./...
+go test ./...
 
 # Run specific test
-PATH=/usr/local/go/bin:$PATH go test -run TestName ./package/
+go test -run TestName ./package/
 
 # Vet (static analysis)
-PATH=/usr/local/go/bin:$PATH go vet ./...
+go vet ./...
 ```
 
 ## Module Management
@@ -100,6 +100,6 @@ out, err := cmd.CombinedOutput()
 ## Rules
 
 - **Always run `go build`** before committing to verify compilation
-- **PATH must include `/usr/local/go/bin`** for Go commands
+- **Go must be in PATH** — see `references/SETUP.md` for installation and PATH setup
 - **No `init()` functions** unless absolutely necessary
 - **Keep packages focused** — one responsibility per package
