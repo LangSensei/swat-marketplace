@@ -5,9 +5,6 @@
 ### Added
 - Debrief hint in Delivery section: prefer dispatching to squad-lint over notify when opening PRs
 
-### Changed
-- Remove Output Schema from "Creating a Squad" step list
-
 ## 1.0.2 — 2026-04-12
 
 ### Changed
