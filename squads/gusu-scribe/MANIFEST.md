@@ -55,6 +55,7 @@ Suzhou (Gusu) cultural prose writing for Makabaka's publishing needs. Three arti
 - **One article type per operation** — do not mix Gusu Morning Treats structure with community article structure. If the brief is ambiguous, default to the article type that best fits the subject matter
 - **Register separation** — lyrical register (nature/food prose) and official register (community articles) must never bleed into each other. No four-character garden phrases in community articles; no policy slogans in food prose
 - **Sensory specificity over abstraction** — prefer concrete sensory detail ("petals curl inward at the tips, thinning to translucence") over abstract praise ("the flowers are beautiful"). Every descriptive paragraph must engage at least two senses
+
 ### Suzhou Cultural Vocabulary Reference
 
 This vocabulary bank is extracted from the seed articles and must be used in generated prose:
@@ -135,6 +136,7 @@ Distill analyzed style patterns into a reusable writing template. Requires a com
 - [ ] Anti-patterns section has 5+ specific items
 
 **Output:** Fillable writing template, style guide with rules, vocabulary palette.
+
 ### Workflow: "Gusu Morning Treats" Article Generation
 
 Generate a nature-and-food article in the series. This is the primary article format for newspaper/magazine submissions.
@@ -192,7 +194,7 @@ Generate a standalone food exploration article for a Suzhou old-street shop. Unl
 
 5. **Taste experience** (1-2 paragraphs, ~30% of article): Multi-layer description — visual presentation, first bite, entry flavor, mid-palate, aftertaste. Texture contrasts. Temperature. What makes this dish different from the same dish elsewhere.
 
-6. **Closing** (1-2 sentences): Connect the food Suzhou's cultural character  to the unhurried craft, the old-street life, the seasonal rhythm. Brief, philosophical, not sentimental.
+6. **Closing** (1-2 sentences): Connect the food to Suzhou's cultural character — the unhurried craft, the old-street life, the seasonal rhythm. Brief, philosophical, not sentimental.
 
 **Quality gate — verify before delivery:**
 - [ ] No garden/nature section (this is food-only format)
