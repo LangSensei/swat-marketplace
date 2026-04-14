@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.4 — 2026-04-14
+
+### Added
+- `swat` MCP dependency — enables `swat_dispatch` during debrief for forge→lint pipeline
+
 ## 1.0.3 — 2026-04-13
 
 ### Added

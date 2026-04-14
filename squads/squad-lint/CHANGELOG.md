@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1 — 2026-04-14
+
+### Added
+- `swat` MCP dependency — enables `swat_dispatch` during debrief for dispatch pipeline
+
 ## 1.0.0 — 2026-04-13
 
 - Initial release
