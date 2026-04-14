@@ -1,10 +1,10 @@
 ---
 name: squad-forge
-version: "1.0.3"
+version: "1.0.4"
 description: Creates new SWAT squads and skills — generates MANIFEST.md, SKILL.md, and CHANGELOG.md, then opens a PR to the marketplace
 dependencies:
   skills: [sop, git-pr]
-  mcps: []
+  mcps: [swat]
 ---
 
 # Squad Forge Squad
