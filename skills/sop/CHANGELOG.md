@@ -1,5 +1,10 @@
 # SOP Skill — Changelog
 
+## 1.0.5 (2026-04-14)
+- Hooks: restructure into `copilot/` and `gemini/` subdirectories for multi-runtime support
+- Hooks: add Gemini CLI hooks with adapted I/O schema (`tool_input`/`decision`/`reason`)
+- Hooks: Gemini scripts use Python regex instead of `grep -oP` for macOS compatibility
+
 ## 1.0.4 (2026-04-14)
 - Quick Start: replace hardcoded `.github/skills/sop/` paths with `<SKILL_DIR>` placeholder for runtime-agnostic portability across CLI environments
 

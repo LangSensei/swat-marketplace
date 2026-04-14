@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "hooks": {
+    "BeforeTool": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .gemini/hooks/sop-scripts/staleness-check.sh",
+            "name": "staleness-check",
+            "timeout": 5000
+          },
+          {
+            "type": "command",
+            "command": "bash .gemini/hooks/sop-scripts/context-refresh.sh",
+            "name": "context-refresh",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
+}
