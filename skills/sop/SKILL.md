@@ -1,6 +1,6 @@
 ---
 name: sop
-version: "1.0.3"
+version: "1.0.4"
 description: Standard Operating Procedure — phase-based execution with step checklists for structured, repeatable tasks
 ---
 
@@ -33,10 +33,11 @@ Execute structured tasks by following predefined phases with step-by-step checkl
 1. Understand your task — read the assignment/brief to identify the phases
 2. **Copy templates** — Do NOT create these files from scratch. The templates contain required structure and comments. If the files already exist, skip this step.
    ```
-   cp .github/skills/sop/templates/plan.md .
-   cp .github/skills/sop/templates/findings.md .
-   cp .github/skills/sop/templates/progress.md .
+   cp <SKILL_DIR>/templates/plan.md .
+   cp <SKILL_DIR>/templates/findings.md .
+   cp <SKILL_DIR>/templates/progress.md .
    ```
+   > `<SKILL_DIR>` is the directory where this SKILL.md lives. Resolve it from your runtime context (e.g. `.github/skills/sop` for Copilot, `.claude/skills/sop` for Claude Code).
 3. Fill in Goal + Phases in `plan.md`
 4. Execute phases in order — check off steps as you go
 5. Update findings.md after every 2 search/browse/view operations (2-Action Rule)

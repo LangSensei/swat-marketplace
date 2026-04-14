@@ -1,5 +1,8 @@
 # SOP Skill — Changelog
 
+## 1.0.4 (2026-04-14)
+- Quick Start: replace hardcoded `.github/skills/sop/` paths with `<SKILL_DIR>` placeholder for runtime-agnostic portability across CLI environments
+
 ## 1.0.3 (2026-04-12)
 - Quick Start: explicit cp commands — "Do NOT create from scratch", "If already exist, skip"
 - Remove redundant Templates section
