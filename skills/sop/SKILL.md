@@ -37,7 +37,7 @@ Execute structured tasks by following predefined phases with step-by-step checkl
    cp <SKILL_DIR>/templates/findings.md .
    cp <SKILL_DIR>/templates/progress.md .
    ```
-   > `<SKILL_DIR>` is the directory where this SKILL.md lives. Resolve it from your runtime context (e.g. `.github/skills/sop` for Copilot, `.claude/skills/sop` for Claude Code).
+   > `<SKILL_DIR>` is the directory containing this SKILL.md. Resolve from your runtime context.
 3. Fill in Goal + Phases in `plan.md`
 4. Execute phases in order — check off steps as you go
 5. Update findings.md after every 2 search/browse/view operations (2-Action Rule)

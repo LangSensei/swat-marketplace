@@ -48,7 +48,7 @@ Before starting any complex task:
    cp <SKILL_DIR>/templates/findings.md .
    cp <SKILL_DIR>/templates/progress.md .
    ```
-   > `<SKILL_DIR>` is the directory where this SKILL.md lives. Resolve it from your runtime context (e.g. `.github/skills/scientific-method` for Copilot, `.claude/skills/scientific-method` for Claude Code).
+   > `<SKILL_DIR>` is the directory containing this SKILL.md. Resolve from your runtime context.
 2. **Fill in `plan.md` Goal** — One sentence describing what you're trying to achieve
 3. **Follow the framework below** — Start with Understand, then Decompose, then Cycles
 
