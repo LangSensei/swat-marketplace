@@ -7,13 +7,13 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .gemini/hooks/sop-scripts/staleness-check.sh",
+            "command": "node .gemini/hooks/sop-scripts/staleness-check.js",
             "name": "staleness-check",
             "timeout": 5000
           },
           {
             "type": "command",
-            "command": "bash .gemini/hooks/sop-scripts/context-refresh.sh",
+            "command": "node .gemini/hooks/sop-scripts/context-refresh.js",
             "name": "context-refresh",
             "timeout": 5000
           }
