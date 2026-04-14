@@ -1,0 +1,23 @@
+{
+  "hooks": {
+    "BeforeTool": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .gemini/hooks/scientific-method-scripts/staleness-check.js",
+            "name": "staleness-check",
+            "timeout": 5000
+          },
+          {
+            "type": "command",
+            "command": "node .gemini/hooks/scientific-method-scripts/context-refresh.js",
+            "name": "context-refresh",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
+}

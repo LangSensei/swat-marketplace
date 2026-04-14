@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.6 (2026-04-14)
+- Hooks: restructure into `copilot/` and `gemini/` subdirectories for multi-runtime support
+- Hooks: add Gemini CLI hooks with adapted I/O schema (`tool_input`/`decision`/`reason`)
+- Hooks: Gemini scripts as cross-platform Node.js (.js) — no bash/Python dependency (Gemini CLI guarantees Node.js)
+
 ## 1.0.5 (2026-04-14)
 - Quick Start: replace hardcoded `.github/skills/scientific-method/` paths with `<SKILL_DIR>` placeholder for runtime-agnostic portability across CLI environments
 
