@@ -1,6 +1,6 @@
 ---
 name: debrief
-version: "2.0.0"
+version: "3.0.0"
 description: Operation completion gate — notify the user or dispatch the next task
 dependencies:
   skills: []
@@ -20,30 +20,12 @@ Never both. Never neither.
 
 Send a concise notification to the user with your key findings.
 
-### How it works
-
-1. Write your message to a file using the `create` tool (2-5 sentences, lead with the conclusion)
-2. Run the notify script — it auto-detects whether OpenClaw is installed:
-   - **OpenClaw installed** → sends via Gateway API
-   - **OpenClaw not installed** → prints the message to stdout (Commander handles delivery)
-
 ### Usage
 
-Write your message to a file first. **Do not pass inline message arguments** — shell tools corrupt multi-byte UTF-8 characters (CJK, etc.).
+Call the `swat_notify` MCP tool with your notification message:
 
-**Linux/macOS:**
-```bash
-bash path/to/debrief/notify.sh --file /path/to/msg.txt
-```
-
-**Windows:**
-```powershell
-pwsh path/to/debrief/notify.ps1 -File /path/to/msg.txt
-```
-
-With optional target and channel:
-```bash
-bash path/to/debrief/notify.sh --file /path/to/msg.txt --target CHAT_ID --channel telegram
+```json
+swat_notify({"message": "your notification message"})
 ```
 
 ### Notification Guidelines
@@ -59,14 +41,3 @@ bash path/to/debrief/notify.sh --file /path/to/msg.txt --target CHAT_ID --channe
 When further work is needed, use the `swat_dispatch` MCP tool to hand off to the next squad.
 
 Provide a clear brief describing what needs to be done next, with reference to this operation's findings if the next squad needs context.
-
-## Environment Variables (for notify)
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `OPENCLAW_GATEWAY_PORT` | No | Gateway port (default: from config or 18789) |
-| `OPENCLAW_GATEWAY_TOKEN` | No | Gateway auth token (default: from config) |
-| `OPENCLAW_NOTIFY_TARGET` | No | Default recipient chat ID (default: from config) |
-| `OPENCLAW_NOTIFY_CHANNEL` | No | Channel type (optional) |
-
-All variables fall back to `~/.openclaw/openclaw.json` if not set. If OpenClaw is not installed, these are ignored.
