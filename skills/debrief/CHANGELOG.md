@@ -1,5 +1,22 @@
 # Debrief Skill — Changelog
 
+## 3.0.0 — 2026-04-14
+
+### Breaking Changes
+- Replaced `notify.sh` and `notify.ps1` shell scripts with `swat_notify` MCP tool
+- Notification is now a single MCP tool call instead of a multi-step file-write-then-shell-script workflow
+
+### Removed
+- `notify.sh` — bash notification script
+- `notify.ps1` — PowerShell notification script
+- Shell script usage examples from SKILL.md
+- `--file` parameter documentation and "Why --file?" rationale (no longer applicable)
+- Environment variables table (configuration now handled by the MCP layer)
+
+### Changed
+- `SKILL.md` v3.0.0: simplified Exit 1 (Notify) to a single `swat_notify` MCP tool call
+- Notification guidelines preserved (language matching, concise, lead with conclusion)
+
 ## 2.0.0 — 2026-04-12
 
 ### Added
