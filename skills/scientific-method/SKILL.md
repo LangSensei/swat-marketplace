@@ -1,6 +1,6 @@
 ---
 name: scientific-method
-version: "1.0.4"
+version: "1.0.5"
 description: Hypothesis-driven cognitive framework for complex reasoning and research tasks. Understand → Decompose → Cycle (Hypothesize → Predict → Test → Conclude) → Synthesize.
 ---
 
@@ -44,10 +44,11 @@ Before starting any complex task:
 
 1. **Copy templates** — Do NOT create these files from scratch. The templates contain required structure and comments. If the files already exist, skip this step.
    ```
-   cp .github/skills/scientific-method/templates/plan.md .
-   cp .github/skills/scientific-method/templates/findings.md .
-   cp .github/skills/scientific-method/templates/progress.md .
+   cp <SKILL_DIR>/templates/plan.md .
+   cp <SKILL_DIR>/templates/findings.md .
+   cp <SKILL_DIR>/templates/progress.md .
    ```
+   > `<SKILL_DIR>` is the directory where this SKILL.md lives. Resolve it from your runtime context (e.g. `.github/skills/scientific-method` for Copilot, `.claude/skills/scientific-method` for Claude Code).
 2. **Fill in `plan.md` Goal** — One sentence describing what you're trying to achieve
 3. **Follow the framework below** — Start with Understand, then Decompose, then Cycles
 

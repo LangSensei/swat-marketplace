@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.5 (2026-04-14)
+- Quick Start: replace hardcoded `.github/skills/scientific-method/` paths with `<SKILL_DIR>` placeholder for runtime-agnostic portability across CLI environments
+
 ## 1.0.4 (2026-04-13)
 - plan.md template: add missing `### Test` section to Cycle 1 and Cycle 2, matching SKILL.md's Hypothesize → Predict → Test → Conclude framework
 - plan.md template: add `### Test (Attempt 2)` to rejected-hypothesis comment block
