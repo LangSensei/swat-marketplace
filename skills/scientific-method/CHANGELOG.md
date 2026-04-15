@@ -32,7 +32,7 @@
 - Fix Windows encoding: ensure UTF-8 for PowerShell→Python pipe (fixes Chinese garbled output)
 - Add PYTHONIOENCODING=utf-8 to all hook scripts
 
-## 1.0.0
+## 1.0.0 (2026-04-12)
 
 Initial release.
 

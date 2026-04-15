@@ -2,7 +2,7 @@
 
 All notable changes to the `gusu-scribe` squad.
 
-## 1.2.0 — 2026-04-14
+## 1.2.0 (2026-04-14)
 
 ### Added
 - Constraints section with 6 domain-specific writing constraints (voice fidelity, no verbatim copying, factual grounding, one article type per operation, register separation, sensory specificity)
@@ -26,13 +26,13 @@ All notable changes to the `gusu-scribe` squad.
 ### Removed
 - Hardcoded `/home/ling/.openclaw/workspace/ink-mist-samples.md` path from General Rules
 
-## 1.1.0 — 2026-04-12
+## 1.1.0 (2026-04-12)
 
 ### Changed
 - Add `sop` skill dependency
 - Remove Output Schema section
 
-## [1.0.0] - 2026-04-10
+## 1.0.0 (2026-04-10)
 
 ### Added
 - Initial squad creation as a rename and specialization of `content-writer`

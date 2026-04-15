@@ -1,12 +1,12 @@
 # Changelog — roco-kingdom
 
-## 1.1.0 — 2026-04-12
+## 1.1.0 (2026-04-12)
 
 ### Changed
 - Add `scientific-method` skill dependency
 - Remove Output Schema section
 
-## [1.0.0] — 2026-04-11
+## 1.0.0 (2026-04-11)
 
 ### Added
 - Initial MANIFEST.md for the Roco Kingdom (洛克王国) game research squad
