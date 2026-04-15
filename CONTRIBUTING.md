@@ -16,7 +16,16 @@ Skills are tools that extend the agent's capabilities. **They can be written in 
   ```
 
 - **Manifest (SKILL.md):**
-  Must include `name`, `version`, `description` in the YAML frontmatter.
+  Must include `name`, `version`, `description`, `dependencies` in the YAML frontmatter.
+  - `name` must match the folder name (kebab-case).
+  - `version` must follow semver format (`"X.Y.Z"`).
+  - `dependencies` declares required skills and MCPs:
+    ```yaml
+    dependencies:
+      skills: []
+      mcps: []
+    ```
+  - Optional: `prereq` — references a setup file (e.g., `prereq: references/SETUP.md`).
 
 ## 2. Squads
 
@@ -32,7 +41,15 @@ Squads are specialized agent configurations.
   ```
 
 - **Manifest (MANIFEST.md):**
-  Must include `name`, `version`, `description` in the YAML frontmatter.
+  Must include `name`, `version`, `description`, `dependencies` in the YAML frontmatter.
+  - `name` must match the folder name (kebab-case).
+  - `version` must follow semver format (`"X.Y.Z"`).
+  - `dependencies` must include `skills: [...]` and `mcps: [...]`:
+    ```yaml
+    dependencies:
+      skills: [sop]   # at least one methodology skill (sop or scientific-method)
+      mcps: [swat]
+    ```
 
 ## 3. Submission
 
