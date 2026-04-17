@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.0 (2026-04-17)
+
+### Added
+- Add swat-openclaw as in-scope repository for PR reviews and audits
+- Add Audit Mode to playbook: full-repo scan, categorize findings, file GitHub issues
+- Add swat-openclaw setup instructions to playbook
+
+### Changed
+- Expand domain to cover swat and swat-openclaw
+- Clarify out-of-scope: swat-marketplace handled by squad-forge and squad-lint
+
 ## 1.3.0 (2026-04-17)
 
 ### Changed
@@ -8,7 +19,6 @@
 - Dispatch brief must include branch name, PR number, repository, categorized fix list, and original PR context
 
 ## 1.2.0 (2026-04-12)
-
 ### Changed
 - Add `sop` skill dependency
 - Remove Output Schema section

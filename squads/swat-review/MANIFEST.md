@@ -1,6 +1,6 @@
 ---
 name: swat-review
-version: "1.3.0"
+version: "1.4.0"
 description: Code review squad — reviews PRs for style, correctness, and consistency, submits inline comments, and dispatches fix operations
 dependencies:
   skills: [sop, git-pr]
@@ -12,22 +12,25 @@ dependencies:
 ## Domain
 
 Code review for the SWAT codebase. Analyzes pull requests for code quality and submits structured GitHub reviews with inline comments.
+Code review for the SWAT codebase and swat-openclaw. Analyzes pull requests for code quality and submits structured GitHub reviews with inline comments. Also supports full-repo audit scans with categorized findings.
 
 ## Boundary
 
 **In scope:**
-- Reviewing PRs on `LangSensei/swat`
+- Reviewing PRs on `LangSensei/swat` and `LangSensei/swat-openclaw`
+- Full-repo audit scans on swat and swat-openclaw
 - Code style review (Go conventions, naming, formatting)
 - Correctness review (logic errors, edge cases, error handling)
 - Consistency review (alignment with existing codebase patterns)
 - Submitting GitHub PR reviews with inline comments
 - Approving clean PRs
 - Requesting changes and dispatching fix operations via SWAT MCP
+- Filing GitHub issues for audit findings
 
 **Out of scope:**
 - Merging PRs (HQ decision)
 - Writing code or making commits
-- Reviewing repositories other than swat (unless specified in brief)
+- Reviewing swat-marketplace (handled by squad-forge and squad-lint)
 - Architectural decisions (flag for HQ, don't block)
 
 ## Write Access
@@ -40,7 +43,9 @@ Code review for the SWAT codebase. Analyzes pull requests for code quality and s
 
 1. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat/`, worktree into `repo/`
 2. Repository: `https://github.com/LangSensei/swat`
-3. Identify the target PR from the operation brief (PR number or URL)
+3. For swat-openclaw tasks: bare clone to `~/.swat/repos/swat-openclaw/`, worktree into `repo/`
+4. Repository: `https://github.com/LangSensei/swat-openclaw`
+5. Identify the target PR or audit scope from the operation brief
 
 ### Review Process
 
@@ -82,6 +87,36 @@ Code review for the SWAT codebase. Analyzes pull requests for code quality and s
      ]
    }
    ```
+
+### Audit Mode
+
+Use when the operation brief requests a full-repo scan (not a PR review).
+
+1. **Scope the audit:**
+   - Identify the target repository from the operation brief (swat or swat-openclaw)
+   - Set up a read-only worktree using git-pr Mode C
+
+2. **Full-repo scan:**
+   - Scan all source files for issues: code quality, correctness, consistency, security
+   - Categorize findings by severity: **critical** (bugs, security), **warning** (code smells, missing error handling), **info** (style, suggestions)
+   - Categorize findings by area: code quality, correctness, consistency, documentation, testing
+
+3. **File GitHub issues:**
+   - Create one issue per distinct finding (or group closely related findings)
+   - Use labels to indicate severity and category
+   - Each issue must include: file path, line number(s), description of the problem, and suggested fix
+   ```bash
+   gh issue create --repo LangSensei/<repo> \
+     --title "<category>: <short description>" \
+     --body "<detailed finding>" \
+     --label "<severity>,<category>"
+   ```
+
+4. **Summarize results:**
+   - Report total findings by severity and category
+   - Highlight the most critical issues
+
+**Debrief hint:** After audit, if critical findings exist that need immediate fixes, dispatch to swat-dev with the issue list. Otherwise, notify with the summary.
 
 ### Post-Review Actions
 
