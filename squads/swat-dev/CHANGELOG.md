@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.7.0 (2026-04-17)
+
+### Added
+- Add swat-openclaw as in-scope repository (same Go module ecosystem)
+- Add `~/.swat/repos/swat-openclaw/` worktree path to Write Access
+- Add swat-openclaw setup instructions to playbook
+
+### Changed
+- Clarify out-of-scope means repos outside swat and swat-openclaw
+- Update Go module constraint to list both modules
+
 ## 1.6.0 (2026-04-17)
 
 ### Changed

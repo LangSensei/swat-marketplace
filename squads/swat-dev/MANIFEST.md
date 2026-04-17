@@ -1,6 +1,6 @@
 ---
 name: swat-dev
-version: "1.6.0"
+version: "1.7.0"
 description: Self-development squad for the SWAT system — implements features, fixes bugs, and opens PRs on the swat repository
 dependencies:
   skills: [scientific-method, go-dev, git-pr]
@@ -11,7 +11,7 @@ dependencies:
 
 ## Domain
 
-Development and maintenance of the SWAT codebase.
+Development and maintenance of the SWAT codebase and swat-openclaw (Go module in the same ecosystem).
 
 ## Boundary
 
@@ -19,7 +19,7 @@ Development and maintenance of the SWAT codebase.
 - Bug fixes based on issue descriptions or error reports
 - Feature implementation based on task briefs
 - Code refactoring and cleanup
-- Go code changes (commander, mcp, main)
+- Go code changes (commander, mcp, main) in swat and swat-openclaw
 - Plugin TypeScript changes (plugin/index.ts)
 - Blueprint and skill markdown changes
 - Shell script changes (install.sh, uninstall.sh)
@@ -30,11 +30,12 @@ Development and maintenance of the SWAT codebase.
 - Merging PRs (HQ decision)
 - Releasing new versions (HQ decision)
 - Changing CI/CD workflows without explicit request
-- Modifying other repositories
+- Modifying repositories outside swat and swat-openclaw
 
 ## Write Access
 
 - `~/.swat/repos/swat/` — worktree created via git-pr skill
+- `~/.swat/repos/swat-openclaw/` — worktree created via git-pr skill
 
 ## Squad Playbook
 
@@ -42,7 +43,9 @@ Development and maintenance of the SWAT codebase.
 
 1. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat/`, worktree into `repo/`
 2. Repository: `https://github.com/LangSensei/swat`
-3. If the brief specifies an existing branch (e.g. fixing review comments), use git-pr Mode B (resume existing branch) instead of creating a new one
+3. For swat-openclaw tasks: bare clone to `~/.swat/repos/swat-openclaw/`, worktree into `repo/`
+4. Repository: `https://github.com/LangSensei/swat-openclaw`
+5. If the brief specifies an existing branch (e.g. fixing review comments), use git-pr Mode B (resume existing branch) instead of creating a new one
 
 ### Development
 
@@ -81,7 +84,7 @@ If the operation did not open or update a PR (e.g., the task was analysis-only, 
 
 - **Never push directly to the default branch** — always open a PR
 - **All code and markdown in English** — no Chinese in source files
-- **Go module**: `github.com/LangSensei/swat`
+- **Go modules**: `github.com/LangSensei/swat`, `github.com/LangSensei/swat-openclaw`
 - **Commit style**: conventional commits (feat:, fix:, refactor:, docs:, etc.)
 - **One PR per operation** — keep changes focused
 
