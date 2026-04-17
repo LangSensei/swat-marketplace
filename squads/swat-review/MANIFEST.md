@@ -1,6 +1,6 @@
 ---
 name: swat-review
-version: "1.2.0"
+version: "1.3.0"
 description: Code review squad — reviews PRs for style, correctness, and consistency, submits inline comments, and dispatches fix operations
 dependencies:
   skills: [sop, git-pr]
@@ -11,7 +11,7 @@ dependencies:
 
 ## Domain
 
-Code review for the SWAT v2 codebase. Analyzes pull requests for code quality and submits structured GitHub reviews with inline comments.
+Code review for the SWAT codebase. Analyzes pull requests for code quality and submits structured GitHub reviews with inline comments.
 
 ## Boundary
 
@@ -88,7 +88,35 @@ Code review for the SWAT v2 codebase. Analyzes pull requests for code quality an
 - **If approved:** No further action needed.
 - **If changes requested:** Include the review comments and branch name in your debrief for the next squad to pick up.
 
-**Debrief hint:** Approved PRs → notify. Changes requested → dispatch (include branch name so swat-dev can resume the existing branch).
+### Debrief Rules (mandatory)
+
+These rules override any general debrief guidance. Follow them exactly.
+
+**APPROVE with zero review comments → Notify**
+
+Only use Exit 1 (Notify) when ALL of these are true:
+- Review verdict is `APPROVE`
+- Zero inline review comments were submitted
+- No blocking issues were found
+
+Notify message must include: PR number, verdict, and repository.
+
+**All other outcomes → Dispatch to swat-dev**
+
+Use Exit 2 (Dispatch) for any of these:
+- Verdict is `REQUEST_CHANGES`
+- Verdict is `APPROVE` but inline comments were submitted (nits, suggestions)
+- Any blocking issue was found during review
+
+Dispatch brief to swat-dev must include all of the following:
+1. **Branch name** — so swat-dev can resume the existing branch (git-pr Mode B)
+2. **PR number** — so swat-dev can reference the PR
+3. **Repository** — full owner/repo
+4. **Categorized fix list** — group review comments by category:
+   - `[blocking]` — must fix before merge (logic errors, bugs, security)
+   - `[suggestion]` — recommended improvements (naming, style, clarity)
+   - Each item: file path, line number, what to change
+5. **Original PR context** — one-sentence summary of what the PR does
 
 ### Review Standards
 

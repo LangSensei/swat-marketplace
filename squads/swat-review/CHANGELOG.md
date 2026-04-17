@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.0 (2026-04-17)
+
+### Changed
+- Replace debrief hint with mandatory "Debrief Rules" section
+- APPROVE with zero comments → Notify; all other outcomes → Dispatch to swat-dev
+- Dispatch brief must include branch name, PR number, repository, categorized fix list, and original PR context
+
 ## 1.2.0 (2026-04-12)
 
 ### Changed

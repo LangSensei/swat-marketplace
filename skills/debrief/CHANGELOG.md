@@ -1,5 +1,17 @@
 # Debrief Skill — Changelog
 
+## 3.1.0 (2026-04-17)
+
+### Added
+- Decision tree flowchart for choosing Notify vs Dispatch
+- Common patterns table mapping scenarios to exits
+- Structured dispatch brief format with required fields
+- Good and bad examples for both Notify and Dispatch exits
+- Guidance that squad-specific MANIFEST debrief rules override general skill guidance
+
+### Changed
+- Expanded Exit 2 (Dispatch) with usage example, brief format, and dispatch examples
+
 ## 3.0.0 (2026-04-14)
 
 ### Breaking Changes

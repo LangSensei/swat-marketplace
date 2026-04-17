@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0 (2026-04-17)
+
+### Changed
+- Add mandatory "Debrief Rules" section requiring dispatch to swat-review after every PR open/update
+- Dispatch brief must include PR number, repository, branch name, summary of changes, and files changed
+- No-PR operations use Notify instead
+
 ## 1.5.0 (2026-04-12)
 
 ### Changed
