@@ -19,6 +19,7 @@
 - Dispatch brief must include branch name, PR number, repository, categorized fix list, and original PR context
 
 ## 1.2.0 (2026-04-12)
+
 ### Changed
 - Add `sop` skill dependency
 - Remove Output Schema section

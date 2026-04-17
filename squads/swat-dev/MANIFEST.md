@@ -11,7 +11,6 @@ dependencies:
 
 ## Domain
 
-Development and maintenance of the SWAT codebase.
 Development and maintenance of the SWAT codebase and swat-openclaw (Go module in the same ecosystem).
 
 ## Boundary

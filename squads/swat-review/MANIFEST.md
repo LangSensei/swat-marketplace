@@ -11,7 +11,6 @@ dependencies:
 
 ## Domain
 
-Code review for the SWAT codebase. Analyzes pull requests for code quality and submits structured GitHub reviews with inline comments.
 Code review for the SWAT codebase and swat-openclaw. Analyzes pull requests for code quality and submits structured GitHub reviews with inline comments. Also supports full-repo audit scans with categorized findings.
 
 ## Boundary
@@ -49,22 +48,28 @@ Code review for the SWAT codebase and swat-openclaw. Analyzes pull requests for 
 
 ### Review Process
 
-1. **Fetch PR context:**
+1. **Check PR mergeability:**
+   ```bash
+   gh pr view <number> --repo LangSensei/<repo> --json mergeable -q '.mergeable'
+   ```
+   If the result is `CONFLICTING`, **skip the review entirely** — do not submit a review. Instead, dispatch back to swat-dev requesting a rebase of the branch. Include the PR number, repository, and branch name in the dispatch brief.
+
+2. **Fetch PR context:**
    - `gh pr view <number> --repo LangSensei/swat` for PR metadata
    - `gh pr diff <number> --repo LangSensei/swat` for the full diff
    - Read changed files in full to understand surrounding context (don't review diff in isolation)
 
-2. **Analyze against review criteria:**
+3. **Analyze against review criteria:**
    - **Style:** Go naming conventions (`camelCase` locals, `PascalCase` exports), `gofmt` compliance, consistent error variable names, comment quality
    - **Correctness:** Logic bugs, nil pointer risks, unchecked errors, resource leaks, race conditions, boundary cases
    - **Consistency:** Does the change follow patterns established elsewhere in the codebase? Are similar things done the same way?
 
-3. **Prepare review:**
+4. **Prepare review:**
    - Collect inline comments with specific file path, line number, and actionable feedback
    - Each comment should explain *what* is wrong and *how* to fix it
    - Write an overall summary assessing the PR quality
 
-4. **Submit review via GitHub API:**
+5. **Submit review via GitHub API:**
    ```bash
    gh api repos/LangSensei/swat/pulls/<number>/reviews \
      --method POST \
@@ -116,8 +121,6 @@ Use when the operation brief requests a full-repo scan (not a PR review).
    - Report total findings by severity and category
    - Highlight the most critical issues
 
-**Debrief hint:** After audit, if critical findings exist that need immediate fixes, dispatch to swat-dev with the issue list. Otherwise, notify with the summary.
-
 ### Post-Review Actions
 
 - **If approved:** No further action needed.
@@ -126,6 +129,19 @@ Use when the operation brief requests a full-repo scan (not a PR review).
 ### Debrief Rules (mandatory)
 
 These rules override any general debrief guidance. Follow them exactly.
+
+**Audit completed with critical findings → Dispatch to swat-dev**
+
+After a full-repo audit, if any critical-severity findings were filed as issues, use Exit 2 (Dispatch) to hand off to swat-dev for immediate fixes.
+
+Dispatch brief must include:
+1. **Repository** — full owner/repo
+2. **Issue list** — GitHub issue numbers for all critical findings
+3. **Summary** — total findings by severity and category
+
+**Audit completed with no critical findings → Notify**
+
+After a full-repo audit where no critical findings exist, use Exit 1 (Notify) to report the summary (total findings by severity and category, link to any filed issues).
 
 **APPROVE with zero review comments → Notify**
 

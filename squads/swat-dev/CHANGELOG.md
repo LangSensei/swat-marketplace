@@ -19,6 +19,7 @@
 - No-PR operations use Notify instead
 
 ## 1.5.0 (2026-04-12)
+
 ### Changed
 - Add `scientific-method` skill dependency
 - Remove Output Schema section
