@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1 (2026-04-17)
+
+- Fix bare clone missing refspec — add `remote.origin.fetch` config after `git clone --bare` so `git fetch --all --prune` correctly updates `origin/*` remote-tracking branches
+
 ## 1.2.0 (2026-03-23)
 
 - Add Mode C: read-only access via `--detach` worktree (no branch created, supports concurrency)

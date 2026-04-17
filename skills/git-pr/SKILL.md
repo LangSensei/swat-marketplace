@@ -1,6 +1,6 @@
 ---
 name: git-pr
-version: "1.2.0"
+version: "1.2.1"
 description: Git branch management and GitHub PR workflow using worktrees
 dependencies:
   skills: []
@@ -22,6 +22,8 @@ if [ -d "$REPO_DIR" ]; then
   cd "$REPO_DIR" && git fetch --all --prune
 else
   git clone --bare "$REPO_URL" "$REPO_DIR"
+  cd "$REPO_DIR"
+  git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 fi
 ```
 
