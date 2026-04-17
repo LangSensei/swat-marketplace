@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.0 (2026-04-17)
+
+### Added
+- Mandatory Debrief Rules section — all checks pass dispatches notify; failures dispatch to squad-forge
+- Mergeable pre-check — check PR mergeability before linting; CONFLICTING status skips lint and dispatches rebase request
+- Incremental PR mode — when PR number is specified, only lint changed files plus cross-references; fall back to full scan otherwise
+- Phase 7: Semantic Checks — duplicate consecutive lines, conflicting debrief patterns, empty section bodies, orphaned squad/skill references
+
+### Changed
+- Phase 4: same-date CHANGELOG warning now only triggers when both entries appear in the PR diff (pre-existing same-date entries no longer warn)
+
+### Removed
+- Debrief hint (replaced by mandatory Debrief Rules)
+
 ## 1.0.1 (2026-04-14)
 
 ### Added

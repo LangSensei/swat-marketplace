@@ -1,6 +1,6 @@
 ---
 name: squad-forge
-version: "1.0.4"
+version: "1.1.0"
 description: Creates new SWAT squads and skills — generates MANIFEST.md, SKILL.md, and CHANGELOG.md, then opens a PR to the marketplace
 dependencies:
   skills: [sop, git-pr]
@@ -67,7 +67,24 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 
 1. Push and open PR against `main`
 
-**Debrief hint:** Opening a PR typically means lint is needed — prefer dispatch over notify.
+### Debrief Rules (mandatory)
+
+These rules override any general debrief guidance. Follow them exactly.
+
+**PR was opened or updated → Dispatch to squad-lint**
+
+Every completed squad-forge operation that opens a PR (or pushes to an existing PR) must use Exit 2 (Dispatch) to hand off to squad-lint for validation. This is not optional.
+
+Dispatch brief to squad-lint must include:
+1. **PR number** — the PR to lint
+2. **Repository** — full owner/repo
+3. **Branch name** — the branch that was pushed
+4. **Summary of changes** — what the PR does and why
+5. **Files changed** — list of modified files
+
+**No PR opened → Notify**
+
+If the operation did not open or update a PR (e.g., the task was analysis-only, or the build failed before PR creation), use Exit 1 (Notify) to report the outcome.
 
 ### Constraints
 
@@ -80,5 +97,7 @@ Creating new SWAT squads and skills for the swat-marketplace repository.
 - **Boundary format: In scope / Out of scope** — use `**In scope:**` and `**Out of scope:**` bullet groups
 - **Title: human-readable** — `# {Squad Name} Squad`, can differ from kebab-case frontmatter `name:`
 - **One version bump per PR** — do not bump version in multiple commits within the same PR
+- **CHANGELOG format** — version headers must use `## X.Y.Z (YYYY-MM-DD)` format (parentheses around date, not em-dash). Example: `## 1.2.0 (2026-04-17)`
+- **Version bump guidance** — patch (`X.Y.Z+1`) for bug fixes and minor edits; minor (`X.Y+1.0`) for new features, sections, or behavioral changes; major (`X+1.0.0`) for breaking changes or full rewrites
 
 Report should include: design decisions, implementation approach, justifications for key choices, and a summary of changes made.

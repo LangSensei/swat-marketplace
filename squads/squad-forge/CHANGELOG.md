@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.0 (2026-04-17)
+
+### Added
+- Mandatory Debrief Rules section — PR opened dispatches to squad-lint; no-PR operations notify
+- CHANGELOG format specification in Constraints — mandates `## X.Y.Z (YYYY-MM-DD)` format
+- Version bump guidance in Constraints — patch/minor/major criteria
+
+### Removed
+- Debrief hint (replaced by mandatory Debrief Rules)
+
 ## 1.0.4 (2026-04-14)
 
 ### Added
