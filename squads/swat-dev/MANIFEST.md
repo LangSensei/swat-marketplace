@@ -1,6 +1,6 @@
 ---
 name: swat-dev
-version: "1.5.0"
+version: "1.6.0"
 description: Self-development squad for the SWAT system — implements features, fixes bugs, and opens PRs on the swat repository
 dependencies:
   skills: [scientific-method, go-dev, git-pr]
@@ -59,6 +59,25 @@ Development and maintenance of the SWAT v2 codebase.
 3. Clean up worktree (mandatory): `cd ~/.swat/repos/swat && git worktree remove "$(pwd)/repo" --force`
 
 **Debrief hint:** Opening a PR typically means review is needed — prefer dispatch over notify.
+
+### Debrief Rules (mandatory)
+
+These rules override any general debrief guidance. Follow them exactly.
+
+**PR was opened or updated → Dispatch to swat-review**
+
+Every completed swat-dev operation that opens a PR (or pushes to an existing PR) must use Exit 2 (Dispatch) to hand off to swat-review for code review. This is not optional.
+
+Dispatch brief to swat-review must include:
+1. **PR number** — the PR to review
+2. **Repository** — full owner/repo
+3. **Branch name** — the branch that was pushed
+4. **Summary of changes** — what the PR does and why
+5. **Files changed** — list of modified files
+
+**No PR opened → Notify**
+
+If the operation did not open or update a PR (e.g., the task was analysis-only, or the build failed before PR creation), use Exit 1 (Notify) to report the outcome.
 
 ### Constraints
 
