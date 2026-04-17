@@ -223,7 +223,7 @@ final_score = raw_score * (indicator_count / 18)
 
 ---
 
-## 合理性检验
+## 第五部分：合理性检验
 
 ### 得分分布
 

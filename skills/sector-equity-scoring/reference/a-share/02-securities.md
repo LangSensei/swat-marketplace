@@ -1,5 +1,7 @@
 # 非银金融板块价值评分公式 (Non-bank Financials Value Score Formula)
 
+> **Cross-reference:** This file covers the full 非银金融 sector (insurance + securities combined) using percentile ranking methodology. For a standalone insurance-only formula using absolute-value interval scoring (designed for the 5-stock small sample), see [03-insurance.md](03-insurance.md).
+
 ## 概述
 
 本公式是A股非银金融板块（申万一级：非银金融）量化价值评分体系，评分范围0-100分。

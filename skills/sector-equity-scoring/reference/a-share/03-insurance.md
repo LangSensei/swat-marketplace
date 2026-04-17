@@ -1,5 +1,7 @@
 # 保险板块价值评分公式 (Insurance Sector Absolute-Value Scoring Formula)
 
+> **Cross-reference:** This is a standalone insurance-only formula using absolute-value interval scoring, designed for the 5-stock small sample where percentile ranking has insufficient granularity. For the combined 非银金融 formula (insurance + securities, 54 stocks) using percentile ranking, see [02-securities.md](02-securities.md).
+
 ## 概述
 
 本公式是A股保险板块（东方财富板块：BK0474）量化价值评分体系，评分范围0-100分。
