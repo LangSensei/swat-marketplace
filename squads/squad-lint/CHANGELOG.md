@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 (2026-04-17)
+
+### Changed
+- Phase 5: relax Steps requirement — sections now need a `### Check` plus at least one other `###` subsection (not strictly `### Steps`)
+- Phase 5: relax platform label rule — standard names (`Linux`, `macOS`, `Windows`) required, but specific variants like `Linux (amd64)` are acceptable
+
 ## 1.1.0 (2026-04-17)
 
 ### Added

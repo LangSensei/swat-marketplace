@@ -1,6 +1,6 @@
 ---
 name: squad-lint
-version: "1.1.0"
+version: "1.1.1"
 description: Validates structural compliance of squads and skills in swat-marketplace
 dependencies:
   skills: [sop, git-pr]
@@ -108,8 +108,8 @@ For each squad or skill directory:
 #### Phase 5: SETUP.md Validation
 
 For each `skills/*/references/SETUP.md` (if present):
-- Each section has both a `Check` and `Steps` subsection
-- Platform labels are consistent (`Linux/macOS`, `Windows`)
+- Each section must have a `### Check` subsection. It must also have at least one other `###` subsection (e.g. `### Steps`, `### Login Flow`, `### Verify`)
+- Platform labels should use standard names (`Linux`, `macOS`, `Windows`). More specific variants like `Linux (amd64)`, `Linux (arm64)` are acceptable
 - No empty sections
 
 #### Phase 6: Cross-File Consistency
