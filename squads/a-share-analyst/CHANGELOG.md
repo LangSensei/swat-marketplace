@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.0 — 2026-04-17
+
+### Added
+- `sector-equity-scoring` skill dependency — percentile-based equity scoring methodology with 18-indicator system and V2 cap rules
+
 ## 1.5.0 — 2026-04-12
 
 ### Changed
