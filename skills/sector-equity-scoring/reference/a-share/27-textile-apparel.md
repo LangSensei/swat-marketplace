@@ -1,4 +1,4 @@
-# 纺织服饰板块价值评分公式 V2 (Textile & Apparel Sector Value Score Formula V2)
+# 纺织服饰板块价值评分公式 (Textile & Apparel Sector Value Score Formula)
 
 ## 概述
 
@@ -133,7 +133,7 @@
 
 ## 第三部分：公式
 
-### V2评分规则
+### 评分规则
 
 ```
 Value_Score = Sum(weight_i * score_i) / Sum(weight_i_participated)
@@ -155,7 +155,7 @@ score_i = industry_rank_percentile (0-100)
 | 缺失值 | 缺失指标权重不参与，总分除以实际参与权重归一化 |
 | 覆盖率惩罚 | 有效指标 < 10 个时，总分 *= (count / 18) |
 
-### V2 cap应用统计
+### 封顶规则应用统计
 
 | Cap类型 | 触发次数 | 示例 |
 |---------|---------|------|

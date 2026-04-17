@@ -12,7 +12,7 @@
 4. 估值权重(20%)适中 — 高成长消费品允许合理溢价
 5. 18个非零权重指标参与回测，100%权重覆盖
 
-**V2规则：**
+**评分规则：**
 - 排除ST/*ST和B股
 - 显示封顶后数值（ROE/ROIC ≤60%，增长率 ±200%）
 - FCF收益率 = FCFF_BACK / f20（总市值），非f116
@@ -148,7 +148,7 @@ score_i = industry_rank_percentile (0-100)
   越高越好: score = percentile
   percentile = (rank - 1) / (N_valid - 1) * 100
 
-V2 rules:
+Scoring rules:
   ROE cap: min(ROE, 60%)
   ROIC cap: min(ROIC, 60%)
   Growth cap: clip(growth, -200%, +200%)

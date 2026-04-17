@@ -144,7 +144,7 @@ score_i = industry_rank_percentile (0-100)
   越高越好的指标: score = percentile
   percentile = (rank - 1) / (N_valid - 1) * 100
 
-V2规则:
+评分规则:
   成长指标cap: 营收增长率/净利润增长率 clip至[-200%, +200%]
   ROE/ROIC cap: clip至≤60%
   PE处理: 亏损股(PE<0)不参与PE排名

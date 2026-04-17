@@ -13,7 +13,7 @@
 5. PB(6%)对房企重要 — 37/75只PB<1x（49.3%为破净股），资产折价是价值信号
 6. 风险类(13%)适度偏高 — D/A中位数67.4%为行业常态，但极端杠杆（>90%）暗示违约风险
 7. 18个非零权重指标参与回测，100%权重覆盖
-8. V2规则全套应用：增长±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
+8. 评分规则全套应用：增长±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
 
 **行业特点：**
 - 75只股票（排除8只ST/*ST + 9只B股），涵盖住宅开发/商业地产/产业园区/城投等子行业
@@ -149,7 +149,7 @@ score_i = industry_rank_percentile (0-100)
   越低越好: score = (1 - (rank - 1) / (N_valid - 1)) * 100  (rank ascending)
   越高越好: score = (1 - (rank - 1) / (N_valid - 1)) * 100  (rank descending)
 
-V2 rules (applied BEFORE rank_percentile):
+Scoring rules:
   ROE cap: min(ROE, 60%)
   ROIC cap: min(ROIC, 60%)
   Growth cap: clip(growth, -200%, +200%)

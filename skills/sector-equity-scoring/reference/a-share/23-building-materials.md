@@ -14,7 +14,7 @@ A股建筑材料板块（申万一级建筑材料，东方财富板块代码BK12
 6. 成长性权重(15%)标准 — 2只利润增速被±200%封顶
 7. 质量类(10%)毛利率变化(5%)+速动比率(5%) — 毛利率趋势反映产品定价能力和行业景气度
 8. 18个非零权重指标参与回测，100%权重覆盖
-9. V2规则：±200%增速封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
+9. 评分规则：±200%增速封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
 
 **行业特点：**
 - 74只股票（排除1只ST+3只B股），涵盖水泥/玻璃/陶瓷/新材料/防水/管材等子行业
@@ -144,7 +144,7 @@ score_i = industry_rank_percentile (0-100)
   越低越好: score = (1 - (rank - 1) / (N_valid - 1)) * 100  (rank ascending)
   越高越好: score = (1 - (rank - 1) / (N_valid - 1)) * 100  (rank descending)
 
-V2 rules (applied BEFORE rank_percentile):
+Scoring rules:
   ROE cap: min(ROE, 60%)
   ROIC cap: min(ROIC, 60%)
   Growth cap: clip(growth, -200%, +200%)

@@ -1,7 +1,7 @@
 ---
 name: sector-equity-scoring
 version: "1.0.0"
-description: Percentile-based equity scoring methodology — 18 indicators across 6 categories, with sector-adaptive weights and V2 cap rules
+description: Percentile-based equity scoring methodology — 18 indicators across 6 categories, with sector-adaptive weights and outlier cap rules
 dependencies:
   skills: [eastmoney-data]
   mcps: []
@@ -58,7 +58,7 @@ Value_Score = Sum(weight_i * score_i) / Sum(weight_i_participated)
 
 Missing indicators are excluded — the denominator adjusts to only include weights of indicators with valid data.
 
-### V2 Rules
+### Scoring Rules
 
 These rules prevent outliers from distorting rankings:
 
@@ -136,7 +136,7 @@ Every sector formula document follows this structure:
 ### Part 3: Formula
 
 - The scoring formula (copy the standard percentile formula)
-- V2 rules applied (growth cap, ROE/ROIC cap, PE exclusion, coverage penalty)
+- Scoring rules applied (growth cap, ROE/ROIC cap, PE exclusion, coverage penalty)
 - Any sector-specific formula adjustments
 
 ### Part 4: Ranking Table
@@ -157,7 +157,7 @@ Perform all 7 standard checks:
 | 3 | **Low-score logic** | Bottom-ranked stocks should show clear weaknesses (losses, high debt, declining revenue) |
 | 4 | **Industry leader ranking** | Well-known sector leaders should appear in a reasonable range (top quartile, though not necessarily #1) |
 | 5 | **Score distribution** | Mean ~49-51, median ~49-52, >70 scores <15% of total, healthy spread |
-| 6 | **V2 cap validation** | Verify that capped values appear correctly in ranking table (200.0 for growth, 60.0 for ROE/ROIC) |
+| 6 | **Cap validation** | Verify that capped values appear correctly in ranking table (200.0 for growth, 60.0 for ROE/ROIC) |
 | 7 | **Sub-industry coverage** | Check that the formula doesn't systematically favor one sub-industry over others within the sector |
 
 Present checks as a verification table: dimension, expected, actual, conclusion (pass/fail).

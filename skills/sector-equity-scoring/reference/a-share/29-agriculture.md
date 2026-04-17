@@ -13,7 +13,7 @@ sudo suA股农林牧渔板块（申万一级农林牧渔，东方财富板块代
 5. 风险类(12%)标准 — D/A 5%+流动比率4%+带息负债率3%，养殖企业杠杆水平关键
 6. 质量类(10%)中毛利率变化(5%)5%(+速动比率 周期行业中毛利率稳定性反映定价权) 
 7. 18个非零权重指标参与回测，100%权重覆盖
-8. V2规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
+8. 评分规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
 
 **行业特点：**
 - 91只股票（排除6只ST+3B股），涵盖畜牧养殖/种业/水产/饲料/动保/食品加工等子行业
@@ -141,7 +141,7 @@ score_i = industry_rank_percentile (0-100)
   越低越好: score = (N - rank_asc) / (N - 1) * 100
   越高越好: score = (N - rank_desc) / (N - 1) * 100
 
-V2 rules (applied BEFORE rank_percentile):
+Scoring rules:
   ROE cap: min(ROE, 60%)
   ROIC cap: min(ROIC, 60%)
   Growth cap: clip(growth, -200%, +200%)

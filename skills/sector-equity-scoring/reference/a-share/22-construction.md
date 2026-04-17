@@ -143,7 +143,7 @@ score_i = industry_rank_percentile (0-100)
   越低越好: score = (1 - (rank - 1) / (N_valid - 1)) * 100  (rank ascending)
   越高越好: score = (1 - (rank - 1) / (N_valid - 1)) * 100  (rank descending)
 
-V2 rules (applied BEFORE rank_percentile):
+Scoring rules:
   ROE cap: min(ROE, 60%)
   ROIC cap: min(ROIC, 60%)
   Growth cap: clip(growth, -200%, +200%)

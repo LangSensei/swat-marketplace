@@ -13,7 +13,7 @@
 5. 风险类(12%)较高 — D/A 5%+流动比率4%+带息负债率3%，钢铁行业杠杆水平关键
 6. 质量类(10%)中毛利率变化(5%)+速动比率(5%) — 周期行业中毛利率稳定性关键
 7. 18个非零权重指标参与回测，100%权重覆盖
-8. V2规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
+8. 评分规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
 
 **行业特点：**
 - 43只股票（排除2只B股+1只ST），涵盖特钢/普钢/钢管/矿业/铁合金等
@@ -142,7 +142,7 @@ score_i = industry_rank_percentile (0-100)
   越高越好: score = percentile
   percentile = (rank - 1) / (N_valid - 1) * 100
 
-V2 rules:
+Scoring rules:
   ROE cap: min(ROE, 60%)
   ROIC cap: min(ROIC, 60%)
   Growth cap: clip(growth, -200%, +200%)

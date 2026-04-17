@@ -13,7 +13,7 @@
 5. 毛利率(7%)为行业特色指标 — 区分专用设备(高毛利40%+)和通用设备(低毛利20%)
 6. 质量类(8%)中毛利率变化(4%)+速动比率(4%) — 关注盈利质量和偿债能力
 7. 18个非零权重指标参与回测，100%权重覆盖
-8. V2规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
+8. 评分规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
 
 **行业特点：**
 - 527只股票（排除74只B股+14只ST/*ST），涵盖五大子行业
@@ -151,7 +151,7 @@ score_i = industry_rank_percentile (0-100)
   越高越好: score = percentile
   percentile = (rank - 1) / (N_valid - 1) * 100
 
-V2 rules:
+Scoring rules:
   ROE cap: min(ROE, 60%)
   ROIC cap: min(ROIC, 60%)
   Growth cap: clip(growth, -200%, +200%)

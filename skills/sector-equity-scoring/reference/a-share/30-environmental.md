@@ -1,4 +1,4 @@
-# 环保板块价值评分公式 V2 (Environmental Protection Sector Value Score Formula)
+# 环保板块价值评分公式 (Environmental Protection Sector Value Score Formula)
 
 ## 概述
 
@@ -19,7 +19,7 @@
 5. 风险类(8%)从标准10%下调 — 高杠杆是PPP/BOT结构性特征（D/A常>60%），不宜过度惩罚
 6. 质量类(10%)中毛利率变化(5%)+速动比率(5%) — 毛利率趋势区分运营型和工程型
 7. 18个非零权重指标参与回测，100%权重覆盖
-8. V2规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
+8. 评分规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
 
 **行业特点：**
 - 125只股票（排除4只B股+7只ST），涵盖垃圾焚烧/水务/环境修复/监测/园林等子行业
@@ -148,7 +148,7 @@ score_i = industry_rank_percentile (0-100)
   越高越好: score = percentile
   percentile = (rank - 1) / (N_valid - 1) * 100
 
-V2 rules:
+Scoring rules:
   ROE cap: min(ROE, 60%)
   ROIC cap: min(ROIC, 60%)
   Growth cap: clip(growth, -200%, +200%)
@@ -278,7 +278,7 @@ Weight table:
 | <40分 | 35只 | 28.0% | |
 | **均值/中位数** | **49.0/50.1** | | ✓ 分布合理，近似正态 |
 
-### 6. V2封顶检查
+### 6. 封顶检查
 
 | 封顶规则 | 触发数量 | 占比 | 结论 |
 |----------|----------|------|------|

@@ -138,7 +138,7 @@ score_i = industry_rank_percentile (0-100)
   higher is better: score = percentile
   percentile = (rank - 1) / (N_valid - 1) * 100
 
-V2 rules:
+Scoring rules:
   Growth cap: clip(growth, -200%, +200%)
   ROE/ROIC cap: clip(value, upper=60%)
   PE: loss-making (PE<0) excluded from PE ranking

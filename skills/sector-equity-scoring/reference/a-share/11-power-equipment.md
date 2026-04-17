@@ -12,7 +12,7 @@
 4. 现金流权重(12%)高于电子(10%) — 重资产行业，现金流质量更关键
 5. 毛利率(7%)为行业特色指标 — 光伏设备毛利率波动剧烈(从50%+跌至负值)，电网设备相对稳定
 6. 18个非零权重指标参与回测，100%权重覆盖
-7. V2规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
+7. 评分规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
 
 **行业特点：**
 - 402只股票，涵盖电网设备、电池、光伏设备、风电设备、电机、其他电源设备六大子行业
@@ -34,7 +34,7 @@
 
 **关键技术要点：**
 - BK1200需分页获取（100只/页，共5页），总计402只股票
-- `TOTAL_OPERATE_INCOME` 列不存在（继承自V2教训），使用 `TOTALOPERATEREVETZ`
+- `TOTAL_OPERATE_INCOME` 列不存在，使用 `TOTALOPERATEREVETZ`
 - 使用 `SECURITY_CODE in (...)` 语法（小写in），不能用大写 `IN`
 - 批量查询每批30只，间隔1.5秒，共14批完成402只股票
 - PE中位数57.5，无需/100转换（与电子不同）
@@ -154,7 +154,7 @@ score_i = industry_rank_percentile (0-100)
   越高越好: score = percentile
   percentile = (rank - 1) / (N_valid - 1) * 100
 
-V2 rules:
+Scoring rules:
   ROE cap: min(ROE, 60%)
   ROIC cap: min(ROIC, 60%)
   Growth cap: clip(growth, -200%, +200%)

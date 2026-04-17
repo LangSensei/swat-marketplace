@@ -11,7 +11,7 @@
 3. 成长性权重(25%)为全系列最高 — 科技股增长是核心估值驱动力
 4. 估值权重(18%)偏低 — 半导体周期性导致PE波动大，降低PE权重避免失真
 5. 18个非零权重指标参与回测，100%权重覆盖
-6. V2规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
+6. 评分规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
 
 **行业特点：**
 - 503只股票，A股第二大行业（仅次于医药生物506只）
@@ -31,7 +31,7 @@
 | 批量行情API | push2.eastmoney.com/api/qt/clist/get | BK1201全部股票PE/PB/股息率 |
 | 财务数据API | datacenter-web.eastmoney.com/api/data/v1/get | RPT_F10_FINANCE_MAINFINADATA |
 
-**关键教训（继承自V2）：**
+**关键教训：**
 - `TOTAL_OPERATE_INCOME` 列不存在，使用会返回错误9501
 - 使用 `SECURITY_CODE in (...)` 语法（小写in），不能用大写 `IN`
 - 批量查询每批30只，间隔1.5秒，共17批完成503只股票
@@ -139,7 +139,7 @@ score_i = industry_rank_percentile (0-100)
   越高越好: score = percentile
   percentile = (rank - 1) / (N_valid - 1) * 100
 
-V2 rules:
+Scoring rules:
   ROE cap: min(ROE, 60%)
   ROIC cap: min(ROIC, 60%)
   Growth cap: clip(growth, -200%, +200%)

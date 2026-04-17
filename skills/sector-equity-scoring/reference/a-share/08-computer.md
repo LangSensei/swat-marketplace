@@ -12,7 +12,7 @@
 4. 估值权重仅18% — 板块160/361亏损(44.3%)，PE区分力有限
 5. 资产轻型特征 — 低负债率、高速动比率体现软件公司特性
 6. 18个非零权重指标参与回测，100%权重覆盖
-7. V2规则全套应用：增长±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
+7. 评分规则全套应用：增长±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
 
 ---
 
@@ -138,7 +138,7 @@ score_i = industry_rank_percentile (0-100)
   higher_better: score = percentile
   percentile = (rank - 1) / (N_valid - 1) * 100
 
-V2 rules:
+Scoring rules:
   ROE cap: min(ROE, 60%)
   ROIC cap: min(ROIC, 60%)
   Growth cap: clip(growth, -200%, +200%)

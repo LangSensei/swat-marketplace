@@ -14,7 +14,7 @@
 6. 风险类(10%)均衡分配 — D/A 4%、流动比率3%、带息负债率3%，不过度惩罚合理杠杆
 7. 质量类(10%)中毛利率变化(5%)+速动比率(5%) — 周期行业中毛利率稳定性尤为重要
 8. 18个非零权重指标参与回测，100%权重覆盖
-9. V2规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
+9. 评分规则全套应用：增长率±200%封顶、ROE/ROIC≤60%封顶、PE<0排除、覆盖率惩罚
 
 **行业特点：**
 - 402只股票（排除36只B股+10只ST/*ST），涵盖化肥/农药/氟化工/煤化工/盐化工/新材料/精细化学品等
@@ -143,7 +143,7 @@ score_i = industry_rank_percentile (0-100)
   越高越好: score = percentile
   percentile = (rank - 1) / (N_valid - 1) * 100
 
-V2 rules:
+Scoring rules:
   ROE cap: min(ROE, 60%)
   ROIC cap: min(ROIC, 60%)
   Growth cap: clip(growth, -200%, +200%)
