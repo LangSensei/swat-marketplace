@@ -1,6 +1,6 @@
 # Debrief Skill — Changelog
 
-## 3.0.0 — 2026-04-14
+## 3.0.0 (2026-04-14)
 
 ### Breaking Changes
 - Replaced `notify.sh` and `notify.ps1` shell scripts with `swat_notify` MCP tool
@@ -17,7 +17,7 @@
 - `SKILL.md` v3.0.0: simplified Exit 1 (Notify) to a single `swat_notify` MCP tool call
 - Notification guidelines preserved (language matching, concise, lead with conclusion)
 
-## 2.0.0 — 2026-04-12
+## 2.0.0 (2026-04-12)
 
 ### Added
 - `notify.ps1` — PowerShell version of notify script for Windows support
@@ -31,7 +31,7 @@
 ### Removed
 - Protocol integration section from SKILL.md (now handled by PROTOCOL.md referencing the skill directly)
 
-## 1.2.0 — 2026-04-03
+## 1.2.0 (2026-04-03)
 
 ### Breaking Changes
 - `notify.sh` now requires `--file` parameter — inline positional message arguments are no longer accepted
@@ -46,7 +46,7 @@
 ### Fixed
 - Debrief notifications with non-ASCII content (Chinese, Japanese, Korean) no longer get garbled or fail with exit 127
 
-## 1.1.0 — 2026-03-10
+## 1.1.0 (2026-03-10)
 
 ### Added
 - Initial release of debrief skill

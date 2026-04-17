@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0 — 2026-04-12
+## 1.1.0 (2026-04-12)
 
 ### Changed
 - Add `sop` skill dependency

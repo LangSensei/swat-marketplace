@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.0 — 2026-04-12
+## 1.2.0 (2026-04-12)
 
 ### Changed
 - Add `scientific-method` skill dependency
