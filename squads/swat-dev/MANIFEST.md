@@ -11,7 +11,7 @@ dependencies:
 
 ## Domain
 
-Development and maintenance of the SWAT v2 codebase.
+Development and maintenance of the SWAT codebase.
 
 ## Boundary
 
@@ -57,8 +57,6 @@ Development and maintenance of the SWAT v2 codebase.
    - If resuming an existing branch with an open PR, push and comment on the existing PR instead of creating a new one
 2. PR description must include: What, Why, Changes, How to Test
 3. Clean up worktree (mandatory): `cd ~/.swat/repos/swat && git worktree remove "$(pwd)/repo" --force`
-
-**Debrief hint:** Opening a PR typically means review is needed — prefer dispatch over notify.
 
 ### Debrief Rules (mandatory)
 

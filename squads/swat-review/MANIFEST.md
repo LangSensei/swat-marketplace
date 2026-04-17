@@ -11,7 +11,7 @@ dependencies:
 
 ## Domain
 
-Code review for the SWAT v2 codebase. Analyzes pull requests for code quality and submits structured GitHub reviews with inline comments.
+Code review for the SWAT codebase. Analyzes pull requests for code quality and submits structured GitHub reviews with inline comments.
 
 ## Boundary
 
