@@ -69,27 +69,6 @@
 
 ---
 
-## 第三部分：公式
-
-```
-Value_Score = base_score * coverage_penalty
-base_score = Sum(weight_i * score_i) / Sum(weight_i_participated)
-score_i = industry_rank_percentile (0-100)
-  lower_better: score = 100 - percentile
-  higher_better: score = percentile
-  percentile = (rank - 1) / (N_valid - 1) * 100
-
-Scoring rules:
-  ROE cap: min(ROE, 60%)
-  ROIC cap: min(ROIC, 60%)
-  Growth cap: clip(growth, -200%, +200%)
-  PE: loss-making (PE<0) excluded from PE ranking
-  Coverage penalty: if indicators < 10, score *= (count / 18)
-  Missing: excluded from that indicator, weight redistributed
-```
-
----
-
 ## 第二部分：完整权重表
 
 ### 估值类 (20%)
@@ -153,6 +132,25 @@ Scoring rules:
 | **合计** | **100%** | |
 
 ---
+
+## 第三部分：公式
+
+```
+Value_Score = base_score * coverage_penalty
+base_score = Sum(weight_i * score_i) / Sum(weight_i_participated)
+score_i = industry_rank_percentile (0-100)
+  lower_better: score = 100 - percentile
+  higher_better: score = percentile
+  percentile = (rank - 1) / (N_valid - 1) * 100
+
+Scoring rules:
+  ROE cap: min(ROE, 60%)
+  ROIC cap: min(ROIC, 60%)
+  Growth cap: clip(growth, -200%, +200%)
+  PE: loss-making (PE<0) excluded from PE ranking
+  Coverage penalty: if indicators < 10, score *= (count / 18)
+  Missing: excluded from that indicator, weight redistributed
+```
 
 ---
 

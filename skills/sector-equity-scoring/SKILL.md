@@ -50,6 +50,10 @@ For "higher is better" indicators (ROE, dividend yield, etc.):
 percentile = (rank - 1) / (N_valid - 1) * 100
 ```
 
+**Tie-breaking:** When multiple stocks share the same indicator value, they receive the same rank (standard competition ranking). The next rank is offset by the number of tied stocks (e.g., if two stocks tie at rank 3, the next stock receives rank 5).
+
+**Edge case — N_valid = 1:** When only one stock has a valid value for an indicator, the percentile formula produces 0/0. In this case, assign a score of 50 (neutral) for that indicator.
+
 The composite score is a weighted sum:
 
 ```

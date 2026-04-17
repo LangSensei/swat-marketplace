@@ -18,26 +18,44 @@
 
 ---
 
----
+## 第一部分：数据审计报告
 
-## 第三部分：公式
+### API数据源
 
-```
-Value_Score = base_score * coverage_penalty
-base_score = Sum(weight_i * score_i) / Sum(weight_i_participated)
-score_i = industry_rank_percentile (0-100)
-  lower_better: score = 100 - percentile
-  higher_better: score = percentile
-  percentile = (rank - 1) / (N_valid - 1) * 100
+| API | 端点 | 用途 |
+|-----|------|------|
+| 批量行情API | push2.eastmoney.com/api/qt/clist/get | 通信板块全部股票PE/PB/股息率/市值 |
+| 财务数据API | datacenter-web.eastmoney.com/api/data/v1/get | RPT_F10_FINANCE_MAINFINADATA |
 
-Scoring rules:
-  ROE cap: min(ROE, 60%)
-  ROIC cap: min(ROIC, 60%)
-  Growth cap: clip(growth, -200%, +200%)
-  PE: loss-making (PE<0) excluded from PE ranking
-  Coverage penalty: if indicators < 10, score *= (count / 18)
-  Missing: excluded from that indicator, weight redistributed
-```
+### 指标可用性
+
+| 指标 | API来源 | 字段名 | 覆盖率 | 数据质量 |
+|------|---------|--------|--------|----------|
+| PE-TTM | 批量API | f9 | 130/130(100%) | 良好，37只亏损股为负 |
+| PB | 批量API | f23 | 130/130(100%) | 良好 |
+| 股息率 | 批量API | f133 | 130/130(100%) | 良好 |
+| ROE(加权) | 财务API | ROEJQ | 130/130(100%) | 良好 |
+| ROA | 财务API | ZZCJLL | 130/130(100%) | 良好 |
+| ROIC | 财务API | ROIC | 130/130(100%) | 良好 |
+| 毛利率 | 财务API | XSMLL | 130/130(100%) | 良好 |
+| 净利率 | 财务API | XSJLL | 130/130(100%) | 良好 |
+| 营收增长率 | 财务API | TOTALOPERATEREVETZ | 130/130(100%) | 良好(YoY) |
+| 净利润增长率 | 财务API | PARENTNETPROFITTZ | 130/130(100%) | 良好(YoY) |
+| 经营CF/净利润 | 财务API | NCO_NETPROFIT | 127/130(97.7%) | 3只亏损股缺失 |
+| FCF | 财务API | FCFF_BACK | 130/130(100%) | 转化为FCF收益率 |
+| 经营CF/营收 | 财务API | JYXJLYYSR | 130/130(100%) | 良好 |
+| 资产负债率 | 财务API | ZCFZL | 130/130(100%) | 良好 |
+| 带息负债率 | 财务API | INTEREST_DEBT_RATIO | 130/130(100%) | 良好 |
+| 流动比率 | 财务API | FC_LIABILITIES | 130/130(100%) | 良好 |
+| 速动比率 | 财务API | GUARD_SPEED_RATIO | 130/130(100%) | 良好 |
+| 毛利率同比变化 | 财务API | XSMLL_TB | 130/130(100%) | 良好 |
+
+**数据特点：**
+- 130只通信板块股票，排除ST/*ST和B股后有效覆盖
+- 37只亏损股(28%)，反映通信设备商周期性
+- 覆盖率高：最少17指标，实际无覆盖率惩罚影响
+- ROE封顶1只：宁通信B ROE=105.3%（近零净资产极端值），封顶至60%
+- 21只股票增长率被±200%封顶
 
 ---
 
@@ -102,6 +120,27 @@ Scoring rules:
 | 风险 | 10% |
 | 行业质量 | 8% |
 | **实际回测** | **100%** |
+
+---
+
+## 第三部分：公式
+
+```
+Value_Score = base_score * coverage_penalty
+base_score = Sum(weight_i * score_i) / Sum(weight_i_participated)
+score_i = industry_rank_percentile (0-100)
+  lower_better: score = 100 - percentile
+  higher_better: score = percentile
+  percentile = (rank - 1) / (N_valid - 1) * 100
+
+Scoring rules:
+  ROE cap: min(ROE, 60%)
+  ROIC cap: min(ROIC, 60%)
+  Growth cap: clip(growth, -200%, +200%)
+  PE: loss-making (PE<0) excluded from PE ranking
+  Coverage penalty: if indicators < 10, score *= (count / 18)
+  Missing: excluded from that indicator, weight redistributed
+```
 
 ---
 
