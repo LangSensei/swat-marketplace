@@ -1,6 +1,6 @@
 ---
 name: squad-lint
-version: "1.0.1"
+version: "1.1.0"
 description: Validates structural compliance of squads and skills in swat-marketplace
 dependencies:
   skills: [sop, git-pr]
@@ -40,6 +40,28 @@ Structural validation of squads and skills in the swat-marketplace repository. C
 1. Set up worktree using git-pr skill: bare clone to `~/.swat/repos/swat-marketplace/`, worktree into `repo/`
 2. Repository: `https://github.com/LangSensei/swat-marketplace`
 3. Use git-pr Mode C (read-only) — squad-lint does not push changes
+
+### Mergeable Pre-Check
+
+When the operation brief specifies a PR number, check mergeability before linting:
+
+```bash
+MERGEABLE=$(gh pr view <number> --repo <repo> --json mergeable -q '.mergeable')
+```
+
+If the result is `CONFLICTING`, report it as a failure and skip detailed lint — the diff is unreliable. Use Exit 2 (Dispatch) to request a rebase from squad-forge.
+
+If `MERGEABLE` or `UNKNOWN`, proceed with lint checks.
+
+### Incremental PR Mode
+
+When the operation brief specifies a PR number, only lint files changed in that PR:
+
+```bash
+gh pr diff <number> --name-only
+```
+
+Lint the changed files plus any files that cross-reference them (e.g., if a MANIFEST.md changes a skill dependency, also check that skill's SKILL.md). Fall back to full scan when no PR number is specified.
 
 ### Lint Checks
 
@@ -81,7 +103,7 @@ For each squad or skill directory:
 - `CHANGELOG.md` exists
 - Latest version entry in CHANGELOG matches the frontmatter `version`
 - CHANGELOG follows Keep a Changelog format (version header with date)
-- One PR should have at most one version bump per squad/skill — multiple version entries with the same date in CHANGELOG suggest unnecessary intermediate bumps
+- One PR should have at most one version bump per squad/skill — warn about multiple versions with the same date only when both entries appear in the PR diff (i.e., both were added in the same PR). Pre-existing same-date entries should not trigger warnings
 
 #### Phase 5: SETUP.md Validation
 
@@ -97,12 +119,37 @@ For each `skills/*/references/SETUP.md` (if present):
 - No orphan files in `references/` subdirectories (if present)
 - Folder names match frontmatter `name` fields across the repository
 
+#### Phase 7: Semantic Checks
+
+Beyond structural validation, check for content-level issues:
+- Duplicate consecutive lines in Domain or Boundary sections
+- Conflicting Debrief patterns — both a "Debrief hint" and a "Debrief Rules" section present in the same MANIFEST
+- Empty section bodies — a heading with no content before the next heading
+- Orphaned references to deleted or renamed squads/skills in prose (e.g., a Boundary bullet mentioning a squad name that does not exist in `squads/`)
+
 ### Delivery
 
 1. Compile all check results into a structured report
 2. Clean up worktree (mandatory): `cd ~/.swat/repos/swat-marketplace && git worktree remove "$(pwd)/repo" --force`
 
-**Debrief hint:** All checks pass → notify. Failures found → dispatch fix operation (include file paths and failure details so squad-forge can address them).
+### Debrief Rules (mandatory)
+
+These rules override any general debrief guidance. Follow them exactly.
+
+**All checks pass (zero failures) → Notify**
+
+If the lint run completes with no failures (warnings are acceptable), use Exit 1 (Notify) to report the results summary.
+
+**Failures found → Dispatch to squad-forge**
+
+If any lint check fails, use Exit 2 (Dispatch) to hand off to squad-forge for fixes.
+
+Dispatch brief to squad-forge must include:
+1. **File paths** — every file that failed a check
+2. **Failure details** — which check failed and why, per file
+3. **PR number** — if the lint was triggered by a PR
+4. **Repository** — full owner/repo
+5. **Branch name** — the branch being linted
 
 ### Constraints
 
