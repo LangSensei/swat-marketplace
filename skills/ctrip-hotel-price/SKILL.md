@@ -78,7 +78,7 @@ Status values: `success`, `not_found`, `error`. On error, the `message` field co
 
 **Supported cities:** 北京, 上海, 广州, 深圳, 杭州, 苏州, 南京, 成都, 武汉, 西安, 重庆, 长沙, 厦门, 青岛, 大连, 天津, 三亚, 珠海, 昆明, 郑州, 合肥, 哈尔滨, 丽江, 桂林, 拉萨, 沈阳, 济南, 福州, 无锡, 宁波, 常州, 温州, 东莞
 
-To add a new city: open hotels.ctrip.com, search the city, check the URL `?city=NNN` for its ID, and add it to `CITY_MAP` in `search.js`.
+To add a new city: open hotels.ctrip.com, search the city, check the redirected URL `cityId=NNN` for its ID, and add it to `CITY_MAP` in `search.js`.
 
 ## Anti-Detection
 

@@ -238,7 +238,7 @@ async function search(opts) {
     output({
       status: result ? 'success' : 'not_found',
       query: { hotel: opts.hotel, city: opts.city, checkin, checkout },
-      date: new Date().toISOString().split('T')[0],
+      date: new Date(Date.now() + 8 * 3600 * 1000).toISOString().split('T')[0],
       hotel: result,
     });
   } catch (err) {
