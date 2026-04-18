@@ -19,28 +19,13 @@ const BROWSER_OPTS = {
   viewport: { width: 1920, height: 1080 },
 };
 
+// City name → Ctrip city ID
 const CITY_MAP = {
-  '\u5317\u4eac': 1,
-  '\u4e0a\u6d77': 2,
-  '\u897f\u5b89': 7,
-  '\u5357\u4eac': 9,
-  '\u676d\u5dde': 14,
-  '\u82cf\u5dde': 17,
-  '\u53a6\u95e8': 21,
-  '\u6df1\u5733': 26,
-  '\u6210\u90fd': 28,
-  '\u6606\u660e': 31,
-  '\u5e7f\u5dde': 32,
-  '\u73e0\u6d77': 33,
-  '\u4e09\u4e9a': 43,
-  '\u5927\u8fde': 122,
-  '\u957f\u6c99': 148,
-  '\u5929\u6d25': 154,
-  '\u91cd\u5e86': 158,
-  '\u90d1\u5dde': 184,
-  '\u9752\u5c9b': 223,
-  '\u5408\u80a5': 452,
-  '\u6b66\u6c49': 477,
+  '北京': 1, '上海': 2, '西安': 7, '南京': 9, '杭州': 14,
+  '苏州': 17, '厦门': 21, '深圳': 26, '成都': 28, '昆明': 31,
+  '广州': 32, '珠海': 33, '三亚': 43, '大连': 122, '长沙': 148,
+  '天津': 154, '重庆': 158, '郑州': 184, '青岛': 223, '合肥': 452,
+  '武汉': 477,
 };
 
 function parseArgs() {
@@ -51,20 +36,36 @@ function parseArgs() {
   };
   return {
     hotel: getOpt('hotel'),
-    city: getOpt('city') || '\u82cf\u5dde',
+    city: getOpt('city') || '苏州',
     checkin: getOpt('checkin') || '',
     checkout: getOpt('checkout') || '',
   };
+}
+
+// Compute default checkin (today) and checkout (tomorrow) in YYYY-MM-DD
+function defaultDates(checkin, checkout) {
+  const now = new Date();
+  const fmt = (d) => d.toISOString().split('T')[0];
+  if (!checkin) {
+    checkin = fmt(now);
+  }
+  if (!checkout) {
+    const next = new Date(checkin);
+    next.setDate(next.getDate() + 1);
+    checkout = fmt(next);
+  }
+  return { checkin, checkout };
 }
 
 function randomDelay(min = 1500, max = 3500) {
   return min + Math.random() * (max - min);
 }
 
+// Extract short brand keyword for the search box (≤6 Chinese chars)
 function shortKeyword(kw) {
   let s = kw
-    .replace(/[\uff08\u0028][^\uff09\u0029]*[\uff09\u0029]/g, '')
-    .replace(/\u9152\u5e97|\u5bbe\u9986|\u5e97$/g, '')
+    .replace(/[（(][^）)]*[）)]/g, '')   // remove parenthesized content
+    .replace(/酒店|宾馆|店$/g, '')        // remove generic suffixes
     .trim();
   if (s.length > 6) s = s.substring(0, 6);
   return s;
@@ -88,6 +89,8 @@ async function search(opts) {
     process.exit(1);
   }
 
+  const { checkin, checkout } = defaultDates(opts.checkin, opts.checkout);
+
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
     ...BROWSER_OPTS,
@@ -98,19 +101,18 @@ async function search(opts) {
   try {
     await page.waitForTimeout(randomDelay());
 
-    // Navigate to city hotel list
-    await page.goto(
-      `https://hotels.ctrip.com/hotels/list?countryId=1&city=${cityId}`,
-      { waitUntil: 'domcontentloaded', timeout: 30000 }
-    );
+    // Navigate to city hotel list with checkin/checkout in URL
+    const listUrl = `https://hotels.ctrip.com/hotels/list?countryId=1&city=${cityId}&checkin=${checkin}&checkout=${checkout}`;
+    await page.goto(listUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(4000 + Math.random() * 2000);
 
-    // Select destination city via dropdown
-    const destInput = page.locator('input[placeholder="\u76ee\u7684\u5730"]');
+    // Select destination city via dropdown (cookie may override URL city param)
+    const destInput = page.locator('input[placeholder="目的地"]');
     if (await destInput.isVisible().catch(() => false)) {
       await destInput.click({ clickCount: 3 });
       await destInput.fill(opts.city);
       await page.waitForTimeout(2000);
+      // Must use span:text-is() — getByText matches too many elements
       const citySpan = page.locator(`span:text-is("${opts.city}")`).first();
       await citySpan.click().catch(async () => {
         await destInput.press('Enter');
@@ -118,16 +120,16 @@ async function search(opts) {
       await page.waitForTimeout(1500);
     }
 
-    // Extract short keyword and fill hotel search input
+    // Fill hotel search input with short keyword
     const shortKw = shortKeyword(opts.hotel);
-    const hotelInput = page.locator('input[placeholder*="\u9152\u5e97"]');
+    const hotelInput = page.locator('input[placeholder*="酒店"]');
     if (await hotelInput.isVisible().catch(() => false)) {
       await hotelInput.click();
       await page.waitForTimeout(300);
       await hotelInput.fill(shortKw);
       await page.waitForTimeout(randomDelay(1000, 2000));
       const searchBtn = page
-        .locator('button:has-text("\u641c\u7d22"), [class*=search-btn]')
+        .locator('button:has-text("搜索"), [class*=search-btn]')
         .first();
       if (await searchBtn.isVisible().catch(() => false)) {
         await searchBtn.click();
@@ -147,10 +149,10 @@ async function search(opts) {
       const body = document.body.innerText;
       const lines = body.split('\n').map((l) => l.trim()).filter((l) => l);
 
-      // Build ngram segments from hotel keyword
+      // Build 2-char and 3-char ngram segments from hotel keyword
       const clean = kw
-        .replace(/[\uff08\u0028][^\uff09\u0029]*[\uff09\u0029]/g, '')
-        .replace(/\u9152\u5e97|\u5bbe\u9986|\u5e97/g, '');
+        .replace(/[（(][^）)]*[）)]/g, '')
+        .replace(/酒店|宾馆|店/g, '');
       const chars = clean.match(/[\u4e00-\u9fff]/g) || [];
       const segments = new Set();
       for (let i = 0; i < chars.length - 1; i++)
@@ -167,9 +169,8 @@ async function search(opts) {
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         if (line.length < 4 || line.length > 60) continue;
-        if (line.startsWith('\u00a5') || line.match(/^\d/)) continue;
-        if (!line.includes('\u9152\u5e97') && !line.includes('\u5bbe\u9986'))
-          continue;
+        if (line.startsWith('¥') || line.match(/^\d/)) continue;
+        if (!line.includes('酒店') && !line.includes('宾馆')) continue;
 
         let score = 0;
         for (const seg of segs) {
@@ -184,15 +185,12 @@ async function search(opts) {
 
       if (!hotelName || hotelIdx < 0) return null;
 
-      // Scan lines below matched hotel for price patterns
+      // Scan lines below matched hotel for ¥NNN price patterns
+      // First match = current price, second (if higher) = original/strikethrough price
       let price = null;
       let originalPrice = null;
-      for (
-        let i = hotelIdx + 1;
-        i < Math.min(hotelIdx + 20, lines.length);
-        i++
-      ) {
-        const m = lines[i].match(/^\u00a5(\d+)$/);
+      for (let i = hotelIdx + 1; i < Math.min(hotelIdx + 20, lines.length); i++) {
+        const m = lines[i].match(/^¥(\d+)$/);
         if (m) {
           const p = parseInt(m[1]);
           if (!price) {
@@ -210,9 +208,9 @@ async function search(opts) {
         // Stop if we hit another hotel listing
         if (
           i > hotelIdx + 3 &&
-          lines[i].includes('\u9152\u5e97') &&
+          lines[i].includes('酒店') &&
           lines[i].length > 8 &&
-          !lines[i].includes('\u00a5') &&
+          !lines[i].includes('¥') &&
           !lines[i].includes(hotelName.substring(0, 4))
         ) {
           break;
@@ -230,8 +228,8 @@ async function search(opts) {
       query: {
         hotel: opts.hotel,
         city: opts.city,
-        checkin: opts.checkin || 'today',
-        checkout: opts.checkout || 'tomorrow',
+        checkin,
+        checkout,
       },
       date: new Date().toISOString().split('T')[0],
       hotel: result,
@@ -251,9 +249,7 @@ async function search(opts) {
       '  node search.js --hotel "hotel name" --city city [--checkin YYYY-MM-DD] [--checkout YYYY-MM-DD]'
     );
     console.error('');
-    console.error(
-      'Supported cities: ' + Object.keys(CITY_MAP).join(', ')
-    );
+    console.error('Supported cities: ' + Object.keys(CITY_MAP).join(', '));
     process.exit(1);
   }
   await search(opts);

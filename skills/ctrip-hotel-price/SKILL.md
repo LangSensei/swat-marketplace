@@ -55,8 +55,10 @@ NODE_PATH=$(npm root -g) node scripts/search.js \
 **Arguments:**
 - `--hotel` (required) — full hotel name to search for
 - `--city` (required) — Chinese city name (see supported cities below)
-- `--checkin` (optional) — check-in date, YYYY-MM-DD format, defaults to today
-- `--checkout` (optional) — check-out date, YYYY-MM-DD format, defaults to tomorrow
+- `--checkin` (optional) — check-in date, YYYY-MM-DD format (defaults to today)
+- `--checkout` (optional) — check-out date, YYYY-MM-DD format (defaults to checkin + 1 day)
+
+Dates are passed as URL parameters to Ctrip's search page. If omitted, defaults to today→tomorrow.
 
 **Output:** JSON object:
 ```json
