@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0 (2026-04-18)
+
+- Handle `sold_out` status in report table — show "售罄" with reference price if available
+- Add 售罄 count to summary line
+- Sort order: priced hotels (ascending) → sold-out → failed
+
 ## 1.1.0 (2026-04-18)
 
 - Add default date handling: checkin/checkout defaults to today→tomorrow when omitted
