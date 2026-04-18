@@ -145,6 +145,7 @@ async function extractResult(page, hotelName) {
 
       let price = null;
       let originalPrice = null;
+      let referencePrice = null;
       if (!isSoldOut) {
         for (const line of lines) {
           const m = line.match(/^¥?(\d+)$/);
@@ -160,9 +161,21 @@ async function extractResult(page, hotelName) {
             }
           }
         }
+      } else {
+        // Extract reference price from "这些日期还可订" within this card
+        const tipIdx = lines.findIndex(l => l.includes('这些日期还可订'));
+        if (tipIdx >= 0) {
+          let date = null;
+          for (let i = tipIdx + 1; i < Math.min(tipIdx + 10, lines.length); i++) {
+            const dm = lines[i].match(/(\d+月\d+日)-(\d+月\d+日)/);
+            if (dm && !date) date = lines[i];
+            const pm = lines[i].match(/^(\d+)$/);
+            if (pm && date) { referencePrice = { dates: date, price: parseInt(pm[1]) }; break; }
+          }
+        }
       }
 
-      return { name, price, originalPrice, rating, soldOut: isSoldOut };
+      return { name, price, originalPrice, rating, soldOut: isSoldOut, referencePrice };
     }
 
     // Fallback: text-based extraction
@@ -207,7 +220,7 @@ async function extractResult(page, hotelName) {
       }
     }
 
-    return { name, price, originalPrice, rating: null, soldOut: isSoldOut };
+    return { name, price, originalPrice, rating: null, soldOut: isSoldOut, referencePrice: null };
   }, hotelName);
 }
 
@@ -278,26 +291,6 @@ async function search(opts) {
         hotel: null,
       });
     } else if (result.soldOut) {
-      // Try to extract a reference price for nearby available dates
-      const referencePrice = await page.evaluate(() => {
-          const lines = document.body.innerText.split('\n').map(l => l.trim()).filter(l => l);
-          const tipIdx = lines.findIndex(l => l.includes('这些日期还可订'));
-          if (tipIdx < 0) return null;
-          let date = null;
-          let price = null;
-          for (let i = tipIdx + 1; i < Math.min(tipIdx + 10, lines.length); i++) {
-            const dm = lines[i].match(/(\d+月\d+日)-(\d+月\d+日)/);
-            if (dm && !date) date = lines[i];
-            const pm = lines[i].match(/^(\d+)$/);
-            if (pm && date && !price) {
-              price = parseInt(pm[1]);
-              break;
-            }
-          }
-          if (date && price) return { dates: date, price };
-          return null;
-        });
-
       output({
         status: 'sold_out',
         query: { hotel: opts.hotel, city: opts.city, checkin, checkout },
@@ -308,7 +301,7 @@ async function search(opts) {
           price: null,
           originalPrice: null,
           soldOut: true,
-          referencePrice,
+          referencePrice: result.referencePrice,
         },
       });
     } else {
