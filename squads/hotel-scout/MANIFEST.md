@@ -1,6 +1,6 @@
 ---
 name: hotel-scout
-version: "1.1.0"
+version: "1.2.0"
 description: Batch hotel price comparison via Ctrip — queries multiple hotels and produces a structured comparison report
 dependencies:
   skills: [sop, ctrip-hotel-price]
@@ -82,21 +82,23 @@ Report should include a Chinese-language comparison table. The table is **mandat
 | 酒店 | 当前价 | 划线价 | 折扣 | 备注 |
 |------|--------|--------|------|------|
 | 酒店名称 | ¥287 | ¥314 | 91% | — |
+| 售罄酒店 | — | — | — | 售罄（参考: ¥242, 4月19日-20日） |
 | 查询失败酒店 | — | — | — | 查询失败 |
 
-共查询 N 家酒店，成功 M 家，失败 K 家，最低价: ¥XXX（酒店名）
+共查询 N 家酒店，成功 M 家，售罄 S 家，失败 K 家，最低价: ¥XXX（酒店名）
 ```
 
 **Table rules:**
 - All queried hotels MUST appear in the table — no omissions
 - Columns: 酒店 | 当前价 | 划线价 | 折扣 | 备注
 - Failed hotels show "—" for price columns (当前价, 划线价, 折扣) and "查询失败" in 备注
+- Sold-out hotels (`status: "sold_out"`) show "—" for price columns and "售罄" in 备注; if `referencePrice` is available, append it: "售罄（参考: ¥242, 4月19日-20日）"
 - Successful hotels show "—" in 备注 when there are no special notes
-- Sort by current price ascending (cheapest first); failed hotels go to the bottom
+- Sort by current price ascending (cheapest first); sold-out hotels go after priced hotels; failed hotels go to the bottom
 - Calculate discount as `round(current_price / original_price * 100)`
 
 **Summary line (mandatory):** After the table, include exactly one summary line in the format:
-`共查询 N 家酒店，成功 M 家，失败 K 家，最低价: ¥XXX（酒店名）`
+`共查询 N 家酒店，成功 M 家，售罄 S 家，失败 K 家，最低价: ¥XXX（酒店名）`
 If all queries failed, replace the price portion with: `最低价: 无（全部失败）`
 
 ### Error Handling

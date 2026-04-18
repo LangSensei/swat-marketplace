@@ -14,7 +14,7 @@ const STORAGE_PATH = path.join(
 );
 
 const BROWSER_OPTS = {
-  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
   locale: 'zh-CN',
   viewport: { width: 375, height: 812 },
 };
@@ -185,25 +185,27 @@ async function extractResult(page, hotelName) {
 
     const name = allLines[hotelIdx];
 
-    let isSoldOut = false;
-    const fbImg = document.querySelector('img[src*=fullbooking]');
-    const noStockEl = document.querySelector('[class*=noStock]');
-    if (fbImg || noStockEl) {
-      let parent = (fbImg || noStockEl).parentElement;
-      for (let i = 0; i < 5; i++) {
-        if (parent && parent.innerText?.includes(kw.substring(0, 6))) {
-          isSoldOut = true;
-          break;
-        }
-        parent = parent?.parentElement;
+    // Determine the range of lines belonging to this hotel (up to next hotel or +20 lines)
+    let endIdx = Math.min(hotelIdx + 20, allLines.length);
+    for (let i = hotelIdx + 4; i < endIdx; i++) {
+      if (allLines[i].includes('酒店') && allLines[i].length > 8
+          && !allLines[i].includes(kw.substring(0, 6))) {
+        endIdx = i;
+        break;
       }
     }
+    const hotelLines = allLines.slice(hotelIdx, endIdx);
+
+    // Check sold-out within this hotel's text range
+    const isSoldOut = hotelLines.some(l => l.includes('售完') || l.includes('满房'));
 
     let price = null;
     let originalPrice = null;
+    let referencePrice = null;
+
     if (!isSoldOut) {
-      for (let i = hotelIdx + 1; i < Math.min(hotelIdx + 20, allLines.length); i++) {
-        const m = allLines[i].match(/^¥?(\d+)$/);
+      for (const line of hotelLines) {
+        const m = line.match(/^¥?(\d+)$/);
         if (m) {
           const p = parseInt(m[1]);
           if (p > 10 && p < 100000) {
@@ -215,9 +217,20 @@ async function extractResult(page, hotelName) {
             }
           }
         }
-        if (i > hotelIdx + 3 && allLines[i].includes('酒店') && allLines[i].length > 8
-            && !allLines[i].includes(kw.substring(0, 6))) break;
       }
+    } else {
+      // Extract reference price from "这些日期还可订" within this hotel's lines
+      const tipIdx = hotelLines.findIndex(l => l.includes('这些日期还可订'));
+      if (tipIdx >= 0) {
+        let date = null;
+        for (let i = tipIdx + 1; i < Math.min(tipIdx + 10, hotelLines.length); i++) {
+          const dm = hotelLines[i].match(/(\d+月\d+日)-(\d+月\d+日)/);
+          if (dm && !date) date = hotelLines[i];
+          const pm = hotelLines[i].match(/^(\d+)$/);
+          if (pm && date) { referencePrice = { dates: date, price: parseInt(pm[1]) }; break; }
+        }
+      }
+    }
     }
 
     return { name, price, originalPrice, rating: null, soldOut: isSoldOut, referencePrice: null };
