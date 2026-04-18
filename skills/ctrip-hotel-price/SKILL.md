@@ -1,6 +1,6 @@
 ---
 name: ctrip-hotel-price
-version: "1.0.0"
+version: "1.1.0"
 description: Ctrip (携程) hotel price query tool. Use when checking hotel prices, comparing rates, or monitoring price changes on Ctrip via Playwright browser automation. Requires pre-authenticated storage state.
 dependencies:
   mcps: []
@@ -74,7 +74,28 @@ Dates are passed as URL parameters to Ctrip's search page. If omitted, defaults 
 }
 ```
 
-Status values: `success`, `not_found`, `error`. On error, the `message` field contains details. The script always outputs valid JSON, even on unexpected failures.
+Status values: `success`, `not_found`, `sold_out`, `error`. On error, the `message` field contains details. The script always outputs valid JSON, even on unexpected failures.
+
+**Sold-out output** (`status: "sold_out"`):
+
+When the matched hotel is sold out for the requested dates, the script automatically retries with the next 3 days (checkin+1, +2, +3) to find a reference price.
+
+```json
+{
+  "status": "sold_out",
+  "query": { "hotel": "...", "city": "...", "checkin": "...", "checkout": "..." },
+  "date": "2026-04-18",
+  "hotel": {
+    "name": "matched hotel name",
+    "price": null,
+    "originalPrice": null,
+    "soldOut": true,
+    "referencePrice": { "checkin": "2026-04-20", "checkout": "2026-04-21", "price": 299 }
+  }
+}
+```
+
+The `referencePrice` field contains the first available date's price, or `null` if all 3 retry dates are also sold out. Each retry adds one page load with random delays.
 
 **Supported cities:** 北京, 上海, 广州, 深圳, 杭州, 苏州, 南京, 成都, 武汉, 西安, 重庆, 长沙, 厦门, 青岛, 大连, 天津, 三亚, 珠海, 昆明, 郑州, 合肥, 哈尔滨, 丽江, 桂林, 拉萨, 沈阳, 济南, 福州, 无锡, 宁波, 常州, 温州, 东莞
 
@@ -89,7 +110,7 @@ The scripts include:
 
 ## Hotel Matching
 
-The search script uses ngram fuzzy scoring (2–3 character segments) to match hotel names on the results page. This handles cases where the page displays extra characters (district names, branch labels) that prevent exact string matching.
+The search script uses ngram fuzzy scoring (2-3 character segments) from the **full hotel name** (including parenthesized branch/location info) to match hotel names on the results page. This ensures branch-specific names like "(苏州浒墅关店)" contribute to scoring, preventing wrong-branch matches.
 
 ## Notes
 

@@ -156,15 +156,14 @@ async function search(opts) {
     await page.evaluate(() => window.scrollBy(0, 600));
     await page.waitForTimeout(2000);
 
-    // Extract hotel name and price using ngram fuzzy matching
+    // Extract hotel name, price, and sold-out status using ngram fuzzy matching
     const result = await page.evaluate((kw) => {
       const body = document.body.innerText;
       const lines = body.split('\n').map((l) => l.trim()).filter((l) => l);
 
-      // Build 2-char and 3-char ngram segments from hotel keyword
-      const clean = kw
-        .replace(/[（(][^）)]*[）)]/g, '')
-        .replace(/酒店|宾馆|店/g, '');
+      // Build ngram segments from full keyword (including parenthesized branch name)
+      // Only strip generic suffixes — keep branch/location info for accurate matching
+      const clean = kw.replace(/酒店|宾馆/g, '');
       const chars = clean.match(/[\u4e00-\u9fff]/g) || [];
       const segments = new Set();
       for (let i = 0; i < chars.length - 1; i++)
@@ -197,25 +196,12 @@ async function search(opts) {
 
       if (!hotelName || hotelIdx < 0) return null;
 
-      // Scan lines below matched hotel for ¥NNN price patterns
-      // First match = current price, second (if higher) = original/strikethrough price
-      let price = null;
-      let originalPrice = null;
-      for (let i = hotelIdx + 1; i < Math.min(hotelIdx + 20, lines.length); i++) {
-        const m = lines[i].match(/^¥(\d+)$/);
-        if (m) {
-          const p = parseInt(m[1]);
-          if (!price) {
-            price = p;
-          } else if (!originalPrice && p !== price) {
-            if (p > price) {
-              originalPrice = p;
-            } else {
-              originalPrice = price;
-              price = p;
-            }
-            break;
-          }
+      // Check for sold-out indicators near the matched hotel
+      let soldOut = false;
+      for (let i = hotelIdx; i < Math.min(hotelIdx + 15, lines.length); i++) {
+        if (lines[i].includes('售罄') || lines[i].includes('已订完')) {
+          soldOut = true;
+          break;
         }
         // Stop if we hit another hotel listing
         if (
@@ -229,18 +215,154 @@ async function search(opts) {
         }
       }
 
-      return { name: hotelName, price, originalPrice };
+      // Scan lines below matched hotel for ¥NNN price patterns
+      // First match = current price, second (if higher) = original/strikethrough price
+      let price = null;
+      let originalPrice = null;
+      if (!soldOut) {
+        for (let i = hotelIdx + 1; i < Math.min(hotelIdx + 20, lines.length); i++) {
+          const m = lines[i].match(/^¥(\d+)$/);
+          if (m) {
+            const p = parseInt(m[1]);
+            if (!price) {
+              price = p;
+            } else if (!originalPrice && p !== price) {
+              if (p > price) {
+                originalPrice = p;
+              } else {
+                originalPrice = price;
+                price = p;
+              }
+              break;
+            }
+          }
+          // Stop if we hit another hotel listing
+          if (
+            i > hotelIdx + 3 &&
+            lines[i].includes('酒店') &&
+            lines[i].length > 8 &&
+            !lines[i].includes('¥') &&
+            !lines[i].includes(hotelName.substring(0, 4))
+          ) {
+            break;
+          }
+        }
+      }
+
+      return { name: hotelName, price, originalPrice, soldOut };
     }, opts.hotel);
+
+    // If hotel is sold out, retry next 3 days for a reference price
+    let referencePrice = null;
+    if (result && result.soldOut) {
+      const baseDate = new Date(checkin + 'T00:00:00Z');
+      for (let offset = 1; offset <= 3; offset++) {
+        const retryCheckin = new Date(baseDate);
+        retryCheckin.setDate(retryCheckin.getDate() + offset);
+        const retryCheckout = new Date(retryCheckin);
+        retryCheckout.setDate(retryCheckout.getDate() + 1);
+        const retryCI = retryCheckin.toISOString().split('T')[0];
+        const retryCO = retryCheckout.toISOString().split('T')[0];
+
+        await page.waitForTimeout(randomDelay());
+
+        const retryUrl = `https://hotels.ctrip.com/hotels/list?countryId=1&city=${cityId}&checkin=${retryCI}&checkout=${retryCO}&keyword=${encodeURIComponent(shortKeyword(opts.hotel))}`;
+        await page.goto(retryUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
+        await page.waitForTimeout(4000 + Math.random() * 2000);
+        await page.evaluate(() => window.scrollBy(0, 600));
+        await page.waitForTimeout(2000);
+
+        const retryResult = await page.evaluate((kw) => {
+          const body = document.body.innerText;
+          const lines = body.split('\n').map((l) => l.trim()).filter((l) => l);
+
+          const clean = kw.replace(/酒店|宾馆/g, '');
+          const chars = clean.match(/[\u4e00-\u9fff]/g) || [];
+          const segments = new Set();
+          for (let i = 0; i < chars.length - 1; i++)
+            segments.add(chars[i] + chars[i + 1]);
+          for (let i = 0; i < chars.length - 2; i++)
+            segments.add(chars[i] + chars[i + 1] + chars[i + 2]);
+          const segs = [...segments];
+
+          let hotelName = null;
+          let hotelIdx = -1;
+          let bestScore = 0;
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            if (line.length < 4 || line.length > 60) continue;
+            if (line.startsWith('¥') || line.match(/^\d/)) continue;
+            if (!line.includes('酒店') && !line.includes('宾馆')) continue;
+            let score = 0;
+            for (const seg of segs) {
+              if (line.includes(seg)) score += seg.length;
+            }
+            if (score > bestScore) {
+              bestScore = score;
+              hotelName = line;
+              hotelIdx = i;
+            }
+          }
+          if (!hotelName || hotelIdx < 0) return null;
+
+          // Check if still sold out on this date
+          for (let i = hotelIdx; i < Math.min(hotelIdx + 15, lines.length); i++) {
+            if (lines[i].includes('售罄') || lines[i].includes('已订完')) return null;
+            if (
+              i > hotelIdx + 3 &&
+              lines[i].includes('酒店') &&
+              lines[i].length > 8 &&
+              !lines[i].includes('¥') &&
+              !lines[i].includes(hotelName.substring(0, 4))
+            ) break;
+          }
+
+          let price = null;
+          for (let i = hotelIdx + 1; i < Math.min(hotelIdx + 20, lines.length); i++) {
+            const m = lines[i].match(/^¥(\d+)$/);
+            if (m) { price = parseInt(m[1]); break; }
+            if (
+              i > hotelIdx + 3 &&
+              lines[i].includes('酒店') &&
+              lines[i].length > 8 &&
+              !lines[i].includes('¥') &&
+              !lines[i].includes(hotelName.substring(0, 4))
+            ) break;
+          }
+          return price;
+        }, opts.hotel);
+
+        if (retryResult) {
+          referencePrice = { checkin: retryCI, checkout: retryCO, price: retryResult };
+          break;
+        }
+      }
+    }
 
     // Update storage state to keep session alive
     await context.storageState({ path: STORAGE_PATH });
 
-    output({
-      status: result ? 'success' : 'not_found',
-      query: { hotel: opts.hotel, city: opts.city, checkin, checkout },
-      date: new Date(Date.now() + 8 * 3600 * 1000).toISOString().split('T')[0],
-      hotel: result,
-    });
+    if (result && result.soldOut) {
+      output({
+        status: 'sold_out',
+        query: { hotel: opts.hotel, city: opts.city, checkin, checkout },
+        date: new Date(Date.now() + 8 * 3600 * 1000).toISOString().split('T')[0],
+        hotel: {
+          name: result.name,
+          price: null,
+          originalPrice: null,
+          soldOut: true,
+          referencePrice,
+        },
+      });
+    } else {
+      output({
+        status: result ? 'success' : 'not_found',
+        query: { hotel: opts.hotel, city: opts.city, checkin, checkout },
+        date: new Date(Date.now() + 8 * 3600 * 1000).toISOString().split('T')[0],
+        hotel: result ? { name: result.name, price: result.price, originalPrice: result.originalPrice } : null,
+      });
+    }
   } catch (err) {
     // Structured error output so callers always get parseable JSON
     output({
