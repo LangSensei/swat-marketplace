@@ -20,12 +20,15 @@ const BROWSER_OPTS = {
 };
 
 // City name → Ctrip city ID
+// To find a new city ID: open hotels.ctrip.com, search the city, check the URL ?city=NNN
 const CITY_MAP = {
   '北京': 1, '上海': 2, '西安': 7, '南京': 9, '杭州': 14,
   '苏州': 17, '厦门': 21, '深圳': 26, '成都': 28, '昆明': 31,
   '广州': 32, '珠海': 33, '三亚': 43, '大连': 122, '长沙': 148,
   '天津': 154, '重庆': 158, '郑州': 184, '青岛': 223, '合肥': 452,
-  '武汉': 477,
+  '武汉': 477, '哈尔滨': 706, '丽江': 394, '桂林': 159, '拉萨': 36,
+  '沈阳': 113, '济南': 199, '福州': 38, '无锡': 72, '宁波': 77,
+  '常州': 73, '温州': 94, '东莞': 365,
 };
 
 function parseArgs() {
@@ -43,14 +46,16 @@ function parseArgs() {
 }
 
 // Compute default checkin (today) and checkout (tomorrow) in YYYY-MM-DD
+// Uses UTC+8 (China Standard Time) since hotel check-in is local time
 function defaultDates(checkin, checkout) {
-  const now = new Date();
   const fmt = (d) => d.toISOString().split('T')[0];
   if (!checkin) {
+    // UTC+8: add 8 hours to UTC
+    const now = new Date(Date.now() + 8 * 3600 * 1000);
     checkin = fmt(now);
   }
   if (!checkout) {
-    const next = new Date(checkin);
+    const next = new Date(checkin + 'T00:00:00Z');
     next.setDate(next.getDate() + 1);
     checkout = fmt(next);
   }
@@ -62,43 +67,50 @@ function randomDelay(min = 1500, max = 3500) {
 }
 
 // Extract short brand keyword for the search box (≤6 Chinese chars)
+// Removes parenthesized content and generic suffixes like 酒店/宾馆
 function shortKeyword(kw) {
   let s = kw
-    .replace(/[（(][^）)]*[）)]/g, '')   // remove parenthesized content
-    .replace(/酒店|宾馆|店$/g, '')        // remove generic suffixes
+    .replace(/[（(][^）)]*[）)]/g, '')
+    .replace(/酒店|宾馆|店$/g, '')
     .trim();
   if (s.length > 6) s = s.substring(0, 6);
   return s;
 }
 
+// Output structured JSON result — always exits cleanly for callers
+function output(obj) {
+  console.log(JSON.stringify(obj, null, 2));
+}
+
 async function search(opts) {
   if (!fs.existsSync(STORAGE_PATH)) {
-    console.log(JSON.stringify({
+    output({
       status: 'error',
       message: 'Not logged in. Run: NODE_PATH=$(npm root -g) node auth.js --login',
-    }));
+    });
     process.exit(1);
   }
 
   const cityId = CITY_MAP[opts.city];
   if (!cityId) {
-    console.log(JSON.stringify({
+    output({
       status: 'error',
       message: `Unsupported city: ${opts.city}. Supported: ${Object.keys(CITY_MAP).join(', ')}`,
-    }));
+    });
     process.exit(1);
   }
 
   const { checkin, checkout } = defaultDates(opts.checkin, opts.checkout);
 
-  const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({
-    ...BROWSER_OPTS,
-    storageState: STORAGE_PATH,
-  });
-  const page = await context.newPage();
-
+  let browser;
   try {
+    browser = await chromium.launch({ headless: true });
+    const context = await browser.newContext({
+      ...BROWSER_OPTS,
+      storageState: STORAGE_PATH,
+    });
+    const page = await context.newPage();
+
     await page.waitForTimeout(randomDelay());
 
     // Navigate to city hotel list with checkin/checkout in URL
@@ -223,21 +235,22 @@ async function search(opts) {
     // Update storage state to keep session alive
     await context.storageState({ path: STORAGE_PATH });
 
-    const output = {
+    output({
       status: result ? 'success' : 'not_found',
-      query: {
-        hotel: opts.hotel,
-        city: opts.city,
-        checkin,
-        checkout,
-      },
+      query: { hotel: opts.hotel, city: opts.city, checkin, checkout },
       date: new Date().toISOString().split('T')[0],
       hotel: result,
-    };
-
-    console.log(JSON.stringify(output, null, 2));
+    });
+  } catch (err) {
+    // Structured error output so callers always get parseable JSON
+    output({
+      status: 'error',
+      message: err.message || String(err),
+      query: { hotel: opts.hotel, city: opts.city },
+    });
+    process.exit(1);
   } finally {
-    await browser.close();
+    if (browser) await browser.close();
   }
 }
 

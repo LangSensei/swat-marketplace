@@ -31,10 +31,12 @@ function parseArgs() {
   };
 }
 
+// All check results output to stdout as plain text (OK / EXPIRED / MISSING)
+// Always exit 0 — callers should parse stdout, not exit code
 async function check() {
   if (!fs.existsSync(STORAGE_PATH)) {
     console.log('MISSING');
-    process.exit(1);
+    return;
   }
 
   let browser;
@@ -60,14 +62,11 @@ async function check() {
 
     if (hasLogin && !url.includes('passport') && !url.includes('login')) {
       console.log('OK');
-      process.exit(0);
     } else {
       console.log('EXPIRED');
-      process.exit(1);
     }
   } catch (err) {
     console.log('EXPIRED');
-    process.exit(1);
   } finally {
     if (browser) await browser.close();
   }
@@ -90,8 +89,8 @@ async function login(timeout) {
     });
     await page.waitForTimeout(3000);
 
-    // Click QR code login tab
-    const qrBtns = await page.getByText(/\u626b\u7801/).all();
+    // Click QR code login tab (扫码)
+    const qrBtns = await page.getByText(/扫码/).all();
     if (qrBtns.length > 0) await qrBtns[0].click();
     await page.waitForTimeout(3000);
 

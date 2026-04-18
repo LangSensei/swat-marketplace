@@ -23,7 +23,7 @@ Headless browser used by playwright.
 
 ### Check
 ```bash
-npx playwright install --dry-run chromium 2>&1 | grep -q "already installed" && echo "OK"
+ls ~/.cache/ms-playwright/chromium-*/chrome-linux/chrome 2>/dev/null && echo "OK"
 ```
 
 ### Steps

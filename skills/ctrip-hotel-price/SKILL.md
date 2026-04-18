@@ -23,12 +23,12 @@ All scripts require `NODE_PATH=$(npm root -g)` to resolve playwright.
 NODE_PATH=$(npm root -g) node scripts/auth.js --check
 ```
 
-Exits with output:
+Always exits 0. Outputs one of:
 - `OK` — storage state exists and login is valid
 - `EXPIRED` — storage state exists but login has expired
 - `MISSING` — no storage state file found
 
-If expired or missing, fail the operation — debrief will notify the user to re-authenticate.
+Parse stdout to determine status. If expired or missing, fail the operation — debrief will notify the user to re-authenticate.
 
 ### Login
 
@@ -74,9 +74,11 @@ Dates are passed as URL parameters to Ctrip's search page. If omitted, defaults 
 }
 ```
 
-Status values: `success`, `not_found`, `error`.
+Status values: `success`, `not_found`, `error`. On error, the `message` field contains details. The script always outputs valid JSON, even on unexpected failures.
 
-**Supported cities:** 北京, 上海, 广州, 深圳, 杭州, 苏州, 南京, 成都, 武汉, 西安, 重庆, 长沙, 厦门, 青岛, 大连, 天津, 三亚, 珠海, 昆明, 郑州, 合肥
+**Supported cities:** 北京, 上海, 广州, 深圳, 杭州, 苏州, 南京, 成都, 武汉, 西安, 重庆, 长沙, 厦门, 青岛, 大连, 天津, 三亚, 珠海, 昆明, 郑州, 合肥, 哈尔滨, 丽江, 桂林, 拉萨, 沈阳, 济南, 福州, 无锡, 宁波, 常州, 温州, 东莞
+
+To add a new city: open hotels.ctrip.com, search the city, check the URL `?city=NNN` for its ID, and add it to `CITY_MAP` in `search.js`.
 
 ## Anti-Detection
 
