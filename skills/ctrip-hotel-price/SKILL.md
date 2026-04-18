@@ -53,12 +53,12 @@ NODE_PATH=$(npm root -g) node scripts/search.js \
 ```
 
 **Arguments:**
-- `--hotel` (required) — full hotel name to search for
+- `--hotel` (required) — full hotel name as shown on Ctrip (must match search suggestion exactly)
 - `--city` (required) — Chinese city name (see supported cities below)
-- `--checkin` (optional) — check-in date, YYYY-MM-DD format (defaults to today)
+- `--checkin` (optional) — check-in date, YYYY-MM-DD format (defaults to today; during 00:00-05:00 CST defaults to yesterday per Ctrip's 凌晨 convention)
 - `--checkout` (optional) — check-out date, YYYY-MM-DD format (defaults to checkin + 1 day)
 
-Dates are passed as URL parameters to Ctrip's search page. If omitted, defaults to today→tomorrow.
+**Flow:** Opens m.ctrip.com mobile search → types hotel name → clicks matching suggestion → lands on list page → adjusts URL date params (c-in/c-out) → extracts price from reloaded page.
 
 **Output:** JSON object:
 ```json
@@ -68,6 +68,7 @@ Dates are passed as URL parameters to Ctrip's search page. If omitted, defaults 
   "date": "2026-04-18",
   "hotel": {
     "name": "维也纳国际酒店(苏州新区高铁站店)",
+    "rating": 4.6,
     "price": 299,
     "originalPrice": 458
   }
@@ -78,7 +79,7 @@ Status values: `success`, `not_found`, `sold_out`, `error`. On error, the `messa
 
 **Sold-out output** (`status: "sold_out"`):
 
-When the matched hotel is sold out for the requested dates, the script automatically retries with the next 3 days (checkin+1, +2, +3) to find a reference price.
+When the matched hotel is sold out for the requested dates, the script extracts a reference price from the page's "这些日期还可订" suggestion if available.
 
 ```json
 {
@@ -87,30 +88,31 @@ When the matched hotel is sold out for the requested dates, the script automatic
   "date": "2026-04-18",
   "hotel": {
     "name": "matched hotel name",
+    "rating": 4.6,
     "price": null,
     "originalPrice": null,
     "soldOut": true,
-    "referencePrice": { "checkin": "2026-04-20", "checkout": "2026-04-21", "price": 299 }
+    "referencePrice": { "dates": "4月19日-4月20日", "price": 299 }
   }
 }
 ```
 
-The `referencePrice` field contains the first available date's price, or `null` if all 3 retry dates are also sold out. Each retry adds one page load with random delays.
+The `referencePrice` field is `null` if no alternative dates are suggested.
 
 **Supported cities:** 北京, 上海, 广州, 深圳, 杭州, 苏州, 南京, 成都, 武汉, 西安, 重庆, 长沙, 厦门, 青岛, 大连, 天津, 三亚, 珠海, 昆明, 郑州, 合肥, 哈尔滨, 丽江, 桂林, 拉萨, 沈阳, 济南, 福州, 无锡, 宁波, 常州, 温州, 东莞
 
-To add a new city: open hotels.ctrip.com, search the city, check the redirected URL `cityId=NNN` for its ID, and add it to `CITY_MAP` in `search.js`.
+To add a new city: open m.ctrip.com, search the city, check the list page URL `d-city=NNN` for its ID, and add it to `CITY_MAP` in `search.js`.
 
 ## Anti-Detection
 
 The scripts include:
 - Random delays (1500–3500ms) between actions
-- Realistic user agent and viewport settings
+- Realistic user agent and mobile viewport (375×812)
 - Chinese locale (`zh-CN`)
 
 ## Hotel Matching
 
-The search script uses ngram fuzzy scoring (2-3 character segments) from the **full hotel name** (including parenthesized branch/location info) to match hotel names on the results page. This ensures branch-specific names like "(苏州浒墅关店)" contribute to scoring, preventing wrong-branch matches.
+The search script types the full hotel name into the search box and clicks the matching suggestion from Ctrip's autocomplete. The hotel name must match exactly as shown on Ctrip. On the results list page, the script uses substring matching (first 6 chars) to locate the hotel card and extract pricing.
 
 ## Notes
 
@@ -118,3 +120,4 @@ The search script uses ngram fuzzy scoring (2-3 character segments) from the **f
 - Add delays between requests to avoid rate limiting
 - All content is Chinese — requires `fonts-noto-cjk` on the system
 - Price extraction looks for `¥NNN` patterns: first match = current price, second = original/strikethrough price
+- During 凌晨 (00:00-05:00 CST), Ctrip treats the previous calendar day as check-in date — the script handles this automatically

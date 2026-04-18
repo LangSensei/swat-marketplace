@@ -36,7 +36,6 @@ function parseArgs() {
     const idx = args.indexOf(`--${name}`);
     return idx >= 0 && args[idx + 1] ? args[idx + 1] : null;
   };
-  const hasFlag = (name) => args.includes(`--${name}`);
   return {
     hotel: getOpt('hotel'),
     city: getOpt('city') || '苏州',
@@ -341,10 +340,7 @@ async function search(opts) {
   const opts = parseArgs();
   if (!opts.hotel) {
     console.error('Usage:');
-    console.error(
-    );
-    console.error('');
-    console.error('Options:');
+    console.error('  node search.js --hotel "hotel name" --city city [--checkin YYYY-MM-DD] [--checkout YYYY-MM-DD]');
     console.error('');
     console.error('Supported cities: ' + Object.keys(CITY_MAP).join(', '));
     process.exit(1);
