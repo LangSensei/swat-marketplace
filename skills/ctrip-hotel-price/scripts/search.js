@@ -231,9 +231,8 @@ async function extractResult(page, hotelName) {
         }
       }
     }
-    }
 
-    return { name, price, originalPrice, rating: null, soldOut: isSoldOut, referencePrice: null };
+    return { name, price, originalPrice, rating: null, soldOut: isSoldOut, referencePrice };
   }, hotelName);
 }
 
