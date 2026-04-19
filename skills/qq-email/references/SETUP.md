@@ -42,6 +42,12 @@ Enable SMTP service and generate an authorization code in QQ Mail settings.
 
 Send a test email to confirm everything works.
 
+### Steps
+
+1. Ensure Steps 1 and 2 are complete (nodemailer installed, SMTP credentials set)
+2. Run the check command below to send a test email to yourself
+3. Confirm the output JSON shows `"status":"success"` and check your inbox for the test email
+
 ### Check
 ```bash
 NODE_PATH=$(npm root -g) node scripts/send.js \
