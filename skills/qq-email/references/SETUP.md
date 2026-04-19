@@ -23,7 +23,7 @@ Enable SMTP service and generate an authorization code in QQ Mail settings.
 
 ### Check
 ```bash
-[ -n "$QQ_EMAIL_USER" ] && [ -n "$QQ_EMAIL_AUTH_CODE" ] && echo "OK"
+grep -q 'QQ_EMAIL_USER=' ~/.swat/.env 2>/dev/null && grep -q 'QQ_EMAIL_AUTH_CODE=' ~/.swat/.env 2>/dev/null && echo "OK" || echo "MISSING"
 ```
 
 ### Steps
@@ -32,10 +32,11 @@ Enable SMTP service and generate an authorization code in QQ Mail settings.
 2. Go to Settings > Account > POP3/IMAP/SMTP/Exchange/CardDAV
 3. Enable SMTP service
 4. Generate an authorization code (follow the SMS verification prompt)
-5. Set environment variables:
+5. Add credentials to the SWAT env file:
    ```bash
-   export QQ_EMAIL_USER="your_qq_email@qq.com"
-   export QQ_EMAIL_AUTH_CODE="your_authorization_code"
+   mkdir -p ~/.swat
+   echo 'QQ_EMAIL_USER=your_qq_email@qq.com' >> ~/.swat/.env
+   echo 'QQ_EMAIL_AUTH_CODE=your_authorization_code' >> ~/.swat/.env
    ```
 
 ## 3. Verify

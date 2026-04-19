@@ -1,6 +1,6 @@
 ---
 name: qq-email
-version: "1.0.0"
+version: "1.1.0"
 description: Send emails via QQ Mail SMTP using nodemailer. Use when sending notifications, reports, or alerts via email.
 dependencies:
   mcps: []
@@ -16,7 +16,7 @@ prereq: references/SETUP.md
 | `QQ_EMAIL_USER` | QQ Mail address (sender) | `123456@qq.com` |
 | `QQ_EMAIL_AUTH_CODE` | SMTP authorization code | (from QQ Mail settings) |
 
-Both must be set before using the send script. See `references/SETUP.md` for setup instructions.
+Credentials are auto-loaded from `~/.swat/.env`. Environment variables take precedence over file values. See `references/SETUP.md` for setup instructions.
 
 ## CLI Scripts
 
@@ -113,5 +113,5 @@ NODE_PATH=$(npm root -g) node scripts/send.js \
 
 - The `--attach` flag can be repeated multiple times for multiple attachments
 - HTML body is read from a file path, not inline HTML string
-- All credentials come from environment variables — never hardcode
+- All credentials come from `~/.swat/.env` or environment variables — never hardcode
 - nodemailer must be globally installed (`npm install -g nodemailer`)
