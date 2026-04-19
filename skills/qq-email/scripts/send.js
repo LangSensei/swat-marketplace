@@ -115,5 +115,9 @@ async function main() {
 }
 
 main().catch((err) => {
-  fail(err.message || String(err));
+  const msg = err.message || String(err);
+  if (/invalid login|auth|535/i.test(msg)) {
+    fail(msg + " — check QQ_EMAIL_USER and QQ_EMAIL_AUTH_CODE (授权码, not password)");
+  }
+  fail(msg);
 });
