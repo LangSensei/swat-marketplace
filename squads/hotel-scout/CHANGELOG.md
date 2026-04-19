@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.0 (2026-04-19)
+
+- **feat:** add promotions column to report table — summarize booking coupons from 订房优惠
+- **feat:** add per-hotel detail section with full coupon info and room type breakdown
+- **feat:** leverage ctrip-hotel-price v1.2.0 detail page data (promotions + rooms)
+- Updated report template with 优惠券 column and detail sections
+
 ## 1.3.0 (2026-04-19)
 
 - Add optional email delivery via qq-email skill — send report.html to specified recipient
