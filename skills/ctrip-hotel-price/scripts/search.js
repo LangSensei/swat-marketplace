@@ -130,6 +130,7 @@ async function extractResult(page, hotelName) {
       const text = card.innerText || '';
       if (!text.includes(kw.substring(0, 6))) continue;
 
+      const hotelId = card.getAttribute('data-hotel');
       const soldOutImg = card.querySelector('img[src*=fullbooking]');
       const soldOutDiv = card.querySelector('[class*=noStock]');
       const isSoldOut = !!(soldOutImg || soldOutDiv);
@@ -175,7 +176,7 @@ async function extractResult(page, hotelName) {
         }
       }
 
-      return { name, price, originalPrice, rating, soldOut: isSoldOut, referencePrice };
+      return { name, hotelId, price, originalPrice, rating, soldOut: isSoldOut, referencePrice };
     }
 
     // Fallback: text-based extraction
@@ -232,10 +233,161 @@ async function extractResult(page, hotelName) {
       }
     }
 
-    return { name, price, originalPrice, rating: null, soldOut: isSoldOut, referencePrice };
+    return { name, hotelId: null, price, originalPrice, rating: null, soldOut: isSoldOut, referencePrice };
   }, hotelName);
 }
 
+
+// ── Extract detail page: promotions + room types ──
+// After finding the hotel on the list page, navigate to its detail page
+// to extract booking promotions and room type information.
+async function extractDetail(page, hotelId, checkin, checkout, cityId) {
+  if (!hotelId) return { promotions: null, rooms: null };
+
+  const url = `https://m.ctrip.com/webapp/hotel/hoteldetail/${hotelId}.html?checkIn=${checkin}&checkOut=${checkout}&cityId=${cityId}`;
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await page.waitForTimeout(8000);
+
+  // Extract promotions summary text (visible before clicking 订房优惠)
+  const promoSummary = await page.evaluate(() => {
+    const allText = document.body.innerText;
+    const lines = allText.split('\n').map(l => l.trim()).filter(l => l);
+    const idx = lines.findIndex(l => l === '订房优惠');
+    if (idx < 0) return null;
+    return lines[idx + 1] || null;
+  });
+
+  // Click 订房优惠 to open detailed promotion popup
+  let promoDetails = [];
+  const promoEl = page.locator('text=订房优惠').first();
+  if (await promoEl.isVisible().catch(() => false)) {
+    await promoEl.click();
+    await page.waitForTimeout(3000);
+
+    // Extract each coupon from the popup.
+    // Ctrip uses Private Use Area Unicode chars (U+E000-U+F8FF) for icon fonts —
+    // we strip these to get clean text.
+    // Each coupon ends with "立即领取" (booking coupons) or "去领取" (external/天降 coupons).
+    // We only collect booking coupons (立即领取).
+    promoDetails = await page.evaluate(() => {
+      const text = document.body.innerText;
+      const clean = (s) => s.replace(/[\uE000-\uF8FF\u200B-\u200D\uFEFF\u00A0\uFFFC]/g, '').replace(/\s+/g, ' ').trim();
+      const lines = text.split('\n').map(clean).filter(l => l.length > 0);
+      const detailIdx = lines.findIndex(l => l === '优惠详情');
+      if (detailIdx < 0) return [];
+
+      const coupons = [];
+      let current = [];
+      let i = detailIdx + 1;
+      while (i < lines.length && i < detailIdx + 50) {
+        const line = lines[i];
+        if (line === '查看房型' || line === '问酒店' || line.startsWith('携程酒店')) break;
+
+        if (line === '立即领取') {
+          // End of a booking coupon — join fields with pipe separator
+          if (current.length > 0) {
+            coupons.push(current.join(' | '));
+          }
+          current = [];
+        } else if (line === '去领取') {
+          // Skip 天降/external coupons — only collect 订房优惠 popup coupons
+          current = [];
+        } else if (line && line !== '优惠详情') {
+          current.push(line);
+        }
+        i++;
+      }
+      if (current.length > 0) {
+        const text = current.join(' | ');
+        if (text) coupons.push(text);
+      }
+      return coupons.filter(c => c);
+    });
+
+    // Close popup
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(1000);
+  }
+
+  // Scroll through room section to load all rooms
+  for (let i = 0; i < 5; i++) {
+    await page.evaluate(() => window.scrollBy(0, 600));
+    await page.waitForTimeout(1000);
+  }
+
+  // Extract room types from the detail page
+  const rooms = await page.evaluate(() => {
+    const text = document.body.innerText;
+    const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+
+    const rooms = [];
+    let i = 0;
+
+    // Room type keywords for matching room name lines
+    const roomKeywords = ['大床房', '双床房', '家庭房', '套房', '标准间', '商务房', '豪华房', '行政房', '影院房', '露台房', '亲子房', '主题房', '圆床房', '榻榻米房', '水床房', '钟点房', '特价房', '单人房', '三人房', '四人房', '高低床房', '胶囊房'];
+    const isRoomName = (line) => roomKeywords.some(k => line.includes(k)) && line.length < 30;
+
+    // Find the boundary where room listings end (footer/SEO sections)
+    const footerKeywords = ['价格说明', '携程酒店官网', '快速链接', '品牌酒店', '欢迎光临'];
+    const footerIdx = lines.findIndex(l => footerKeywords.some(k => l.includes(k)));
+    const roomEndIdx = footerIdx > 0 ? footerIdx : lines.length;
+
+    while (i < roomEndIdx) {
+      if (!isRoomName(lines[i])) { i++; continue; }
+
+      const room = { name: lines[i], bed: null, area: null, price: null, originalPrice: null, discount: null, tags: [], soldOut: false };
+      i++;
+
+      // Parse following lines for this room's attributes
+      let lineCount = 0;
+      while (i < roomEndIdx && lineCount < 25) {
+        const l = lines[i];
+        // Stop if next room starts
+        if (isRoomName(l)) break;
+        // Stop at non-room sections
+        if (['住客点评', '设施服务', '位置周边', '订房必读', '酒店政策', '钟点房', '价格说明', '携程酒店', '快速链接', '问酒店'].some(s => l.startsWith(s))) break;
+
+        // Bed info (must be short to avoid SEO text matching)
+        if (l.match(/张.*床/) && l.length < 40) { room.bed = l; }
+        // Room area
+        else if (l.match(/^\d+[-\d]*㎡$/)) { room.area = l; }
+        // Sold out marker
+        else if (l === '已订完') { room.soldOut = true; }
+        // Price (standalone number on its own line)
+        else if (l.match(/^\d+$/) && parseInt(l) > 50 && parseInt(l) < 100000) {
+          const p = parseInt(l);
+          if (!room.originalPrice && !room.price) { room.originalPrice = p; }
+          else if (room.originalPrice && !room.price) {
+            if (p < room.originalPrice) room.price = p;
+            else { room.price = room.originalPrice; room.originalPrice = p; }
+          }
+        }
+        // Discount tags
+        else if (l.match(/^\d+项优惠\d+$/) || l.match(/^优惠\d+$/)) { room.discount = l; }
+        else if (l === '十亿豪补') { room.tags.push(l); }
+        // Promotion tags
+        else if (['新客体验钻石', '门店首单', '品牌首单'].includes(l)) { room.tags.push(l); }
+        else if (l.match(/^\d+\.\d折$/)) { room.tags.push(l); }
+        // Remaining stock
+        else if (l.match(/^仅剩\d+间$/)) { room.tags.push(l); }
+
+        i++;
+        lineCount++;
+      }
+
+      // Only add if we got meaningful data
+      if (room.price || room.soldOut) {
+        rooms.push(room);
+      }
+    }
+    return rooms;
+  });
+
+  return {
+    promotions: promoDetails.length > 0 ? promoDetails : (promoSummary ? [promoSummary] : null),
+    rooms: rooms.length > 0 ? rooms : null,
+  };
+}
 // ── Main ──
 async function search(opts) {
   if (!fs.existsSync(STORAGE_PATH)) {
@@ -291,11 +443,11 @@ async function search(opts) {
     // Step 3: Adjust dates by rewriting URL c-in/c-out and reloading
     await adjustDates(page, checkin, checkout);
 
-    // Step 4: Extract result
+    // Step 4: Extract basic info from list page (price + hotel ID)
     const result = await extractResult(page, opts.hotel);
-    await context.storageState({ path: STORAGE_PATH });
 
     if (!result) {
+      await context.storageState({ path: STORAGE_PATH });
       output({
         status: 'not_found',
         query: { hotel: opts.hotel, city: opts.city, checkin, checkout },
@@ -303,6 +455,7 @@ async function search(opts) {
         hotel: null,
       });
     } else if (result.soldOut) {
+      await context.storageState({ path: STORAGE_PATH });
       output({
         status: 'sold_out',
         query: { hotel: opts.hotel, city: opts.city, checkin, checkout },
@@ -314,9 +467,18 @@ async function search(opts) {
           originalPrice: null,
           soldOut: true,
           referencePrice: result.referencePrice,
+          promotions: null,
+          rooms: null,
         },
       });
     } else {
+      // Step 5: Visit detail page for promotions + room types
+      await page.waitForTimeout(randomDelay());
+      const detail = await extractDetail(page, result.hotelId, checkin, checkout, cityId);
+
+      // Save session state after all page interactions are done
+      await context.storageState({ path: STORAGE_PATH });
+
       output({
         status: 'success',
         query: { hotel: opts.hotel, city: opts.city, checkin, checkout },
@@ -326,6 +488,8 @@ async function search(opts) {
           rating: result.rating,
           price: result.price,
           originalPrice: result.originalPrice,
+          promotions: detail.promotions,
+          rooms: detail.rooms,
         },
       });
     }

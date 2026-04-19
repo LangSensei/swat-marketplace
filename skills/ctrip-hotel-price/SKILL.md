@@ -1,6 +1,6 @@
 ---
 name: ctrip-hotel-price
-version: "1.1.0"
+version: "1.2.0"
 description: Ctrip (携程) hotel price query tool. Use when checking hotel prices, comparing rates, or monitoring price changes on Ctrip via Playwright browser automation. Requires pre-authenticated storage state.
 dependencies:
   mcps: []
@@ -58,7 +58,7 @@ NODE_PATH=$(npm root -g) node scripts/search.js \
 - `--checkin` (optional) — check-in date, YYYY-MM-DD format (defaults to today; during 00:00-05:00 CST defaults to yesterday per Ctrip's 凌晨 convention)
 - `--checkout` (optional) — check-out date, YYYY-MM-DD format (defaults to checkin + 1 day)
 
-**Flow:** Opens m.ctrip.com mobile search → types hotel name → clicks matching suggestion → lands on list page → adjusts URL date params (c-in/c-out) → extracts price from reloaded page.
+**Flow:** Opens m.ctrip.com mobile search → types hotel name → clicks matching suggestion → lands on list page → adjusts URL date params (c-in/c-out) → extracts price + hotel ID from list page → navigates to hotel detail page → extracts promotions + room types.
 
 **Output:** JSON object:
 ```json
@@ -70,10 +70,29 @@ NODE_PATH=$(npm root -g) node scripts/search.js \
     "name": "维也纳国际酒店(苏州新区高铁站店)",
     "rating": 4.6,
     "price": 299,
-    "originalPrice": 458
+    "originalPrice": 458,
+    "promotions": [
+      "优惠券 | 94 | 折 | 无金额门槛 | 限额50元 | 春日酒店特惠券"
+    ],
+    "rooms": [
+      {
+        "name": "高级大床房[空气净化器]",
+        "bed": "1张1.8米大床",
+        "area": "20-25㎡",
+        "price": 296,
+        "originalPrice": 312,
+        "discount": "优惠16",
+        "tags": ["十亿豪补"],
+        "soldOut": false
+      }
+    ]
   }
 }
 ```
+
+**New in v1.2.0:** After finding the hotel on the list page, the script navigates to the hotel detail page to extract:
+- **promotions** — booking coupons from the "订房优惠" popup. Each coupon is a pipe-separated string of its raw fields. `null` if no promotions available.
+- **rooms** — all available room types with name, bed type, area, price, original price, discount summary, tags (e.g. "十亿豪补", "新客体验钻石"), and sold-out status. `null` if extraction fails.
 
 Status values: `success`, `not_found`, `sold_out`, `error`. On error, the `message` field contains details. The script always outputs valid JSON, even on unexpected failures.
 
@@ -116,6 +135,8 @@ The search script types the full hotel name into the search box and clicks the m
 
 ## Notes
 
+- Detail page adds ~10-15s per hotel query (navigation + rendering + promotion popup)
+- Ctrip uses Private Use Area Unicode characters (U+E000–U+F8FF) for icon fonts — the script strips these during text extraction
 - Storage state expires after days/weeks — fail and debrief if auth errors occur
 - Add delays between requests to avoid rate limiting
 - All content is Chinese — requires `fonts-noto-cjk` on the system
