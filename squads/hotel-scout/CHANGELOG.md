@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0 (2026-04-19)
+
+- Add optional email delivery via qq-email skill — send report.html to specified recipient
+- Add qq-email to skill dependencies
+- Email delivery is best-effort — failure does not block operation
+
 ## 1.2.0 (2026-04-18)
 
 - Handle `sold_out` status in report table — show "售罄" with reference price if available

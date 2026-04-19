@@ -1,9 +1,9 @@
 ---
 name: hotel-scout
-version: "1.2.0"
-description: Batch hotel price comparison via Ctrip — queries multiple hotels and produces a structured comparison report
+version: "1.3.0"
+description: Batch hotel price comparison via Ctrip — queries multiple hotels and produces a structured comparison report with optional email delivery
 dependencies:
-  skills: [sop, ctrip-hotel-price]
+  skills: [sop, ctrip-hotel-price, qq-email]
   mcps: []
 ---
 
@@ -115,3 +115,22 @@ If all queries failed, replace the price portion with: `最低价: 无（全部�
 - Minimum 5-second delay between queries
 - All report output in Chinese
 - All squad/skill configuration files in English
+
+### Email Delivery (Optional)
+
+If the brief specifies an email recipient (e.g. "发送到 xxx@qq.com"), send the report via email after generating `report.html`:
+
+```bash
+NODE_PATH=$(npm root -g) node <QQ_EMAIL_SKILL_DIR>/scripts/send.js \
+  --to "<recipient>" \
+  --subject "酒店价格报告 - <city> <checkin>" \
+  --body "共查询 N 家酒店，最低价 ¥XXX（酒店名）" \
+  --html report.html
+```
+
+`<QQ_EMAIL_SKILL_DIR>` is the installed skill directory for `qq-email`. Resolve from your runtime context.
+
+- The `--body` should contain the summary line (plain text fallback)
+- The `--html` should point to the generated `report.html`
+- If email sending fails, log the error but do NOT fail the operation — the report is still valid
+- Email delivery is best-effort; Ctrip query results are the primary deliverable
