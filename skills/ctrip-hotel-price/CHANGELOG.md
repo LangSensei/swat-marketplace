@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 (2026-04-19)
+
+- **feat:** detail page navigation — extract hotel ID from list page, visit detail page for rich data
+- **feat:** booking promotions extraction from "订房优惠" popup (pipe-separated raw coupon text)
+- **feat:** room type extraction — name, bed, area, price, originalPrice, discount, tags, soldOut
+- **fix:** strip Private Use Area Unicode characters (U+E000–U+F8FF) from Ctrip icon fonts
+- **fix:** footer boundary detection to prevent SEO text from being parsed as room data
+
 ## 1.1.0 (2026-04-18)
 
 - **refactor:** switch from PC web (hotels.ctrip.com) to mobile web (m.ctrip.com) — more reliable rendering in headless
