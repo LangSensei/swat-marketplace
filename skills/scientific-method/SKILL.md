@@ -1,25 +1,12 @@
 ---
 name: scientific-method
-version: "1.0.6"
-description: Hypothesis-driven cognitive framework for complex reasoning and research tasks. Understand → Decompose → Cycle (Hypothesize → Predict → Test → Conclude) → Synthesize.
+version: "1.0.7"
+description: Hypothesis-driven research — Understand → Decompose → Cycle (Hypothesize → Predict → Test → Conclude) → Synthesize, with structured working files. (Mandatory execution methodology, follow SKILL.md to setup before any other tool calls)
 ---
 
 # Scientific Method
 
 A cognitive framework for tasks that require reasoning, research, or exploration. Instead of executing a linear checklist, you iteratively form hypotheses, test them, and refine your understanding.
-
-## When to Use
-
-**Use for:**
-- Research and analysis tasks
-- Debugging and root-cause analysis
-- Exploratory tasks with unclear scope
-- Tasks requiring reasoning under uncertainty
-- Anything where "figure it out" is part of the job
-
-**Don't use for:**
-- Tasks with a known, fixed procedure (use an SOP skill instead)
-- Simple lookups or single-step actions
 
 ## Where Files Go
 
@@ -42,7 +29,7 @@ One piece of information lives in one place. Don't duplicate status, errors, or 
 
 Before starting any complex task:
 
-1. **Copy templates** — Do NOT create these files from scratch. The templates contain required structure and comments. If the files already exist, skip this step.
+1. **Copy templates FIRST** — this is your FIRST action. No other tool calls are allowed before these files exist. Do NOT create these files from scratch. The templates contain required structure and comments. If the files already exist, skip this step.
    ```
    cp <SKILL_DIR>/templates/plan.md .
    cp <SKILL_DIR>/templates/findings.md .

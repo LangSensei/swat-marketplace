@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.7 (2026-04-20)
+- Frontmatter: update description to clarify mandatory execution methodology
+- Remove "When to Use" / "Don't use for" section — skill selection is handled by squad MANIFEST dependencies
+- Quick Start: strengthen step 1 — copying templates is the FIRST action, no other tool calls allowed before files exist
+
 ## 1.0.6 (2026-04-14)
 - Hooks: restructure into `copilot/` and `gemini/` subdirectories for multi-runtime support
 - Hooks: add Gemini CLI hooks with adapted I/O schema (`tool_input`/`decision`/`reason`)

@@ -1,18 +1,12 @@
 ---
 name: sop
-version: "1.0.5"
-description: Standard Operating Procedure — phase-based execution with step checklists for structured, repeatable tasks
+version: "1.0.6"
+description: Standard Operating Procedure — phase-based execution with sequential step checklists and structured working files. (Mandatory execution methodology, follow SKILL.md to setup before any other tool calls)
 ---
 
 # SOP Skill
 
 Execute structured tasks by following predefined phases with step-by-step checklists. Unlike exploratory research (scientific method), SOP tasks have known procedures — the focus is on thorough execution, not hypothesis testing.
-
-## When to Use
-
-- Tasks with known, repeatable procedures
-- Code review, content writing, squad creation
-- Any task where the phases can be defined upfront
 
 ## Files
 
@@ -30,14 +24,14 @@ Execute structured tasks by following predefined phases with step-by-step checkl
 
 ## Quick Start
 
-1. Understand your task — read the assignment/brief to identify the phases
-2. **Copy templates** — Do NOT create these files from scratch. The templates contain required structure and comments. If the files already exist, skip this step.
+1. **Copy templates FIRST** — this is your FIRST action. No other tool calls are allowed before these files exist. Do NOT create these files from scratch. The templates contain required structure and comments. If the files already exist, skip this step.
    ```
    cp <SKILL_DIR>/templates/plan.md .
    cp <SKILL_DIR>/templates/findings.md .
    cp <SKILL_DIR>/templates/progress.md .
    ```
    > `<SKILL_DIR>` is the directory containing this SKILL.md. Resolve from your runtime context.
+2. Understand your task — read the assignment/brief to identify the phases
 3. Fill in Goal + Phases in `plan.md`
 4. Execute phases in order — check off steps as you go
 5. Update findings.md after every 2 search/browse/view operations (2-Action Rule)
