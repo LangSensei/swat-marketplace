@@ -1,21 +1,28 @@
 {
-  "version": 1,
   "hooks": {
-    "preToolUse": [
+    "BeforeTool": [
       {
-        "type": "command",
-        "command": "node .gemini/hooks/scientific-method-scripts/format-check.js",
-        "timeout": 5
-      },
-      {
-        "type": "command",
-        "command": "node .gemini/hooks/scientific-method-scripts/staleness-check.js",
-        "timeout": 5
-      },
-      {
-        "type": "command",
-        "command": "node .gemini/hooks/scientific-method-scripts/context-refresh.js",
-        "timeout": 5
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .gemini/hooks/scientific-method-scripts/format-check.js",
+            "name": "format-check",
+            "timeout": 5000
+          },
+          {
+            "type": "command",
+            "command": "node .gemini/hooks/scientific-method-scripts/staleness-check.js",
+            "name": "staleness-check",
+            "timeout": 5000
+          },
+          {
+            "type": "command",
+            "command": "node .gemini/hooks/scientific-method-scripts/context-refresh.js",
+            "name": "context-refresh",
+            "timeout": 5000
+          }
+        ]
       }
     ]
   }
