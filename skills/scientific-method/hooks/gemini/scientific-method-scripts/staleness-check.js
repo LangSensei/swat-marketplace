@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // scientific-method: Staleness check (BeforeTool) — Gemini CLI
 // Deny when plan.md/progress.md/findings.md not updated in MAX_STALE seconds.
+// Always exits 0.
 // Skips during Synthesis/Complete.
 
 const fs = require('fs');
@@ -48,6 +49,8 @@ try {
   }
 
   process.stdout.write('{}');
+  process.exit(0);
 } catch (e) {
   process.stdout.write('{}');
+  process.exit(0);
 }

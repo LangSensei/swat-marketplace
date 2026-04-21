@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // scientific-method: Context refresh (BeforeTool) — Gemini CLI
 // Every REFRESH_INTERVAL seconds, deny once to remind re-reading AGENTS.md + .squad/
+// Always exits 0.
 // Skips during Synthesis/Complete.
 
 const fs = require('fs');
@@ -44,6 +45,8 @@ try {
   }
 
   process.stdout.write('{}');
+  process.exit(0);
 } catch (e) {
   process.stdout.write('{}');
+  process.exit(0);
 }

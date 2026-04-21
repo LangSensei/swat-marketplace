@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // scientific-method: Format check (BeforeTool) — Gemini CLI
 // Validates plan.md structure: required sections, status values, cycle completeness, current state.
+// Always exits 0.
 
 const fs = require('fs');
 
@@ -122,6 +123,8 @@ try {
   }
 
   process.stdout.write('{}');
+  process.exit(0);
 } catch (e) {
   process.stdout.write('{}');
+  process.exit(0);
 }
