@@ -1,41 +1,43 @@
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-$env:PYTHONIOENCODING = "utf-8"
-# scientific-method: Context refresh (preToolUse)
+#!/usr/bin/env pwsh
+# scientific-method: Context refresh (preToolUse) — PowerShell
 # Every REFRESH_INTERVAL seconds, deny once to remind re-reading AGENTS.md + .squad/
-# Always exits 0.
+# Skips during Synthesize/Complete.
 
-$hookInput = [Console]::In.ReadToEnd() | ConvertFrom-Json
+$ErrorActionPreference = "SilentlyContinue"
 
 $REFRESH_INTERVAL = if ($env:REFRESH_INTERVAL) { [int]$env:REFRESH_INTERVAL } else { 300 }
 $REFRESH_TS_FILE = ".context_refresh_ts"
 
-$now = [int][double]::Parse((Get-Date -UFormat %s))
-
-# Skip during final stages (Synthesize/Complete) — no more context refresh needed
+# Skip during Synthesize/Complete
 if (Test-Path "plan.md") {
-    $currentState = (Select-String -Path "plan.md" -Pattern '\*\*Step:\*\*\s*(\S+)' -List | Select-Object -First 1).Matches.Groups[1].Value
-    if ($currentState -match '(?i)(synthesize|complete)') {
-        Write-Output '{}'; exit 0
+    $content = [System.IO.File]::ReadAllText("plan.md", [System.Text.Encoding]::UTF8)
+    $stepM = [regex]::Match($content, "\*\*Step:\*\*\s*(.+)")
+    if ($stepM.Success) {
+        $step = $stepM.Groups[1].Value.Trim()
+        if ($step -in @("Synthesize", "Synthesis", "Complete")) {
+            Write-Output '{}'
+            exit 0
+        }
     }
 }
 
-# First run: initialize timestamp, don't deny
+$now = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+
+# First run: initialize
 if (-not (Test-Path $REFRESH_TS_FILE)) {
-    Set-Content -Path $REFRESH_TS_FILE -Value $now -NoNewline
+    [System.IO.File]::WriteAllText($REFRESH_TS_FILE, "$now")
     Write-Output '{}'
     exit 0
 }
 
-$lastRefresh = [int](Get-Content $REFRESH_TS_FILE -ErrorAction SilentlyContinue)
-
+$lastRefresh = [long]([System.IO.File]::ReadAllText($REFRESH_TS_FILE).Trim())
 $elapsed = $now - $lastRefresh
+
 if ($elapsed -gt $REFRESH_INTERVAL) {
-    Set-Content -Path $REFRESH_TS_FILE -Value $now -NoNewline
+    [System.IO.File]::WriteAllText($REFRESH_TS_FILE, "$now")
     $msg = "CONTEXT REFRESH: ${elapsed}s since last refresh. Re-read AGENTS.md and all files under .squad/ to prevent protocol drift."
-    $py = if (Get-Command python3 -ErrorAction SilentlyContinue) { "python3" } else { "python" }
-    $escaped = $msg | & $py -c "import sys,json; print(json.dumps(sys.stdin.read().strip(), ensure_ascii=False))" 2>$null
-    if (-not $escaped) { $escaped = "`"$msg`"" }
-    Write-Output "{`"permissionDecision`":`"deny`",`"permissionDecisionReason`":$escaped}"
+    $result = @{ permissionDecision = "deny"; permissionDecisionReason = $msg } | ConvertTo-Json -Compress
+    Write-Output $result
     exit 0
 }
 

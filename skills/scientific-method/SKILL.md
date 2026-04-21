@@ -1,6 +1,6 @@
 ---
 name: scientific-method
-version: "1.0.7"
+version: "1.0.8"
 description: Hypothesis-driven research — Understand → Decompose → Cycle (Hypothesize → Predict → Test → Conclude) → Synthesize, with structured working files. (Mandatory execution methodology, follow SKILL.md to setup before any other tool calls)
 ---
 
@@ -136,7 +136,7 @@ Multimodal content (images, browser results, screenshots) does not persist in co
 Before major decisions, re-read `plan.md`. This refreshes goals in your attention window. Context decays over long sessions — your files don't.
 
 ### Update Progress at Every Transition
-When moving between steps (Understand → Decompose, Cycle N Hypothesize → Test, etc.), update `progress.md` — both the actions log and the **Status** field. Status in `progress.md` is the single source of truth for how far you've gotten. Also update `plan.md` Current State to reflect where you are.
+When moving between steps, update `progress.md` — both the actions log and the **Status** field. Status in `progress.md` is the single source of truth for how far you've gotten. Also update `plan.md` Current State `**Step:**` to reflect where you are. Use the format: `Understand`, `Decompose`, `Synthesize`, `Complete`, or `Cycle N - Hypothesize`, `Cycle N - Predict`, `Cycle N - Test`, `Cycle N - Conclude`.
 
 ### Log ALL Errors
 Every error goes in `progress.md` Errors table. Track what you tried. Never repeat a failed action — mutate the approach.

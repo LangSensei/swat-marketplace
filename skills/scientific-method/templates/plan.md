@@ -18,11 +18,12 @@
   WHAT: Quick snapshot of where you are right now.
   WHY: When re-reading plan before a decision, this tells you exactly where you are.
   WHEN: Update EVERY time you move to a new step or Cycle.
-  Step OPTIONS: Understand | Decompose | Hypothesize | Predict | Test | Conclude | Synthesize | Complete
-  Cycle OPTIONS: 0 (when not in a cycle) | 1 | 2 | 3 | ...
+  Step OPTIONS:
+    Understand | Decompose | Synthesize | Complete
+    Cycle 1 - Hypothesize | Cycle 1 - Predict | Cycle 1 - Test | Cycle 1 - Conclude
+    (increment Cycle number as needed)
 -->
 - **Step:** Understand
-- **Cycle:** 0
 
 ## Key Questions
 <!--
