@@ -19,11 +19,11 @@
   WHY: When re-reading plan before a decision, this tells you exactly where you are.
   WHEN: Update EVERY time you move to a new step or Cycle.
   Step OPTIONS:
-    Understand | Decompose | Synthesize | Complete
-    Cycle 1 - Hypothesize | Cycle 1 - Predict | Cycle 1 - Test | Cycle 1 - Conclude
+    Observation | Decomposition | Synthesis | Complete
+    Cycle 1 - Hypothesis | Cycle 1 - Prediction | Cycle 1 - Test | Cycle 1 - Conclusion
     (increment Cycle number as needed)
 -->
-- **Step:** Understand
+- **Step:** Observation
 
 ## Key Questions
 <!--
@@ -37,7 +37,7 @@
 1. [Question to answer]
 2. [Question to answer]
 
-## Understand
+## Observation
 <!--
   WHAT: Your initial analysis of the problem — what you know, what you don't, constraints.
   WHY: Forces you to think before acting. Prevents jumping to conclusions.
@@ -54,7 +54,7 @@
 - Constraints:
 - Assumptions:
 
-## Decompose
+## Decomposition
 <!--
   WHAT: Break the problem into sub-problems. Each becomes a Cycle.
   WHY: Complex problems are solved by solving their parts. Explicit decomposition prevents aimless exploration.

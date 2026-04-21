@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // scientific-method: Staleness check (BeforeTool) — Gemini CLI
 // Deny when plan.md/progress.md/findings.md not updated in MAX_STALE seconds.
-// Skips during Synthesize/Complete.
+// Skips during Synthesis/Complete.
 
 const fs = require('fs');
 
@@ -17,7 +17,7 @@ try {
     process.exit(0);
   }
 
-  // Skip during Synthesize/Complete
+  // Skip during Synthesis/Complete
   if (fs.existsSync('plan.md')) {
     const content = fs.readFileSync('plan.md', 'utf8');
     const csMatch = content.match(/## Current State([\s\S]*?)(?=\n## |\n*$)/);
@@ -25,7 +25,7 @@ try {
     const stepM = csContent.match(/\*\*Step:\*\*\s*(.+)/);
     if (stepM) {
       const step = stepM[1].trim();
-      if (['Synthesize', 'Synthesis', 'Complete'].includes(step)) {
+      if (['Synthesis', 'Complete'].includes(step)) {
         console.log(JSON.stringify({ decision: 'ALLOW' }));
         process.exit(0);
       }

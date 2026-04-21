@@ -6,7 +6,7 @@
   NOTE: Status tracking lives in plan.md (Current State). This file is purely an action log.
 -->
 
-## Understand
+## Observation
 <!--
   WHAT: What you did during the Understand step.
   WHEN: Update as you work through Understand.
@@ -16,7 +16,7 @@
 - Files read:
   -
 
-## Decompose
+## Decomposition
 <!--
   WHAT: How you broke down the problem.
   WHEN: Update after completing decomposition.
@@ -30,11 +30,11 @@
   WHEN: Update each sub-step as you progress through H → P → T → C.
 -->
 
-### Hypothesize
+### Hypothesis
 - Actions taken:
   -
 
-### Predict
+### Prediction
 - Actions taken:
   -
 
@@ -55,17 +55,17 @@
   -->
   -
 
-### Conclude
+### Conclusion
 - Actions taken:
   -
 
 ## Cycle 2: [Sub-problem]
 
-### Hypothesize
+### Hypothesis
 - Actions taken:
   -
 
-### Predict
+### Prediction
 - Actions taken:
   -
 
@@ -75,11 +75,11 @@
 - Files created/modified:
   -
 
-### Conclude
+### Conclusion
 - Actions taken:
   -
 
-## Synthesize
+## Synthesis
 - Actions taken:
   -
 

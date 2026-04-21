@@ -48,11 +48,11 @@ try {
   if (currentSection) sections[currentSection] = currentContent.join('\n');
 
   // A. Check required sections
-  if (!sections['Understand']) deny("FORMAT: plan.md missing required section '## Understand'.");
-  if (!sections['Decompose']) deny("FORMAT: plan.md missing required section '## Decompose'.");
+  if (!sections['Observation']) deny("FORMAT: plan.md missing required section '## Observation'.");
+  if (!sections['Decomposition']) deny("FORMAT: plan.md missing required section '## Decomposition'.");
 
   const synthesisFound = Object.keys(sections).some(k => k.startsWith('Synthes'));
-  if (!synthesisFound) deny("FORMAT: plan.md missing required section '## Synthesis' (or '## Synthesize').");
+  if (!synthesisFound) deny("FORMAT: plan.md missing required section '## Synthesis'.");
 
   // B. Validate all Status values
   const allStatuses = [...content.matchAll(/\*\*Status:\*\*\s*(\S+)/g)].map(m => m[1]);
@@ -62,15 +62,15 @@ try {
     }
   }
 
-  // C. If Decompose complete, check Cycles
-  const decomposeContent = sections['Decompose'] || '';
+  // C. If Decomposition complete, check Cycles
+  const decomposeContent = sections['Decomposition'] || '';
   const decomposeStatusM = decomposeContent.match(/\*\*Status:\*\*\s*(\S+)/);
   const decomposeStatus = decomposeStatusM ? decomposeStatusM[1] : 'not_started';
 
   if (decomposeStatus === 'complete') {
     const cycleSections = Object.entries(sections).filter(([k]) => /^Cycle \d+/.test(k));
     if (cycleSections.length === 0) {
-      deny("FORMAT: Decompose is complete but no '## Cycle N' sections found in plan.md.");
+      deny("FORMAT: Decomposition is complete but no '## Cycle N' sections found in plan.md.");
     }
 
     const REQUIRED_SUBS = ['Hypothesis', 'Prediction', 'Test', 'Conclusion'];
@@ -103,14 +103,14 @@ try {
   const stepM = csContent.match(/\*\*Step:\*\*\s*(.+)/);
   if (stepM) {
     const step = stepM[1].trim();
-    const validTop = new Set(['Understand', 'Decompose', 'Synthesize', 'Synthesis', 'Complete']);
-    const cyclePattern = /^Cycle \d+ - (Hypothesize|Predict|Test|Conclude)$/.test(step);
+    const validTop = new Set(['Observation', 'Decomposition', 'Synthesis', 'Complete']);
+    const cyclePattern = /^Cycle \d+ - (Hypothesis|Prediction|Test|Conclusion)$/.test(step);
     if (!validTop.has(step) && !cyclePattern) {
-      deny(`FORMAT: Invalid Current State Step '${step}'. Must be Understand, Decompose, Synthesize, Complete, or 'Cycle N - Hypothesize/Predict/Test/Conclude'.`);
+      deny(`FORMAT: Invalid Current State Step '${step}'. Must be Observation, Decomposition, Synthesis, Complete, or 'Cycle N - Hypothesis/Prediction/Test/Conclusion'.`);
     }
 
-    // E. Synthesize gate
-    if (['Synthesize', 'Synthesis', 'Complete'].includes(step)) {
+    // E. Synthesis gate
+    if (['Synthesis', 'Complete'].includes(step)) {
       const nonComplete = [];
       allStatuses.forEach((s, i) => {
         if (s !== 'complete') nonComplete.push(`Status #${i + 1}: ${s}`);

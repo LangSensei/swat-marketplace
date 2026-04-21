@@ -3,7 +3,7 @@
 export PYTHONIOENCODING=utf-8
 # scientific-method: Staleness check (preToolUse)
 # Deny when plan.md/progress.md/findings.md not updated in MAX_STALE seconds.
-# Skips during Synthesize/Complete (format-check handles that gate).
+# Skips during Synthesis/Complete (format-check handles that gate).
 # Always exits 0.
 
 INPUT=$(cat)
@@ -25,7 +25,7 @@ case "$TOOL_ARGS" in
         echo '{}'; exit 0 ;;
 esac
 
-# Skip during Synthesize/Complete — no staleness pressure needed
+# Skip during Synthesis/Complete — no staleness pressure needed
 if [ -f "plan.md" ]; then
     STEP=$($PYTHON -c "
 import re
@@ -36,7 +36,7 @@ m = re.search(r'\*\*Step:\*\*\s*(.+)', cs.group(1)) if cs else None
 print(m.group(1).strip() if m else '')
 " 2>/dev/null)
     case "$STEP" in
-        Synthesize|Synthesis|Complete)
+        Synthesis|Complete)
             echo '{}'; exit 0 ;;
     esac
 fi

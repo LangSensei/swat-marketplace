@@ -1,14 +1,14 @@
 #!/usr/bin/env pwsh
 # scientific-method: Context refresh (preToolUse) — PowerShell
 # Every REFRESH_INTERVAL seconds, deny once to remind re-reading AGENTS.md + .squad/
-# Skips during Synthesize/Complete.
+# Skips during Synthesis/Complete.
 
 $ErrorActionPreference = "SilentlyContinue"
 
 $REFRESH_INTERVAL = if ($env:REFRESH_INTERVAL) { [int]$env:REFRESH_INTERVAL } else { 300 }
 $REFRESH_TS_FILE = ".context_refresh_ts"
 
-# Skip during Synthesize/Complete
+# Skip during Synthesis/Complete
 if (Test-Path "plan.md") {
     $content = [System.IO.File]::ReadAllText("plan.md", [System.Text.Encoding]::UTF8)
     $csMatch = [regex]::Match($content, "(?s)## Current State(.*?)(?=\r?\n## |\z)")
@@ -16,7 +16,7 @@ if (Test-Path "plan.md") {
     $stepM = [regex]::Match($csContent, "\*\*Step:\*\*\s*(.+)")
     if ($stepM.Success) {
         $step = $stepM.Groups[1].Value.Trim()
-        if ($step -in @("Synthesize", "Synthesis", "Complete")) {
+        if ($step -in @("Synthesis", "Complete")) {
             Write-Output '{}'
             exit 0
         }

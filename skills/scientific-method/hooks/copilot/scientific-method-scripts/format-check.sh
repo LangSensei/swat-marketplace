@@ -48,7 +48,7 @@ except Exception:
 
 # --- A. Extract top-level sections and their statuses ---
 VALID_STATUSES = {"not_started", "in_progress", "complete"}
-REQUIRED_SECTIONS = ["Understand", "Decompose", "Synthesis"]
+REQUIRED_SECTIONS = ["Observation", "Decomposition", "Synthesis"]
 
 # Find all ## headings and their content
 sections = {}
@@ -67,19 +67,19 @@ if current_section:
     sections[current_section] = "\n".join(current_content)
 
 # Check required sections exist
-# Accept "Synthesis" or "Synthesize" for the synthesis section
+# Check for Synthesis section for the synthesis section
 synthesis_found = False
 for name in sections:
     if name.startswith("Synthes"):
         synthesis_found = True
         break
 
-for req in ["Understand", "Decompose"]:
+for req in ["Observation", "Decomposition"]:
     if req not in sections:
         deny(f"FORMAT: plan.md missing required section '## {req}'.")
 
 if not synthesis_found:
-    deny("FORMAT: plan.md missing required section '## Synthesis' (or '## Synthesize').")
+    deny("FORMAT: plan.md missing required section '## Synthesis' .")
 
 # --- B. Validate all Status values ---
 all_statuses = re.findall(r"\*\*Status:\*\*\s*(\S+)", content)
@@ -87,8 +87,8 @@ for s in all_statuses:
     if s not in VALID_STATUSES:
         deny(f"FORMAT: Invalid status '{s}' in plan.md. Must be one of: not_started, in_progress, complete.")
 
-# --- C. If Decompose is complete, check Cycles ---
-decompose_content = sections.get("Decompose", "")
+# --- C. If Decomposition is complete, check Cycles ---
+decompose_content = sections.get("Decomposition", "")
 decompose_status_m = re.search(r"\*\*Status:\*\*\s*(\S+)", decompose_content)
 decompose_status = decompose_status_m.group(1) if decompose_status_m else "not_started"
 
@@ -96,14 +96,14 @@ if decompose_status == "complete":
     # Find all Cycle sections
     cycle_sections = {k: v for k, v in sections.items() if re.match(r"Cycle \d+", k)}
     if not cycle_sections:
-        deny("FORMAT: Decompose is complete but no '## Cycle N' sections found in plan.md.")
+        deny("FORMAT: Decomposition is complete but no '## Cycle N' sections found in plan.md.")
 
     # Check each cycle has required subsections
     REQUIRED_CYCLE_SUBS = ["Hypothesis", "Prediction", "Test", "Conclusion"]
     for cycle_name, cycle_content in cycle_sections.items():
         # Find ### subsections within this cycle
         subs = re.findall(r"^### (\w+)", cycle_content, re.MULTILINE)
-        # Also accept "Hypothesize" for "Hypothesis", "Predict" for "Prediction", "Conclude" for "Conclusion"
+        # Normalize subsection names
         sub_normalized = set()
         for s in subs:
             if s.startswith("Hypothes"):
@@ -133,15 +133,15 @@ step_m = re.search(r"\*\*Step:\*\*\s*(.+)", cs_content)
 if step_m:
     step = step_m.group(1).strip()
     # Valid patterns
-    valid_top = {"Understand", "Decompose", "Synthesize", "Synthesis", "Complete"}
-    cycle_pattern = re.match(r"Cycle (\d+) - (Hypothesize|Predict|Test|Conclude)", step)
+    valid_top = {"Observation", "Decomposition", "Synthesis", "Complete"}
+    cycle_pattern = re.match(r"Cycle (\d+) - (Hypothesis|Prediction|Test|Conclusion)", step)
     if step not in valid_top and not cycle_pattern:
-        deny(f"FORMAT: Invalid Current State Step '{step}'. Must be Understand, Decompose, Synthesize, Complete, or 'Cycle N - Hypothesize/Predict/Test/Conclude'.")
+        deny(f"FORMAT: Invalid Current State Step '{step}'. Must be Observation, Decomposition, Synthesis, Complete, or 'Cycle N - Hypothesis/Prediction/Test/Conclusion'.")
 
-# --- E. Synthesize gate ---
+# --- E. Synthesis gate ---
 if step_m:
     step = step_m.group(1).strip()
-    if step in ("Synthesize", "Synthesis", "Complete"):
+    if step in ("Synthesis", "Complete"):
         non_complete = []
         for i, s in enumerate(all_statuses):
             if s != "complete":

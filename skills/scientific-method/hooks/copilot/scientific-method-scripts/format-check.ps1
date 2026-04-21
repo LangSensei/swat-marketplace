@@ -37,9 +37,9 @@ function Deny($msg) {
 }
 
 # A. Check required sections
-if ($content -notmatch "(?m)^## Understand") { Deny "FORMAT: plan.md missing required section '## Understand'." }
-if ($content -notmatch "(?m)^## Decompose") { Deny "FORMAT: plan.md missing required section '## Decompose'." }
-if ($content -notmatch "(?m)^## Synthes") { Deny "FORMAT: plan.md missing required section '## Synthesis' (or '## Synthesize')." }
+if ($content -notmatch "(?m)^## Observation") { Deny "FORMAT: plan.md missing required section '## Observation'." }
+if ($content -notmatch "(?m)^## Decomposition") { Deny "FORMAT: plan.md missing required section '## Decomposition'." }
+if ($content -notmatch "(?m)^## Synthes") { Deny "FORMAT: plan.md missing required section '## Synthesis'." }
 
 # B. Validate all Status values
 $allStatuses = [regex]::Matches($content, "\*\*Status:\*\*\s*(\S+)") | ForEach-Object { $_.Groups[1].Value }
@@ -49,8 +49,8 @@ foreach ($s in $allStatuses) {
     }
 }
 
-# C. If Decompose complete, check Cycles
-$decomposeMatch = [regex]::Match($content, "(?s)## Decompose\s*\n(.*?)(?=\n## |\z)")
+# C. If Decomposition complete, check Cycles
+$decomposeMatch = [regex]::Match($content, "(?s)## Decomposition\s*\n(.*?)(?=\n## |\z)")
 if ($decomposeMatch.Success) {
     $decomposeContent = $decomposeMatch.Groups[1].Value
     $dsMatch = [regex]::Match($decomposeContent, "\*\*Status:\*\*\s*(\S+)")
@@ -59,7 +59,7 @@ if ($decomposeMatch.Success) {
     if ($decomposeStatus -eq "complete") {
         $cycleMatches = [regex]::Matches($content, "(?m)^## (Cycle \d+)")
         if ($cycleMatches.Count -eq 0) {
-            Deny "FORMAT: Decompose is complete but no '## Cycle N' sections found in plan.md."
+            Deny "FORMAT: Decomposition is complete but no '## Cycle N' sections found in plan.md."
         }
     }
 }
@@ -71,14 +71,14 @@ $csContent = if ($csMatch.Success) { $csMatch.Groups[1].Value } else { "" }
 $stepMatch = [regex]::Match($csContent, "\*\*Step:\*\*\s*(.+)")
 if ($stepMatch.Success) {
     $step = $stepMatch.Groups[1].Value.Trim()
-    $validTop = @("Understand", "Decompose", "Synthesize", "Synthesis", "Complete")
-    $cyclePattern = $step -match "^Cycle \d+ - (Hypothesize|Predict|Test|Conclude)$"
+    $validTop = @("Observation", "Decomposition", "Synthesis", "Complete")
+    $cyclePattern = $step -match "^Cycle \d+ - (Hypothesis|Prediction|Test|Conclusion)$"
     if ($step -notin $validTop -and -not $cyclePattern) {
-        Deny "FORMAT: Invalid Current State Step '$step'. Must be Understand, Decompose, Synthesize, Complete, or 'Cycle N - Hypothesize/Predict/Test/Conclude'."
+        Deny "FORMAT: Invalid Current State Step '$step'. Must be Observation, Decomposition, Synthesis, Complete, or 'Cycle N - Hypothesis/Prediction/Test/Conclusion'."
     }
 
-    # E. Synthesize gate
-    if ($step -in @("Synthesize", "Synthesis", "Complete")) {
+    # E. Synthesis gate
+    if ($step -in @("Synthesis", "Complete")) {
         $nonComplete = @()
         for ($i = 0; $i -lt $allStatuses.Count; $i++) {
             if ($allStatuses[$i] -ne "complete") {

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.9 (2026-04-21)
+- Rename all phases to nouns for consistency: Understand→Observation, Decompose→Decomposition, Hypothesize→Hypothesis, Predict→Prediction, Conclude→Conclusion, Synthesize→Synthesis
+- Step values and section headings are now identical — zero normalization needed in hooks
+- Remove legacy verb aliases from hook validation (no more Synthesize/Hypothesize/etc fallbacks)
+
 ## 1.0.8 (2026-04-21)
 - Hooks: add `format-check` script — validates plan.md structure (required sections, status values, cycle completeness, Current State format, Synthesize gate)
 - Hooks: simplify `staleness-check` — remove Synthesize gate logic (moved to format-check), skip during Synthesize/Complete

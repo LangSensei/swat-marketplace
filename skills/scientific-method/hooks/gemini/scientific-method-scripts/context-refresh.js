@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // scientific-method: Context refresh (BeforeTool) — Gemini CLI
 // Every REFRESH_INTERVAL seconds, deny once to remind re-reading AGENTS.md + .squad/
-// Skips during Synthesize/Complete.
+// Skips during Synthesis/Complete.
 
 const fs = require('fs');
 
@@ -9,7 +9,7 @@ const REFRESH_INTERVAL = parseInt(process.env.REFRESH_INTERVAL || '300', 10);
 const REFRESH_TS_FILE = '.context_refresh_ts';
 
 try {
-  // Skip during Synthesize/Complete
+  // Skip during Synthesis/Complete
   if (fs.existsSync('plan.md')) {
     const content = fs.readFileSync('plan.md', 'utf8');
     const csMatch = content.match(/## Current State([\s\S]*?)(?=\n## |\n*$)/);
@@ -17,7 +17,7 @@ try {
     const stepM = csContent.match(/\*\*Step:\*\*\s*(.+)/);
     if (stepM) {
       const step = stepM[1].trim();
-      if (['Synthesize', 'Synthesis', 'Complete'].includes(step)) {
+      if (['Synthesis', 'Complete'].includes(step)) {
         console.log(JSON.stringify({ decision: 'ALLOW' }));
         process.exit(0);
       }

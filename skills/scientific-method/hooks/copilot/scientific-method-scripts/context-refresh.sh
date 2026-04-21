@@ -3,7 +3,7 @@
 export PYTHONIOENCODING=utf-8
 # scientific-method: Context refresh (preToolUse)
 # Every REFRESH_INTERVAL seconds, deny once to remind re-reading AGENTS.md + .squad/
-# Skips during Synthesize/Complete.
+# Skips during Synthesis/Complete.
 # Always exits 0.
 
 INPUT=$(cat)
@@ -15,7 +15,7 @@ PYTHON=$(command -v python3 || command -v python)
 
 NOW=$(date +%s)
 
-# Skip during Synthesize/Complete
+# Skip during Synthesis/Complete
 if [ -f "plan.md" ]; then
     STEP=$($PYTHON -c "
 import re
@@ -26,7 +26,7 @@ m = re.search(r'\*\*Step:\*\*\s*(.+)', cs.group(1)) if cs else None
 print(m.group(1).strip() if m else '')
 " 2>/dev/null)
     case "$STEP" in
-        Synthesize|Synthesis|Complete)
+        Synthesis|Complete)
             echo '{}'; exit 0 ;;
     esac
 fi
