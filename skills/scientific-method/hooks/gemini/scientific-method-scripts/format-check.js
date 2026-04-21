@@ -5,7 +5,7 @@
 const fs = require('fs');
 
 function deny(msg) {
-  console.log(JSON.stringify({ decision: 'BLOCK', reason: msg }));
+  process.stdout.write(JSON.stringify({ decision: 'deny', reason: msg }));
   process.exit(0);
 }
 
@@ -17,13 +17,13 @@ try {
 
   // Skip when tool targets state files
   if (/plan\.md|progress\.md|findings\.md/.test(toolArgs)) {
-    console.log(JSON.stringify({ decision: 'ALLOW' }));
+    process.stdout.write('{}');
     process.exit(0);
   }
 
   // If plan.md doesn't exist, skip
   if (!fs.existsSync('plan.md')) {
-    console.log(JSON.stringify({ decision: 'ALLOW' }));
+    process.stdout.write('{}');
     process.exit(0);
   }
 
@@ -121,7 +121,7 @@ try {
     }
   }
 
-  console.log(JSON.stringify({ decision: 'ALLOW' }));
+  process.stdout.write('{}');
 } catch (e) {
-  console.log(JSON.stringify({ decision: 'ALLOW' }));
+  process.stdout.write('{}');
 }

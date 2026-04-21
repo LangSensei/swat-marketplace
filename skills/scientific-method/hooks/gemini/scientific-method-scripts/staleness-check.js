@@ -13,7 +13,7 @@ try {
 
   // Skip when tool targets state files
   if (/plan\.md|progress\.md|findings\.md/.test(toolArgs)) {
-    console.log(JSON.stringify({ decision: 'ALLOW' }));
+    process.stdout.write('{}');
     process.exit(0);
   }
 
@@ -26,7 +26,7 @@ try {
     if (stepM) {
       const step = stepM[1].trim();
       if (['Synthesis', 'Complete'].includes(step)) {
-        console.log(JSON.stringify({ decision: 'ALLOW' }));
+        process.stdout.write('{}');
         process.exit(0);
       }
     }
@@ -43,11 +43,11 @@ try {
 
   if (staleFiles.length > 0) {
     const msg = `STALENESS: Not updated in over ${MAX_STALE}s: ${staleFiles.join(' ')}. Re-read SKILL.md, then check plan.md, progress.md, and findings.md for sections that need updating.`;
-    console.log(JSON.stringify({ decision: 'BLOCK', reason: msg }));
+    process.stdout.write(JSON.stringify({ decision: 'deny', reason: msg }));
     process.exit(0);
   }
 
-  console.log(JSON.stringify({ decision: 'ALLOW' }));
+  process.stdout.write('{}');
 } catch (e) {
-  console.log(JSON.stringify({ decision: 'ALLOW' }));
+  process.stdout.write('{}');
 }

@@ -18,7 +18,7 @@ try {
     if (stepM) {
       const step = stepM[1].trim();
       if (['Synthesis', 'Complete'].includes(step)) {
-        console.log(JSON.stringify({ decision: 'ALLOW' }));
+        process.stdout.write('{}');
         process.exit(0);
       }
     }
@@ -29,7 +29,7 @@ try {
   // First run: initialize timestamp
   if (!fs.existsSync(REFRESH_TS_FILE)) {
     fs.writeFileSync(REFRESH_TS_FILE, String(now));
-    console.log(JSON.stringify({ decision: 'ALLOW' }));
+    process.stdout.write('{}');
     process.exit(0);
   }
 
@@ -39,11 +39,11 @@ try {
   if (elapsed > REFRESH_INTERVAL) {
     fs.writeFileSync(REFRESH_TS_FILE, String(now));
     const msg = `CONTEXT REFRESH: ${elapsed}s since last refresh. Re-read AGENTS.md and all files under .squad/ to prevent protocol drift.`;
-    console.log(JSON.stringify({ decision: 'BLOCK', reason: msg }));
+    process.stdout.write(JSON.stringify({ decision: 'deny', reason: msg }));
     process.exit(0);
   }
 
-  console.log(JSON.stringify({ decision: 'ALLOW' }));
+  process.stdout.write('{}');
 } catch (e) {
-  console.log(JSON.stringify({ decision: 'ALLOW' }));
+  process.stdout.write('{}');
 }
