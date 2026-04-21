@@ -28,10 +28,12 @@ esac
 # Skip during Synthesize/Complete — no staleness pressure needed
 if [ -f "plan.md" ]; then
     STEP=$($PYTHON -c "
-import re, sys
+import re
 with open('plan.md', 'r') as f:
-    m = re.search(r'\*\*Step:\*\*\s*(.+)', f.read())
-    print(m.group(1).strip() if m else '')
+    content = f.read()
+cs = re.search(r'(?s)## Current State(.*?)(?=\n## |\Z)', content)
+m = re.search(r'\*\*Step:\*\*\s*(.+)', cs.group(1)) if cs else None
+print(m.group(1).strip() if m else '')
 " 2>/dev/null)
     case "$STEP" in
         Synthesize|Synthesis|Complete)

@@ -127,7 +127,9 @@ if decompose_status == "complete":
             deny(f"FORMAT: {cycle_name} has subsections without **Status:** fields.")
 
 # --- D. Current State validation ---
-step_m = re.search(r"\*\*Step:\*\*\s*(.+)", content)
+cs_match = re.search(r"(?s)## Current State(.*?)(?=\n## |\Z)", content)
+cs_content = cs_match.group(1) if cs_match else ""
+step_m = re.search(r"\*\*Step:\*\*\s*(.+)", cs_content)
 if step_m:
     step = step_m.group(1).strip()
     # Valid patterns

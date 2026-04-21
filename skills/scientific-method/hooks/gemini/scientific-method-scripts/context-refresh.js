@@ -12,7 +12,9 @@ try {
   // Skip during Synthesize/Complete
   if (fs.existsSync('plan.md')) {
     const content = fs.readFileSync('plan.md', 'utf8');
-    const stepM = content.match(/\*\*Step:\*\*\s*(.+)/);
+    const csMatch = content.match(/## Current State([\s\S]*?)(?=\n## |\n*$)/);
+    const csContent = csMatch ? csMatch[1] : '';
+    const stepM = csContent.match(/\*\*Step:\*\*\s*(.+)/);
     if (stepM) {
       const step = stepM[1].trim();
       if (['Synthesize', 'Synthesis', 'Complete'].includes(step)) {

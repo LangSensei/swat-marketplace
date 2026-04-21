@@ -97,7 +97,10 @@ try {
   }
 
   // D. Current State validation
-  const stepM = content.match(/\*\*Step:\*\*\s*(.+)/);
+  // D. Current State validation — extract Step from ## Current State section only
+  const csMatch = content.match(/## Current State([\s\S]*?)(?=\n## |\n*$)/);
+  const csContent = csMatch ? csMatch[1] : '';
+  const stepM = csContent.match(/\*\*Step:\*\*\s*(.+)/);
   if (stepM) {
     const step = stepM[1].trim();
     const validTop = new Set(['Understand', 'Decompose', 'Synthesize', 'Synthesis', 'Complete']);

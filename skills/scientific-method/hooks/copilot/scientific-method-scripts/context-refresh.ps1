@@ -11,7 +11,9 @@ $REFRESH_TS_FILE = ".context_refresh_ts"
 # Skip during Synthesize/Complete
 if (Test-Path "plan.md") {
     $content = [System.IO.File]::ReadAllText("plan.md", [System.Text.Encoding]::UTF8)
-    $stepM = [regex]::Match($content, "\*\*Step:\*\*\s*(.+)")
+    $csMatch = [regex]::Match($content, "(?s)## Current State(.*?)(?=\r?\n## |\z)")
+    $csContent = if ($csMatch.Success) { $csMatch.Groups[1].Value } else { "" }
+    $stepM = [regex]::Match($csContent, "\*\*Step:\*\*\s*(.+)")
     if ($stepM.Success) {
         $step = $stepM.Groups[1].Value.Trim()
         if ($step -in @("Synthesize", "Synthesis", "Complete")) {

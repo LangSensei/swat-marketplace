@@ -65,7 +65,10 @@ if ($decomposeMatch.Success) {
 }
 
 # D. Current State validation
-$stepMatch = [regex]::Match($content, "\*\*Step:\*\*\s*(.+)")
+# D. Current State validation — extract Step from ## Current State section only
+$csMatch = [regex]::Match($content, "(?s)## Current State(.*?)(?=\r?\n## |\z)")
+$csContent = if ($csMatch.Success) { $csMatch.Groups[1].Value } else { "" }
+$stepMatch = [regex]::Match($csContent, "\*\*Step:\*\*\s*(.+)")
 if ($stepMatch.Success) {
     $step = $stepMatch.Groups[1].Value.Trim()
     $validTop = @("Understand", "Decompose", "Synthesize", "Synthesis", "Complete")
