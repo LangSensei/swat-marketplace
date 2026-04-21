@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// scientific-method: Context refresh (preToolUse) — Gemini runtime
+// scientific-method: Context refresh (BeforeTool) — Gemini CLI
 // Every REFRESH_INTERVAL seconds, deny once to remind re-reading AGENTS.md + .squad/
 // Skips during Synthesize/Complete.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// scientific-method: Staleness check (preToolUse) — Gemini runtime
+// scientific-method: Staleness check (BeforeTool) — Gemini CLI
 // Deny when plan.md/progress.md/findings.md not updated in MAX_STALE seconds.
 // Skips during Synthesize/Complete.
 

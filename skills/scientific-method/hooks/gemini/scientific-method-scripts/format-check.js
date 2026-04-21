@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// scientific-method: Format check (preToolUse) — Gemini runtime
+// scientific-method: Format check (BeforeTool) — Gemini CLI
 // Validates plan.md structure: required sections, status values, cycle completeness, current state.
 
 const fs = require('fs');
