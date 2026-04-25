@@ -3,7 +3,7 @@
 ## 1.2.0 (2026-04-25)
 
 ### Added
-- Phase 8: Semantic Code Review — six advisory-only checks for code-level semantic issues:
+- Phase 6: Semantic Code Review — six advisory-only checks for code-level semantic issues:
   - Cross-platform hook consistency (logical equivalence across copilot/gemini runtimes)
   - CHANGELOG text vs code alignment (quoted identifiers and renamed sections)
   - Template comment consistency (HTML comments vs current section headings)
