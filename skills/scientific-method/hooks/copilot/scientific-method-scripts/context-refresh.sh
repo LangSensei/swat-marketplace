@@ -6,7 +6,7 @@ export PYTHONIOENCODING=utf-8
 # Skips during Synthesis/Complete.
 # Always exits 0.
 
-INPUT=$(cat)
+cat > /dev/null  # Consume stdin (required by hook protocol)
 
 REFRESH_INTERVAL="${REFRESH_INTERVAL:-300}"
 REFRESH_TS_FILE=".context_refresh_ts"

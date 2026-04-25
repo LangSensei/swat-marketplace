@@ -29,7 +29,7 @@
 <!--
   WHAT: Questions you need to answer to complete the task.
   WHY: These guide your decomposition and hypothesis formation.
-  WHEN: Fill during Understand. Update as new questions emerge.
+  WHEN: Fill during Observation. Update as new questions emerge.
   EXAMPLE:
     1. What triggers the 500 error? (Answered: concurrent writes to same row)
     2. Is it a database lock issue or application logic? (Pending)

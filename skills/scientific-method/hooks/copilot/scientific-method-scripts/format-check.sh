@@ -31,8 +31,7 @@ RESULT=$($PYTHON << 'PYEOF'
 import re, sys, json
 
 def deny(msg):
-    escaped = json.dumps(msg, ensure_ascii=False)
-    print(json.dumps({"permissionDecision": "deny", "permissionDecisionReason": json.loads(escaped)}))
+    print(json.dumps({"permissionDecision": "deny", "permissionDecisionReason": msg}))
     sys.exit(0)
 
 try:

@@ -30,7 +30,6 @@ $content = [System.IO.File]::ReadAllText("plan.md", [System.Text.Encoding]::UTF8
 $VALID_STATUSES = @("not_started", "in_progress", "complete")
 
 function Deny($msg) {
-    $escaped = $msg | ConvertTo-Json
     $result = @{ permissionDecision = "deny"; permissionDecisionReason = $msg } | ConvertTo-Json -Compress
     Write-Output $result
     exit 0
@@ -60,6 +59,36 @@ if ($decomposeMatch.Success) {
         $cycleMatches = [regex]::Matches($content, "(?m)^## (Cycle \d+)")
         if ($cycleMatches.Count -eq 0) {
             Deny "FORMAT: Decomposition is complete but no '## Cycle N' sections found in plan.md."
+        }
+
+        # Check each cycle has required subsections and status fields
+        $requiredSubs = @("Hypothesis", "Prediction", "Test", "Conclusion")
+        for ($ci = 0; $ci -lt $cycleMatches.Count; $ci++) {
+            $cycleName = $cycleMatches[$ci].Groups[1].Value
+            $cycleStart = $cycleMatches[$ci].Index
+            if ($ci -lt $cycleMatches.Count - 1) {
+                $cycleEnd = $cycleMatches[$ci + 1].Index
+            } else {
+                $nextH2 = [regex]::Match($content.Substring($cycleStart + $cycleMatches[$ci].Length), "(?m)^## ")
+                if ($nextH2.Success) {
+                    $cycleEnd = $cycleStart + $cycleMatches[$ci].Length + $nextH2.Index
+                } else {
+                    $cycleEnd = $content.Length
+                }
+            }
+            $cycleContent = $content.Substring($cycleStart, $cycleEnd - $cycleStart)
+
+            $subs = [regex]::Matches($cycleContent, "(?m)^### (\w+)") | ForEach-Object { $_.Groups[1].Value }
+            foreach ($req in $requiredSubs) {
+                if ($req -notin $subs) {
+                    Deny "FORMAT: $cycleName missing required subsection '### $req'."
+                }
+            }
+
+            $subStatuses = [regex]::Matches($cycleContent, "\*\*Status:\*\*\s*(\S+)")
+            if ($subStatuses.Count -lt $requiredSubs.Count) {
+                Deny "FORMAT: $cycleName has subsections without **Status:** fields."
+            }
         }
     }
 }
