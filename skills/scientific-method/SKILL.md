@@ -1,7 +1,7 @@
 ---
 name: scientific-method
-version: "1.0.7"
-description: Hypothesis-driven research — Understand → Decompose → Cycle (Hypothesize → Predict → Test → Conclude) → Synthesize, with structured working files. (Mandatory execution methodology, follow SKILL.md to setup before any other tool calls)
+version: "1.0.8"
+description: Hypothesis-driven research — Observation → Decomposition → Cycle (Hypothesis → Prediction → Test → Conclusion) → Synthesis, with structured working files. (Mandatory execution methodology, follow SKILL.md to setup before any other tool calls)
 ---
 
 # Scientific Method
@@ -21,7 +21,7 @@ A cognitive framework for tasks that require reasoning, research, or exploration
 |------|------|--------|
 | `plan.md` | **How you think** | Goal, current state pointer, key questions, decomposition, hypotheses, conclusions, synthesis, decisions |
 | `findings.md` | **What you found** | Research findings, visual/browser findings, technical decisions, issues encountered, resources |
-| `progress.md` | **What you did** | Actions log per step, **status of each step** (single source of truth), test results, errors |
+| `progress.md` | **What you did** | Actions log per step, test results, errors |
 
 One piece of information lives in one place. Don't duplicate status, errors, or findings across files.
 
@@ -37,18 +37,18 @@ Before starting any complex task:
    ```
    > `<SKILL_DIR>` is the directory containing this SKILL.md. Resolve from your runtime context.
 2. **Fill in `plan.md` Goal** — One sentence describing what you're trying to achieve
-3. **Follow the framework below** — Start with Understand, then Decompose, then Cycles
+3. **Follow the framework below** — Start with Observation, then Decomposition, then Cycles
 
 ## The Framework
 
 ```
-Understand → Decompose → [Hypothesize → Predict → Test → Conclude] × N → Synthesize
+Observation → Decomposition → [Hypothesis → Prediction → Test → Conclusion] × N → Synthesis
                                     ↑_______←_______↓ (if hypothesis rejected)
 ```
 
 Each step is a distinct cognitive action. Do not skip steps. Do not combine steps.
 
-### 1. Understand
+### 1. Observation
 
 Before anything else, understand what you're dealing with.
 
@@ -57,26 +57,26 @@ Before anything else, understand what you're dealing with.
 - Record information gaps as **Key Questions** in `plan.md`
 - Identify constraints, assumptions, and success criteria
 
-**Output:** `plan.md` Goal + Key Questions + Understand section filled in. Update `progress.md` Understand Status → `in_progress`.
+**Output:** `plan.md` Goal + Key Questions + Observation section filled in. Update `plan.md` Observation Status → `in_progress`.
 
-### 2. Decompose
+### 2. Decomposition
 
 Break the problem into sub-problems. This is mandatory — even "simple" tasks benefit from explicit decomposition.
 
 - Each sub-problem = one **Cycle**
-- Each Cycle should be completable in one round of Hypothesize → Predict → Test → Conclude
+- Each Cycle should be completable in one round of Hypothesis → Prediction → Test → Conclusion
 - Order Cycles by dependency (what needs to be answered first?)
 - Don't decompose generically ("research → analyze → report") — decompose by **actual sub-questions**
 
-**Output:** `plan.md` Decompose table filled in with Cycles. Update `progress.md` Understand Status → `complete`, Decompose Status → `complete`.
+**Output:** `plan.md` Decomposition table filled in with Cycles. Update `plan.md` Observation Status → `complete`, Decomposition Status → `complete`.
 
 > **Status transition rule:** When you start a step, mark it `in_progress`. When you finish it and move to the next, mark it `complete`. The step you're entering becomes `in_progress`.
 
 ### 3. Cycle (repeat for each sub-problem)
 
-When starting a Cycle, update `progress.md` Cycle N Status → `in_progress` and `plan.md` Current State.
+When starting a Cycle, update `plan.md` Cycle N Status → `in_progress` and `plan.md` Current State.
 
-#### Hypothesize
+#### Hypothesis
 Based on what you know so far, propose an answer or approach.
 
 - Be specific and falsifiable: "I think X because Y"
@@ -84,7 +84,7 @@ Based on what you know so far, propose an answer or approach.
 
 **Output:** `plan.md` → Cycle N → Hypothesis section.
 
-#### Predict
+#### Prediction
 If your hypothesis is correct, what would you expect to see?
 
 - Define concrete, observable predictions
@@ -102,25 +102,25 @@ Execute the verification. This is where you actually do work.
 
 **Output:** `findings.md` updated with discoveries. `progress.md` Test Results table updated.
 
-#### Conclude
+#### Conclusion
 Was the hypothesis supported or rejected?
 
 - **Supported:** Record conclusion, move to next Cycle
 - **Rejected:** Form a new hypothesis based on what you learned, repeat the Cycle
 - **Partially supported:** Note what held and what didn't, refine and repeat
 - Record conclusion in `plan.md` → Cycle N → Conclusion
-- Update `progress.md` Cycle N Status → `complete` (or stay `in_progress` if looping back)
+- Update `plan.md` Cycle N Status → `complete` (or stay `in_progress` if looping back)
 
-### 4. Synthesize
+### 4. Synthesis
 
 After all Cycles are complete:
 
 - Review all Cycle conclusions together
 - Identify patterns, contradictions, or gaps
 - Produce the final answer or deliverable
-- Check: did you answer all Key Questions from Understand?
+- Check: did you answer all Key Questions from Observation?
 
-**Output:** `plan.md` Synthesis section + final deliverable. Update `progress.md` Synthesize Status → `complete`.
+**Output:** `plan.md` Synthesis section + final deliverable. Update `plan.md` Synthesis Status → `complete`.
 
 ## Critical Rules
 
@@ -136,7 +136,7 @@ Multimodal content (images, browser results, screenshots) does not persist in co
 Before major decisions, re-read `plan.md`. This refreshes goals in your attention window. Context decays over long sessions — your files don't.
 
 ### Update Progress at Every Transition
-When moving between steps (Understand → Decompose, Cycle N Hypothesize → Test, etc.), update `progress.md` — both the actions log and the **Status** field. Status in `progress.md` is the single source of truth for how far you've gotten. Also update `plan.md` Current State to reflect where you are.
+When moving between steps, update `progress.md` actions log and `plan.md` **Status** field. Status in `plan.md` is the single source of truth for how far you've gotten. Also update `plan.md` Current State `**Step:**` to reflect where you are. Use the format: `Observation`, `Decomposition`, `Synthesis`, `Complete`, or `Cycle N - Hypothesis`, `Cycle N - Prediction`, `Cycle N - Test`, `Cycle N - Conclusion`.
 
 ### Log ALL Errors
 Every error goes in `progress.md` Errors table. Track what you tried. Never repeat a failed action — mutate the approach.
@@ -159,15 +159,15 @@ AFTER 3 FAILURES: Escalate
 ```
 
 ### Don't Skip Steps
-Each step (Understand, Decompose, Hypothesize, Predict, Test, Conclude, Synthesize) is a distinct cognitive action. Jumping from Understand straight to Test means you're guessing, not reasoning. The discipline of forming explicit hypotheses and predictions is what makes this framework work.
+Each step (Observation, Decomposition, Hypothesis, Prediction, Test, Conclusion, Synthesis) is a distinct cognitive action. Jumping from Observation straight to Test means you're guessing, not reasoning. The discipline of forming explicit hypotheses and predictions is what makes this framework work.
 
 ### Don't Skip Cycles
-Each Cycle in your Decompose table represents a distinct sub-problem. Execute them in order, one by one. Even if you gathered data for Cycle N+1 during Cycle N, you must still formally go through Hypothesize → Predict → Test → Conclude for every Cycle. Merging or skipping Cycles means your reasoning chain has gaps. A quality gate will deny tool use during Synthesize if prior steps/cycles are not marked complete.
+Each Cycle in your Decomposition table represents a distinct sub-problem. Execute them in order, one by one. Even if you gathered data for Cycle N+1 during Cycle N, you must still formally go through Hypothesis → Prediction → Test → Conclusion for every Cycle. Merging or skipping Cycles means your reasoning chain has gaps. A quality gate will deny tool use during Synthesis if prior steps/cycles are not marked complete.
 
 ### When to Loop Back
 - Hypothesis rejected → new hypothesis (stay in same Cycle)
 - Discovered a sub-problem you didn't anticipate → add a new Cycle to plan.md
-- Realize your decomposition was wrong → go back to Decompose and restructure
+- Realize your decomposition was wrong → go back to Decomposition and restructure
 
 ## Read vs Write Decision Matrix
 
@@ -186,8 +186,8 @@ If you can answer these from your files, your state management is solid:
 
 | Question | Source |
 |----------|--------|
-| Where am I? | Current State in `plan.md` + Status in `progress.md` |
-| Where am I going? | Remaining steps — check Status fields in `progress.md` |
+| Where am I? | Current State in `plan.md` + Status in `plan.md` |
+| Where am I going? | Remaining steps — check Status fields in `plan.md` |
 | What's the goal? | Goal statement in `plan.md` |
 | What have I learned? | `findings.md` |
 | What have I done? | `progress.md` |
@@ -200,7 +200,7 @@ If you can answer these from your files, your state management is solid:
 | Decompose generically ("research, analyze, report") | Decompose by actual sub-questions |
 | Keep findings in your head | Write to `findings.md` immediately |
 | Repeat a failed approach | Log error, mutate approach |
-| Skip Predict ("I'll just see what happens") | Define what you expect to see |
+| Skip prediction ("I'll just see what happens") | Define what you expect to see |
 | Forget to update progress | Update at every step transition |
 | Duplicate info across files | One piece of information, one file |
 | Start without a plan | Create `plan.md` FIRST |

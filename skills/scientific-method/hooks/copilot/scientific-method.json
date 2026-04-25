@@ -4,6 +4,12 @@
     "preToolUse": [
       {
         "type": "command",
+        "bash": ".github/hooks/scientific-method-scripts/format-check.sh",
+        "powershell": ".github/hooks/scientific-method-scripts/format-check.ps1",
+        "timeout": 5
+      },
+      {
+        "type": "command",
         "bash": ".github/hooks/scientific-method-scripts/staleness-check.sh",
         "powershell": ".github/hooks/scientific-method-scripts/staleness-check.ps1",
         "timeout": 5

@@ -18,17 +18,18 @@
   WHAT: Quick snapshot of where you are right now.
   WHY: When re-reading plan before a decision, this tells you exactly where you are.
   WHEN: Update EVERY time you move to a new step or Cycle.
-  Step OPTIONS: Understand | Decompose | Hypothesize | Predict | Test | Conclude | Synthesize | Complete
-  Cycle OPTIONS: 0 (when not in a cycle) | 1 | 2 | 3 | ...
+  Step OPTIONS:
+    Observation | Decomposition | Synthesis | Complete
+    Cycle 1 - Hypothesis | Cycle 1 - Prediction | Cycle 1 - Test | Cycle 1 - Conclusion
+    (increment Cycle number as needed)
 -->
-- **Step:** Understand
-- **Cycle:** 0
+- **Step:** Observation
 
 ## Key Questions
 <!--
   WHAT: Questions you need to answer to complete the task.
   WHY: These guide your decomposition and hypothesis formation.
-  WHEN: Fill during Understand. Update as new questions emerge.
+  WHEN: Fill during Observation. Update as new questions emerge.
   EXAMPLE:
     1. What triggers the 500 error? (Answered: concurrent writes to same row)
     2. Is it a database lock issue or application logic? (Pending)
@@ -36,11 +37,11 @@
 1. [Question to answer]
 2. [Question to answer]
 
-## Understand
+## Observation
 <!--
   WHAT: Your initial analysis of the problem — what you know, what you don't, constraints.
   WHY: Forces you to think before acting. Prevents jumping to conclusions.
-  WHEN: Fill this FIRST, before Decompose.
+  WHEN: Fill this FIRST, before Decomposition.
   EXAMPLE:
     - The API works fine under single requests
     - Errors only appear with 10+ concurrent users
@@ -53,11 +54,11 @@
 - Constraints:
 - Assumptions:
 
-## Decompose
+## Decomposition
 <!--
   WHAT: Break the problem into sub-problems. Each becomes a Cycle.
   WHY: Complex problems are solved by solving their parts. Explicit decomposition prevents aimless exploration.
-  WHEN: After Understand. Update if you discover new sub-problems during Cycles.
+  WHEN: After Observation. Update if you discover new sub-problems during Cycles.
   EXAMPLE:
     | 1 | Reproduce the error locally |
     | 2 | Identify the failing query |
