@@ -26,7 +26,7 @@ Structural and semantic validation of squads and skills in the swat-marketplace 
 
 **Out of scope:**
 - Modifying any files (lint is read-only)
-- Validating runtime behavior or executing code
+- Validating runtime behavior, executing code, or testing functional correctness
 - Installing or testing squads/skills
 - Reviewing prose quality or documentation style
 
@@ -131,6 +131,8 @@ Beyond structural validation, check for content-level issues:
 #### Phase 8: Semantic Code Review
 
 Phase 8 is advisory only: findings from this phase are warnings and must not fail the lint run.
+
+> **Note:** This check relies on LLM semantic understanding — the operator reads both platform implementations and compares intent, not exact syntax.
 
 Beyond structural and content-level checks, review hook scripts, templates, and code text for semantic correctness:
 
