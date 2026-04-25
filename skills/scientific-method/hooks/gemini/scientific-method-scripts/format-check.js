@@ -101,14 +101,17 @@ try {
       deny(`FORMAT: Invalid Current State Step '${step}'. Must be Observation, Decomposition, Synthesis, Complete, or 'Cycle N - Hypothesis/Prediction/Test/Conclusion'.`);
     }
 
-    // E. Synthesis gate
+    // E. Synthesis gate — check only statuses BEFORE ## Synthesis to avoid deadlock
     if (['Synthesis', 'Complete'].includes(step)) {
+      const synthIdx = content.indexOf('## Synthesis');
+      const preSynthContent = synthIdx >= 0 ? content.substring(0, synthIdx) : content;
+      const preSynthStatuses = [...preSynthContent.matchAll(/\*\*Status:\*\*\s*(\S+)/g)].map(m => m[1]);
       const nonComplete = [];
-      allStatuses.forEach((s, i) => {
+      preSynthStatuses.forEach((s, i) => {
         if (s !== 'complete') nonComplete.push(`Status #${i + 1}: ${s}`);
       });
       if (nonComplete.length > 0) {
-        deny(`QUALITY GATE: Cannot proceed to ${step} — prior steps not complete: ${nonComplete.join('; ')}.`);
+        deny(`QUALITY GATE: Cannot proceed to ${step} \u2014 prior steps not complete: ${nonComplete.join('; ')}.`);
       }
     }
   }

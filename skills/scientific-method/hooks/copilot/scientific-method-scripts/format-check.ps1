@@ -105,16 +105,19 @@ if ($stepMatch.Success) {
         Deny "FORMAT: Invalid Current State Step '$step'. Must be Observation, Decomposition, Synthesis, Complete, or 'Cycle N - Hypothesis/Prediction/Test/Conclusion'."
     }
 
-    # E. Synthesis gate
+    # E. Synthesis gate — check only statuses BEFORE ## Synthesis to avoid deadlock
     if ($step -in @("Synthesis", "Complete")) {
+        $synthIdx = $content.IndexOf("## Synthesis")
+        $preSynthContent = if ($synthIdx -ge 0) { $content.Substring(0, $synthIdx) } else { $content }
+        $preSynthStatuses = [regex]::Matches($preSynthContent, "\*\*Status:\*\*\s*(\S+)") | ForEach-Object { $_.Groups[1].Value }
         $nonComplete = @()
-        for ($i = 0; $i -lt $allStatuses.Count; $i++) {
-            if ($allStatuses[$i] -ne "complete") {
-                $nonComplete += "Status #$($i+1): $($allStatuses[$i])"
+        for ($i = 0; $i -lt $preSynthStatuses.Count; $i++) {
+            if ($preSynthStatuses[$i] -ne "complete") {
+                $nonComplete += "Status #$($i+1): $($preSynthStatuses[$i])"
             }
         }
         if ($nonComplete.Count -gt 0) {
-            Deny "QUALITY GATE: Cannot proceed to $step \u2014 prior steps not complete: $($nonComplete -join '; ')."
+            Deny "QUALITY GATE: Cannot proceed to $step — prior steps not complete: $($nonComplete -join '; ')."
         }
     }
 }

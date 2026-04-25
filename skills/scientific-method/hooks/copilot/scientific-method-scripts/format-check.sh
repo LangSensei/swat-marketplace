@@ -120,16 +120,19 @@ if step_m:
     if step not in valid_top and not cycle_pattern:
         deny(f"FORMAT: Invalid Current State Step '{step}'. Must be Observation, Decomposition, Synthesis, Complete, or 'Cycle N - Hypothesis/Prediction/Test/Conclusion'.")
 
-# --- E. Synthesis gate ---
+# --- E. Synthesis gate — check only statuses BEFORE ## Synthesis to avoid deadlock ---
 if step_m:
     step = step_m.group(1).strip()
     if step in ("Synthesis", "Complete"):
+        synth_idx = content.find("## Synthesis")
+        pre_synth = content[:synth_idx] if synth_idx >= 0 else content
+        pre_synth_statuses = re.findall(r"\*\*Status:\*\*\s*(\S+)", pre_synth)
         non_complete = []
-        for i, s in enumerate(all_statuses):
+        for i, s in enumerate(pre_synth_statuses):
             if s != "complete":
                 non_complete.append(f"Status #{i+1}: {s}")
         if non_complete:
-            deny(f"QUALITY GATE: Cannot proceed to {step} — prior steps not complete: {'; '.join(non_complete)}.")
+            deny(f"QUALITY GATE: Cannot proceed to {step} \u2014 prior steps not complete: {'; '.join(non_complete)}.")
 
 print("{}")
 PYEOF
