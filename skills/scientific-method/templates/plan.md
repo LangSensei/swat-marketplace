@@ -41,7 +41,7 @@
 <!--
   WHAT: Your initial analysis of the problem — what you know, what you don't, constraints.
   WHY: Forces you to think before acting. Prevents jumping to conclusions.
-  WHEN: Fill this FIRST, before Decompose.
+  WHEN: Fill this FIRST, before Decomposition.
   EXAMPLE:
     - The API works fine under single requests
     - Errors only appear with 10+ concurrent users
@@ -58,7 +58,7 @@
 <!--
   WHAT: Break the problem into sub-problems. Each becomes a Cycle.
   WHY: Complex problems are solved by solving their parts. Explicit decomposition prevents aimless exploration.
-  WHEN: After Understand. Update if you discover new sub-problems during Cycles.
+  WHEN: After Observation. Update if you discover new sub-problems during Cycles.
   EXAMPLE:
     | 1 | Reproduce the error locally |
     | 2 | Identify the failing query |
