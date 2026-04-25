@@ -21,7 +21,7 @@ A cognitive framework for tasks that require reasoning, research, or exploration
 |------|------|--------|
 | `plan.md` | **How you think** | Goal, current state pointer, key questions, decomposition, hypotheses, conclusions, synthesis, decisions |
 | `findings.md` | **What you found** | Research findings, visual/browser findings, technical decisions, issues encountered, resources |
-| `progress.md` | **What you did** | Actions log per step, **status of each step** (single source of truth), test results, errors |
+| `progress.md` | **What you did** | Actions log per step, test results, errors |
 
 One piece of information lives in one place. Don't duplicate status, errors, or findings across files.
 
@@ -57,7 +57,7 @@ Before anything else, understand what you're dealing with.
 - Record information gaps as **Key Questions** in `plan.md`
 - Identify constraints, assumptions, and success criteria
 
-**Output:** `plan.md` Goal + Key Questions + Observation section filled in. Update `progress.md` Observation Status → `in_progress`.
+**Output:** `plan.md` Goal + Key Questions + Observation section filled in. Update `plan.md` Observation Status → `in_progress`.
 
 ### 2. Decomposition
 
@@ -68,13 +68,13 @@ Break the problem into sub-problems. This is mandatory — even "simple" tasks b
 - Order Cycles by dependency (what needs to be answered first?)
 - Don't decompose generically ("research → analyze → report") — decompose by **actual sub-questions**
 
-**Output:** `plan.md` Decomposition table filled in with Cycles. Update `progress.md` Observation Status → `complete`, Decomposition Status → `complete`.
+**Output:** `plan.md` Decomposition table filled in with Cycles. Update `plan.md` Observation Status → `complete`, Decomposition Status → `complete`.
 
 > **Status transition rule:** When you start a step, mark it `in_progress`. When you finish it and move to the next, mark it `complete`. The step you're entering becomes `in_progress`.
 
 ### 3. Cycle (repeat for each sub-problem)
 
-When starting a Cycle, update `progress.md` Cycle N Status → `in_progress` and `plan.md` Current State.
+When starting a Cycle, update `plan.md` Cycle N Status → `in_progress` and `plan.md` Current State.
 
 #### Hypothesis
 Based on what you know so far, propose an answer or approach.
@@ -109,7 +109,7 @@ Was the hypothesis supported or rejected?
 - **Rejected:** Form a new hypothesis based on what you learned, repeat the Cycle
 - **Partially supported:** Note what held and what didn't, refine and repeat
 - Record conclusion in `plan.md` → Cycle N → Conclusion
-- Update `progress.md` Cycle N Status → `complete` (or stay `in_progress` if looping back)
+- Update `plan.md` Cycle N Status → `complete` (or stay `in_progress` if looping back)
 
 ### 4. Synthesis
 
@@ -120,7 +120,7 @@ After all Cycles are complete:
 - Produce the final answer or deliverable
 - Check: did you answer all Key Questions from Observation?
 
-**Output:** `plan.md` Synthesis section + final deliverable. Update `progress.md` Synthesis Status → `complete`.
+**Output:** `plan.md` Synthesis section + final deliverable. Update `plan.md` Synthesis Status → `complete`.
 
 ## Critical Rules
 
@@ -136,7 +136,7 @@ Multimodal content (images, browser results, screenshots) does not persist in co
 Before major decisions, re-read `plan.md`. This refreshes goals in your attention window. Context decays over long sessions — your files don't.
 
 ### Update Progress at Every Transition
-When moving between steps, update `progress.md` — both the actions log and the **Status** field. Status in `progress.md` is the single source of truth for how far you've gotten. Also update `plan.md` Current State `**Step:**` to reflect where you are. Use the format: `Observation`, `Decomposition`, `Synthesis`, `Complete`, or `Cycle N - Hypothesis`, `Cycle N - Prediction`, `Cycle N - Test`, `Cycle N - Conclusion`.
+When moving between steps, update `progress.md` actions log and `plan.md` **Status** field. Status in `plan.md` is the single source of truth for how far you've gotten. Also update `plan.md` Current State `**Step:**` to reflect where you are. Use the format: `Observation`, `Decomposition`, `Synthesis`, `Complete`, or `Cycle N - Hypothesis`, `Cycle N - Prediction`, `Cycle N - Test`, `Cycle N - Conclusion`.
 
 ### Log ALL Errors
 Every error goes in `progress.md` Errors table. Track what you tried. Never repeat a failed action — mutate the approach.
@@ -186,8 +186,8 @@ If you can answer these from your files, your state management is solid:
 
 | Question | Source |
 |----------|--------|
-| Where am I? | Current State in `plan.md` + Status in `progress.md` |
-| Where am I going? | Remaining steps — check Status fields in `progress.md` |
+| Where am I? | Current State in `plan.md` + Status in `plan.md` |
+| Where am I going? | Remaining steps — check Status fields in `plan.md` |
 | What's the goal? | Goal statement in `plan.md` |
 | What have I learned? | `findings.md` |
 | What have I done? | `progress.md` |
