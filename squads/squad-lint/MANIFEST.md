@@ -128,9 +128,7 @@ Beyond structural validation, check for content-level issues:
 - Empty section bodies — a heading with no content before the next heading
 - Orphaned references to deleted or renamed squads/skills in prose (e.g., a Boundary bullet mentioning a squad name that does not exist in `squads/`)
 
-#### Phase 6: Semantic Code Review
-
-Phase 6 is advisory only: findings from this phase are warnings and must not fail the lint run.
+#### Phase 8: Semantic Code Review
 
 > **Note:** This check relies on LLM semantic understanding — the operator reads both platform implementations and compares intent, not exact syntax.
 
