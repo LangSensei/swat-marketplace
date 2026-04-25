@@ -197,7 +197,7 @@ If you can answer these from your files, your state management is solid:
 | Don't | Do Instead |
 |-------|------------|
 | Jump straight to testing | Form a hypothesis first |
-| Decompose generically ("research, analyze, report") | Decomposition by actual sub-questions |
+| Decompose generically ("research, analyze, report") | Decompose by actual sub-questions |
 | Keep findings in your head | Write to `findings.md` immediately |
 | Repeat a failed approach | Log error, mutate approach |
 | Skip prediction ("I'll just see what happens") | Define what you expect to see |

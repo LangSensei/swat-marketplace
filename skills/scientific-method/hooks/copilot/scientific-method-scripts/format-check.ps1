@@ -64,7 +64,6 @@ if ($decomposeMatch.Success) {
     }
 }
 
-# D. Current State validation
 # D. Current State validation — extract Step from ## Current State section only
 $csMatch = [regex]::Match($content, "(?s)## Current State(.*?)(?=\r?\n## |\z)")
 $csContent = if ($csMatch.Success) { $csMatch.Groups[1].Value } else { "" }

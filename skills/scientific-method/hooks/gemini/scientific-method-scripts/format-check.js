@@ -77,16 +77,8 @@ try {
     const REQUIRED_SUBS = ['Hypothesis', 'Prediction', 'Test', 'Conclusion'];
     for (const [cycleName, cycleContent] of cycleSections) {
       const subs = [...cycleContent.matchAll(/^### (\w+)/gm)].map(m => m[1]);
-      const normalized = new Set();
-      for (const s of subs) {
-        if (s.startsWith('Hypothes')) normalized.add('Hypothesis');
-        else if (s.startsWith('Predict')) normalized.add('Prediction');
-        else if (s === 'Test') normalized.add('Test');
-        else if (s.startsWith('Conclu')) normalized.add('Conclusion');
-        else normalized.add(s);
-      }
       for (const req of REQUIRED_SUBS) {
-        if (!normalized.has(req)) {
+        if (!subs.includes(req)) {
           deny(`FORMAT: ${cycleName} missing required subsection '### ${req}'.`);
         }
       }
@@ -97,7 +89,6 @@ try {
     }
   }
 
-  // D. Current State validation
   // D. Current State validation — extract Step from ## Current State section only
   const csMatch = content.match(/## Current State([\s\S]*?)(?=\n## |\n*$)/);
   const csContent = csMatch ? csMatch[1] : '';

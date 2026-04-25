@@ -8,8 +8,8 @@
 
 ## Observation
 <!--
-  WHAT: What you did during the Understand step.
-  WHEN: Update as you work through Understand.
+  WHAT: What you did during the Observation step.
+  WHEN: Update as you work through Observation.
 -->
 - Actions taken:
   -

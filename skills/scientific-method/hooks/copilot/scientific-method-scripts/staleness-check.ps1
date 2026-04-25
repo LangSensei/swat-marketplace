@@ -4,12 +4,12 @@
 # Skips during Synthesis/Complete.
 
 $ErrorActionPreference = "SilentlyContinue"
-$input_data = $input | Out-String
+$hookInput = $Input | Out-String
 
 $MAX_STALE = if ($env:MAX_STALE) { [int]$env:MAX_STALE } else { 120 }
 
 try {
-    $parsed = $input_data | ConvertFrom-Json
+    $parsed = $hookInput | ConvertFrom-Json
     $toolArgs = $parsed.toolArgs
 } catch {
     $toolArgs = ""

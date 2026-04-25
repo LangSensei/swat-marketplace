@@ -75,7 +75,7 @@ for req in ["Observation", "Decomposition"]:
         deny(f"FORMAT: plan.md missing required section '## {req}'.")
 
 if not synthesis_found:
-    deny("FORMAT: plan.md missing required section '## Synthesis' .")
+    deny("FORMAT: plan.md missing required section '## Synthesis'.")
 
 # --- B. Validate all Status values ---
 all_statuses = re.findall(r"\*\*Status:\*\*\s*(\S+)", content)
