@@ -129,7 +129,7 @@ if step_m:
             if s != "complete":
                 non_complete.append(f"Status #{i+1}: {s}")
         if non_complete:
-            deny(f"QUALITY GATE: Cannot proceed to {step} — prior steps not complete: {'; '.join(non_complete)}. Complete all prior Cycles before synthesizing.")
+            deny(f"QUALITY GATE: Cannot proceed to {step} — prior steps not complete: {'; '.join(non_complete)}.")
 
 print("{}")
 PYEOF

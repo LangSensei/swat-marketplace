@@ -114,7 +114,7 @@ if ($stepMatch.Success) {
             }
         }
         if ($nonComplete.Count -gt 0) {
-            Deny "QUALITY GATE: Cannot proceed to $step - prior steps not complete: $($nonComplete -join '; ')."
+            Deny "QUALITY GATE: Cannot proceed to $step \u2014 prior steps not complete: $($nonComplete -join '; ')."
         }
     }
 }
