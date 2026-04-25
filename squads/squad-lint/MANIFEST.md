@@ -1,7 +1,7 @@
 ---
 name: squad-lint
-version: "1.1.1"
-description: Validates structural compliance of squads and skills in swat-marketplace
+version: "1.2.0"
+description: Validates structural and semantic compliance of squads and skills in swat-marketplace
 dependencies:
   skills: [sop, git-pr]
   mcps: [swat]
@@ -11,7 +11,7 @@ dependencies:
 
 ## Domain
 
-Structural validation of squads and skills in the swat-marketplace repository. Checks frontmatter, dependencies, cross-file consistency, and hook configuration to ensure all marketplace content meets quality standards.
+Structural and semantic validation of squads and skills in the swat-marketplace repository. Checks frontmatter, dependencies, cross-file consistency, hook configuration, and code-level semantic patterns to ensure all marketplace content meets quality standards.
 
 ## Boundary
 
@@ -22,10 +22,11 @@ Structural validation of squads and skills in the swat-marketplace repository. C
 - Checking CHANGELOG.md existence and version consistency
 - Validating SETUP.md structure (if present)
 - Cross-file consistency checks (version match, orphan file detection)
+- Static semantic review of hook scripts, templates, and code text patterns
 
 **Out of scope:**
 - Modifying any files (lint is read-only)
-- Validating code logic or runtime behavior
+- Validating runtime behavior, executing code, or testing functional correctness
 - Installing or testing squads/skills
 - Reviewing prose quality or documentation style
 
@@ -126,6 +127,27 @@ Beyond structural validation, check for content-level issues:
 - Conflicting Debrief patterns — both a "Debrief hint" and a "Debrief Rules" section present in the same MANIFEST
 - Empty section bodies — a heading with no content before the next heading
 - Orphaned references to deleted or renamed squads/skills in prose (e.g., a Boundary bullet mentioning a squad name that does not exist in `squads/`)
+
+#### Phase 8: Semantic Code Review
+
+> **Note:** This check relies on LLM semantic understanding — the operator reads both platform implementations and compares intent, not exact syntax.
+
+Beyond structural and content-level checks, review hook scripts, templates, and code text for semantic correctness:
+
+1. **Cross-platform hook consistency** — When a skill has hooks for multiple runtimes (`copilot/`, `gemini/`), verify logical equivalence:
+   - All runtimes register the same logical hooks (e.g., if copilot registers `staleness-check`, gemini must also register it) — compare both script files and hook JSON registrations
+   - Core logic intent matches across platforms: same trigger conditions, same skip/deny intent, materially equivalent user-facing reason messages. Allow runtime-specific protocol fields and wrappers (e.g., `permissionDecision` vs `decision`)
+   - Skip/deny conditions are functionally equivalent
+
+2. **CHANGELOG text vs code alignment** — Verify that quoted identifiers, renamed sections, hook names, and file names in CHANGELOG entries match actual code. Flag mismatches where CHANGELOG uses a different term than what the code defines (e.g., CHANGELOG says "Synthesize gate" but code uses "Synthesis"). Do not warn on general descriptive prose.
+
+3. **Template comment consistency** — In template files (`templates/*.md`), verify HTML comments reference current section names, not stale ones (e.g., comment says "Understand step" but section heading is `## Observation`)
+
+4. **PowerShell reserved variable names** — Flag `$input` (case-insensitive: `$Input`, `$INPUT`, etc.) when used as a custom variable in `.ps1` hook scripts. `$input` is a PowerShell automatic variable that will silently shadow intended values. Suggest `$hookInput` or similar.
+
+5. **Duplicate comments** — Detect consecutive identical comment lines in hook scripts (`.sh`, `.ps1`, `.js`). A sign of copy-paste errors.
+
+6. **String literal hygiene** — Flag user-facing deny/error message literals with stray spaces before punctuation (e.g., `'## Synthesis' .` with space before period) or consecutive punctuation (e.g., `..` instead of `.`) in hook scripts and SKILL.md files.
 
 ### Delivery
 

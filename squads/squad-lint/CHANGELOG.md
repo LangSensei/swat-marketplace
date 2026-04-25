@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.2.0 (2026-04-25)
+
+### Added
+- Phase 8: Semantic Code Review — six checks for code-level semantic issues:
+  - Cross-platform hook consistency (logical equivalence across copilot/gemini runtimes)
+  - CHANGELOG text vs code alignment (quoted identifiers and renamed sections)
+  - Template comment consistency (HTML comments vs current section headings)
+  - PowerShell reserved variable names (`$input` detection in `.ps1` files)
+  - Duplicate comments in hook scripts
+  - String literal hygiene (stray spaces before punctuation, consecutive punctuation)
+
+### Changed
+- Domain and Boundary updated to include static semantic review of hook scripts, templates, and code text patterns
+- Description updated to reflect both structural and semantic validation
+
 ## 1.1.1 (2026-04-17)
 
 ### Changed
