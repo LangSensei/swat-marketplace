@@ -1,16 +1,14 @@
 # Changelog
 
-## 1.0.9 (2026-04-21)
-- Rename all phases to nouns for consistency: Understand→Observation, Decompose→Decomposition, Hypothesize→Hypothesis, Predict→Prediction, Conclude→Conclusion, Synthesize→Synthesis
-- Step values and section headings are now identical — zero normalization needed in hooks
-- Remove legacy verb aliases from hook validation (no more Synthesize/Hypothesize/etc fallbacks)
-
 ## 1.0.8 (2026-04-21)
 - Hooks: add `format-check` script — validates plan.md structure (required sections, status values, cycle completeness, Current State format, Synthesize gate)
 - Hooks: simplify `staleness-check` — remove Synthesize gate logic (moved to format-check), skip during Synthesize/Complete
 - Hooks: simplify `context-refresh` — skip during Synthesize/Complete
 - Hooks: remove `grep -oP` dependency — all parsing via Python (bash/PowerShell) or Node.js (Gemini) for cross-platform compatibility
 - Template: change Current State format from separate Step + Cycle fields to single `**Step:**` field with values like `Cycle 1 - Hypothesize`
+- Rename all phases to nouns for consistency: Understand→Observation, Decompose→Decomposition, Hypothesize→Hypothesis, Predict→Prediction, Conclude→Conclusion, Synthesize→Synthesis
+- Step values and section headings are now identical — zero normalization needed in hooks
+- Remove legacy verb aliases from hook validation (no more Synthesize/Hypothesize/etc fallbacks)
 
 ## 1.0.7 (2026-04-20)
 - Frontmatter: update description to clarify mandatory execution methodology

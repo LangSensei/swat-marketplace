@@ -3,11 +3,11 @@
 # Validates plan.md structure: required sections, status values, cycle completeness, current state.
 
 $ErrorActionPreference = "SilentlyContinue"
-$input_data = $input | Out-String
+$hookInput = $Input | Out-String
 
 # Parse toolArgs
 try {
-    $parsed = $input_data | ConvertFrom-Json
+    $parsed = $hookInput | ConvertFrom-Json
     $toolArgs = $parsed.toolArgs
 } catch {
     $toolArgs = ""

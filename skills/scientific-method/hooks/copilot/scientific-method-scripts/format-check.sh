@@ -35,10 +35,6 @@ def deny(msg):
     print(json.dumps({"permissionDecision": "deny", "permissionDecisionReason": json.loads(escaped)}))
     sys.exit(0)
 
-def warn(msg):
-    print(json.dumps({"hookSpecificOutput": {"message": msg}}))
-    sys.exit(0)
-
 try:
     with open("plan.md", "r", encoding="utf-8") as f:
         content = f.read()
@@ -103,22 +99,9 @@ if decompose_status == "complete":
     for cycle_name, cycle_content in cycle_sections.items():
         # Find ### subsections within this cycle
         subs = re.findall(r"^### (\w+)", cycle_content, re.MULTILINE)
-        # Normalize subsection names
-        sub_normalized = set()
-        for s in subs:
-            if s.startswith("Hypothes"):
-                sub_normalized.add("Hypothesis")
-            elif s.startswith("Predict"):
-                sub_normalized.add("Prediction")
-            elif s == "Test":
-                sub_normalized.add("Test")
-            elif s.startswith("Conclu"):
-                sub_normalized.add("Conclusion")
-            else:
-                sub_normalized.add(s)
 
         for req in REQUIRED_CYCLE_SUBS:
-            if req not in sub_normalized:
+            if req not in subs:
                 deny(f"FORMAT: {cycle_name} missing required subsection '### {req}'.")
 
         # Check each subsection has a Status

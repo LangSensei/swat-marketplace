@@ -1,6 +1,6 @@
 ---
 name: scientific-method
-version: "1.0.9"
+version: "1.0.8"
 description: Hypothesis-driven research — Observation → Decomposition → Cycle (Hypothesis → Prediction → Test → Conclusion) → Synthesis, with structured working files. (Mandatory execution methodology, follow SKILL.md to setup before any other tool calls)
 ---
 
@@ -57,7 +57,7 @@ Before anything else, understand what you're dealing with.
 - Record information gaps as **Key Questions** in `plan.md`
 - Identify constraints, assumptions, and success criteria
 
-**Output:** `plan.md` Goal + Key Questions + Observation section filled in. Update `progress.md` Observation Status → `in_progress`..
+**Output:** `plan.md` Goal + Key Questions + Observation section filled in. Update `progress.md` Observation Status → `in_progress`.
 
 ### 2. Decomposition
 
@@ -68,7 +68,7 @@ Break the problem into sub-problems. This is mandatory — even "simple" tasks b
 - Order Cycles by dependency (what needs to be answered first?)
 - Don't decompose generically ("research → analyze → report") — decompose by **actual sub-questions**
 
-**Output:** `plan.md` Decomposition table filled in with Cycles. Update `progress.md` Observation Status → `complete`, Decomposition Status → `complete`..
+**Output:** `plan.md` Decomposition table filled in with Cycles. Update `progress.md` Observation Status → `complete`, Decomposition Status → `complete`.
 
 > **Status transition rule:** When you start a step, mark it `in_progress`. When you finish it and move to the next, mark it `complete`. The step you're entering becomes `in_progress`.
 
@@ -120,7 +120,7 @@ After all Cycles are complete:
 - Produce the final answer or deliverable
 - Check: did you answer all Key Questions from Observation?
 
-**Output:** `plan.md` Synthesis section + final deliverable. Update `progress.md` Synthesis Status → `complete`..
+**Output:** `plan.md` Synthesis section + final deliverable. Update `progress.md` Synthesis Status → `complete`.
 
 ## Critical Rules
 
@@ -197,10 +197,10 @@ If you can answer these from your files, your state management is solid:
 | Don't | Do Instead |
 |-------|------------|
 | Jump straight to testing | Form a hypothesis first |
-| Decomposition generically ("research, analyze, report") | Decomposition by actual sub-questions |
+| Decompose generically ("research, analyze, report") | Decomposition by actual sub-questions |
 | Keep findings in your head | Write to `findings.md` immediately |
 | Repeat a failed approach | Log error, mutate approach |
-| Skip Prediction ("I'll just see what happens") | Define what you expect to see |
+| Skip prediction ("I'll just see what happens") | Define what you expect to see |
 | Forget to update progress | Update at every step transition |
 | Duplicate info across files | One piece of information, one file |
 | Start without a plan | Create `plan.md` FIRST |
