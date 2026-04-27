@@ -4,7 +4,7 @@
 # Skips during Synthesis/Complete.
 
 $ErrorActionPreference = "SilentlyContinue"
-$hookInput = $Input | Out-String
+$hookInput = [Console]::In.ReadToEnd()
 
 $MAX_STALE = if ($env:MAX_STALE) { [int]$env:MAX_STALE } else { 120 }
 
@@ -15,8 +15,8 @@ try {
     $toolArgs = ""
 }
 
-# Skip when tool targets state files
-if ($toolArgs -match "plan\.md|progress\.md|findings\.md") {
+# Skip when tool targets state/infrastructure files
+if ($toolArgs -match "plan\.md|progress\.md|findings\.md|OPERATION\.md|report\.html|\.squad|\.github") {
     Write-Output '{}'
     exit 0
 }

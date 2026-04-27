@@ -3,7 +3,7 @@
 # Validates plan.md structure: required sections, status values, cycle completeness, current state.
 
 $ErrorActionPreference = "SilentlyContinue"
-$hookInput = $Input | Out-String
+$hookInput = [Console]::In.ReadToEnd()
 
 # Parse toolArgs
 try {
@@ -13,8 +13,8 @@ try {
     $toolArgs = ""
 }
 
-# Skip when tool targets state files
-if ($toolArgs -match "plan\.md|progress\.md|findings\.md") {
+# Skip when tool targets state/infrastructure files
+if ($toolArgs -match "plan\.md|progress\.md|findings\.md|OPERATION\.md|report\.html|\.squad|\.github") {
     Write-Output '{}'
     exit 0
 }

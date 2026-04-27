@@ -17,7 +17,7 @@ print(data.get('toolArgs', ''))
 " <<< "$INPUT" 2>/dev/null)
 
 case "$TOOL_ARGS" in
-    *plan.md*|*progress.md*|*findings.md*)
+    *plan.md*|*progress.md*|*findings.md*|*OPERATION.md*|*report.html*|*.squad*|*.github*)
         echo '{}'; exit 0 ;;
 esac
 
