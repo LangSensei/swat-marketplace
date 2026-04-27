@@ -10,6 +10,14 @@ const REFRESH_INTERVAL = parseInt(process.env.REFRESH_INTERVAL || '300', 10);
 const REFRESH_TS_FILE = '.context_refresh_ts';
 
 try {
+  // Parse input and skip when tool targets state/infrastructure files
+  const input = JSON.parse(fs.readFileSync('/dev/stdin', 'utf8'));
+  const toolArgs = JSON.stringify(input.tool_input || {});
+  if (/plan\.md|progress\.md|findings\.md|OPERATION\.md|report\.html|\.squad|\.github/.test(toolArgs)) {
+    process.stdout.write('{}');
+    process.exit(0);
+  }
+
   // Skip during Synthesis/Complete
   if (fs.existsSync('plan.md')) {
     const content = fs.readFileSync('plan.md', 'utf8');

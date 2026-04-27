@@ -1,6 +1,6 @@
 ---
 name: sop
-version: "1.0.6"
+version: "1.0.7"
 description: Standard Operating Procedure — phase-based execution with sequential step checklists and structured working files. (Mandatory execution methodology, follow SKILL.md to setup before any other tool calls)
 ---
 

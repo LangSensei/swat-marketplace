@@ -14,6 +14,19 @@ let input = '';
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', (chunk) => { input += chunk; });
 process.stdin.on('end', () => {
+  try {
+    const data = JSON.parse(input);
+    const toolInput = JSON.stringify(data.tool_input || {});
+
+    // Skip when tool targets state/infrastructure files
+    if (/plan\.md|progress\.md|findings\.md|OPERATION\.md|report\.html|\.squad|\.github/.test(toolInput)) {
+      process.stdout.write('{}');
+      process.exit(0);
+    }
+  } catch (_) {
+    // If input parsing fails, continue with refresh check
+  }
+
   const nowSec = Math.floor(Date.now() / 1000);
 
   // Skip during final stages — if all but last (or all) phases are complete, allow freely

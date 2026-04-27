@@ -12,8 +12,8 @@ try {
   const input = JSON.parse(fs.readFileSync('/dev/stdin', 'utf8'));
   const toolArgs = JSON.stringify(input.tool_input || {});
 
-  // Skip when tool targets state files
-  if (/plan\.md|progress\.md|findings\.md/.test(toolArgs)) {
+  // Skip when tool targets state/infrastructure files
+  if (/plan\.md|progress\.md|findings\.md|OPERATION\.md|report\.html|\.squad|\.github/.test(toolArgs)) {
     process.stdout.write('{}');
     process.exit(0);
   }

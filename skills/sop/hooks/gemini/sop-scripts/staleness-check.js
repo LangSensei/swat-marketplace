@@ -18,8 +18,8 @@ process.stdin.on('end', () => {
     const data = JSON.parse(input);
     const toolInput = JSON.stringify(data.tool_input || {});
 
-    // Skip when tool targets state files (avoid deny loop)
-    if (/plan\.md|progress\.md|findings\.md/.test(toolInput)) {
+    // Skip when tool targets state/infrastructure files (avoid deny loop)
+    if (/plan\.md|progress\.md|findings\.md|OPERATION\.md|report\.html|\.squad|\.github/.test(toolInput)) {
       process.stdout.write('{}');
       process.exit(0);
     }

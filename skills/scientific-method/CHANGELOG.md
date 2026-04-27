@@ -2,8 +2,9 @@
 
 ## 1.0.9 (2026-04-27)
 - Hooks: fix PS1 stdin deadlock — replace `$Input | Out-String` with `[Console]::In.ReadToEnd()` in format-check.ps1 and staleness-check.ps1
-- Hooks: unify whitelist across all 6 hook scripts (3 PS1 + 3 bash) — skip when tool targets `plan.md`, `progress.md`, `findings.md`, `OPERATION.md`, `report.html`, `.squad/`, or `.github/`
+- Hooks: unify whitelist across all 6 Copilot hook scripts (3 PS1 + 3 bash) — skip when tool targets `plan.md`, `progress.md`, `findings.md`, `OPERATION.md`, `report.html`, `.squad/`, or `.github/`
 - Hooks: add stdin parsing and whitelist to context-refresh.ps1 and context-refresh.sh (previously missing)
+- Hooks: align Gemini JS hooks (format-check.js, staleness-check.js, context-refresh.js) with same expanded whitelist
 
 ## 1.0.8 (2026-04-21)
 - Hooks: add `format-check` script — validates plan.md structure (required sections, status values, cycle completeness, Current State format, Synthesis gate)

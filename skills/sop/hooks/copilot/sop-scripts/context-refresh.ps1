@@ -9,6 +9,13 @@ $hookInput = [Console]::In.ReadToEnd() | ConvertFrom-Json
 $REFRESH_INTERVAL = if ($env:REFRESH_INTERVAL) { [int]$env:REFRESH_INTERVAL } else { 300 }
 $REFRESH_TS_FILE = ".context_refresh_ts"
 
+$toolArgs = $hookInput.toolArgs
+
+# Skip when tool targets state/infrastructure files
+if ($toolArgs -match "plan\.md|progress\.md|findings\.md|OPERATION\.md|report\.html|\.squad|\.github") {
+    Write-Output '{}'; exit 0
+}
+
 $now = [int][double]::Parse((Get-Date -UFormat %s))
 
 # Skip during final stages — if all but last (or all) phases are complete, allow freely

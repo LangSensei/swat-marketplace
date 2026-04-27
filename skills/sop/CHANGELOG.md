@@ -1,5 +1,9 @@
 # SOP Skill — Changelog
 
+## 1.0.7 (2026-04-27)
+- Hooks: unify whitelist across all 6 hook scripts (2 PS1 + 2 bash + 2 JS) — skip when tool targets `plan.md`, `progress.md`, `findings.md`, `OPERATION.md`, `report.html`, `.squad/`, or `.github/`
+- Hooks: add stdin parsing and whitelist to context-refresh.ps1 and context-refresh.sh (previously missing)
+
 ## 1.0.6 (2026-04-20)
 - Frontmatter: update description to clarify mandatory execution methodology
 - Remove "When to Use" section — skill selection is handled by squad MANIFEST dependencies
