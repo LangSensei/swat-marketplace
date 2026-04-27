@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // scientific-method: Context refresh (BeforeTool) — Gemini CLI
-// Every REFRESH_INTERVAL seconds, deny once to remind re-reading AGENTS.md + .squad/
+// Every REFRESH_INTERVAL seconds, deny once to remind re-reading GEMINI.md + .squad/
 // Always exits 0.
 // Skips during Synthesis/Complete.
 
@@ -47,7 +47,7 @@ try {
 
   if (elapsed > REFRESH_INTERVAL) {
     fs.writeFileSync(REFRESH_TS_FILE, String(now));
-    const msg = `CONTEXT REFRESH: Re-read AGENTS.md and .squad/ directory now to prevent protocol drift. Do NOT modify .context_refresh_ts manually. After re-reading, your next action will proceed normally.`;
+    const msg = `CONTEXT REFRESH: Re-read GEMINI.md and .squad/ directory now to prevent protocol drift. Do NOT modify .context_refresh_ts manually. After re-reading, your next action will proceed normally.`;
     process.stdout.write(JSON.stringify({ decision: 'deny', reason: msg }));
     process.exit(0);
   }
