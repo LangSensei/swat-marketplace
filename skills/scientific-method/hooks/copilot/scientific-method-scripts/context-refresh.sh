@@ -56,7 +56,7 @@ LAST_REFRESH=$(cat "$REFRESH_TS_FILE" 2>/dev/null || echo "0")
 ELAPSED=$((NOW - LAST_REFRESH))
 if [ "$ELAPSED" -gt "$REFRESH_INTERVAL" ]; then
     echo "$NOW" > "$REFRESH_TS_FILE"
-    MSG="CONTEXT REFRESH: ${ELAPSED}s since last refresh. Re-read AGENTS.md and all files under .squad/ to prevent protocol drift."
+    MSG="CONTEXT REFRESH: Re-read AGENTS.md and .squad/ directory now to prevent protocol drift. Do NOT modify .context_refresh_ts manually. After re-reading, your next action will proceed normally."
     ESCAPED=$($PYTHON -c "import sys,json; print(json.dumps(sys.argv[1], ensure_ascii=False))" "$MSG" 2>/dev/null || echo "\"$MSG\"")
     echo "{\"permissionDecision\":\"deny\",\"permissionDecisionReason\":$ESCAPED}"
     exit 0

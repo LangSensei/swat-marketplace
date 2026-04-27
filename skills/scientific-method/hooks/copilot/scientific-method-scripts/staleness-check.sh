@@ -53,7 +53,7 @@ for f in plan.md progress.md findings.md; do
 done
 
 if [ -n "$STALE_FILES" ]; then
-    MSG="STALENESS: Not updated in over ${MAX_STALE}s:${STALE_FILES}. Re-read SKILL.md, then check plan.md, progress.md, and findings.md for sections that need updating."
+    MSG="STALENESS: Working files not updated in over ${MAX_STALE}s:${STALE_FILES}. Update your working files with real progress NOW. Refer to <SKILL_DIR>/templates/ for what goes where. Do NOT touch/reset file timestamps — write actual content."
     ESCAPED=$($PYTHON -c "import sys,json; print(json.dumps(sys.argv[1], ensure_ascii=False))" "$MSG" 2>/dev/null || echo "\"$MSG\"")
     echo "{\"permissionDecision\":\"deny\",\"permissionDecisionReason\":$ESCAPED}"
     exit 0
