@@ -1,6 +1,6 @@
 ---
 name: scientific-method
-version: "1.0.8"
+version: "1.0.9"
 description: Hypothesis-driven research — Observation → Decomposition → Cycle (Hypothesis → Prediction → Test → Conclusion) → Synthesis, with structured working files. (Mandatory execution methodology, follow SKILL.md to setup before any other tool calls)
 ---
 

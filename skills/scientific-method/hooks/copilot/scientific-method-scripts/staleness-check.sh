@@ -19,9 +19,9 @@ data = json.loads(sys.stdin.read())
 print(data.get('toolArgs', ''))
 " <<< "$INPUT" 2>/dev/null)
 
-# Skip when tool targets state files (avoid deny loop)
+# Skip when tool targets state/infrastructure files (avoid deny loop)
 case "$TOOL_ARGS" in
-    *plan.md*|*progress.md*|*findings.md*)
+    *plan.md*|*progress.md*|*findings.md*|*OPERATION.md*|*report.html*|*.squad*|*.github*)
         echo '{}'; exit 0 ;;
 esac
 

@@ -6,12 +6,25 @@ export PYTHONIOENCODING=utf-8
 # Skips during Synthesis/Complete.
 # Always exits 0.
 
-cat > /dev/null  # Consume stdin (required by hook protocol)
+INPUT=$(cat)
+
+PYTHON=$(command -v python3 || command -v python)
+
+# Parse toolArgs via Python
+TOOL_ARGS=$($PYTHON -c "
+import sys, json
+data = json.loads(sys.stdin.read())
+print(data.get('toolArgs', ''))
+" <<< "$INPUT" 2>/dev/null)
+
+# Skip when tool targets state/infrastructure files
+case "$TOOL_ARGS" in
+    *plan.md*|*progress.md*|*findings.md*|*OPERATION.md*|*report.html*|*.squad*|*.github*)
+        echo '{}'; exit 0 ;;
+esac
 
 REFRESH_INTERVAL="${REFRESH_INTERVAL:-300}"
 REFRESH_TS_FILE=".context_refresh_ts"
-
-PYTHON=$(command -v python3 || command -v python)
 
 NOW=$(date +%s)
 

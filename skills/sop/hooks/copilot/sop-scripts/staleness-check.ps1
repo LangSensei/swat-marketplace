@@ -10,8 +10,8 @@ $MAX_STALE = if ($env:MAX_STALE) { [int]$env:MAX_STALE } else { 120 }
 
 $toolArgs = $hookInput.toolArgs
 
-# Skip when tool targets state files (avoid deny loop when LLM tries to update them)
-if ($toolArgs -like "*plan.md*" -or $toolArgs -like "*progress.md*" -or $toolArgs -like "*findings.md*") {
+# Skip when tool targets state/infrastructure files (avoid deny loop)
+if ($toolArgs -match "plan\.md|progress\.md|findings\.md|OPERATION\.md|report\.html|\.squad|\.github") {
     Write-Output '{}'; exit 0
 }
 

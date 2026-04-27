@@ -4,6 +4,21 @@
 # Skips during Synthesis/Complete.
 
 $ErrorActionPreference = "SilentlyContinue"
+$hookInput = [Console]::In.ReadToEnd()
+
+# Parse toolArgs
+try {
+    $parsed = $hookInput | ConvertFrom-Json
+    $toolArgs = $parsed.toolArgs
+} catch {
+    $toolArgs = ""
+}
+
+# Skip when tool targets state/infrastructure files
+if ($toolArgs -match "plan\.md|progress\.md|findings\.md|OPERATION\.md|report\.html|\.squad|\.github") {
+    Write-Output '{}'
+    exit 0
+}
 
 $REFRESH_INTERVAL = if ($env:REFRESH_INTERVAL) { [int]$env:REFRESH_INTERVAL } else { 300 }
 $REFRESH_TS_FILE = ".context_refresh_ts"
