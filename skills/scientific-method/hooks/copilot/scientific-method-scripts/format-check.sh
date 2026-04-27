@@ -31,6 +31,7 @@ RESULT=$($PYTHON << 'PYEOF'
 import re, sys, json
 
 def deny(msg):
+    msg += " Refer to <SKILL_DIR>/templates/plan.md for correct structure."
     print(json.dumps({"permissionDecision": "deny", "permissionDecisionReason": msg}))
     sys.exit(0)
 

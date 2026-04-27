@@ -30,6 +30,7 @@ $content = [System.IO.File]::ReadAllText("plan.md", [System.Text.Encoding]::UTF8
 $VALID_STATUSES = @("not_started", "in_progress", "complete")
 
 function Deny($msg) {
+    $msg += " Refer to <SKILL_DIR>/templates/plan.md for correct structure."
     $result = @{ permissionDecision = "deny"; permissionDecisionReason = $msg } | ConvertTo-Json -Compress
     Write-Output $result
     exit 0

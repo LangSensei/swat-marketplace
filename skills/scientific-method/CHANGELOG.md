@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.10 (2026-04-27)
+- SKILL.md: add 4 Critical Rules — "When a Hook Denies Your Action", "Hook-Managed Files", "Preserve Template Structure", "Keep Files Fresh"
+- SKILL.md: Quick Start step 2 now instructs setting Current State Step to Observation
+- Hooks: optimize staleness-check deny message — actionable guidance with template reference
+- Hooks: optimize context-refresh deny message — concise instruction, warn against modifying .context_refresh_ts
+- Hooks: optimize format-check deny messages — append template reference to all FORMAT denials
+- Hooks: all changes applied across 3 runtimes (bash, PowerShell, Node.js)
+- Version bump to 1.0.10
+
 ## 1.0.9 (2026-04-27)
 - Hooks: fix PS1 stdin deadlock — replace `$Input | Out-String` with `[Console]::In.ReadToEnd()` in format-check.ps1 and staleness-check.ps1
 - Hooks: unify whitelist across all 6 Copilot hook scripts (3 PS1 + 3 bash) — skip when tool targets `plan.md`, `progress.md`, `findings.md`, `OPERATION.md`, `report.html`, `.squad/`, or `.github/`

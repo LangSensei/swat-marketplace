@@ -6,6 +6,7 @@
 const fs = require('fs');
 
 function deny(msg) {
+  msg += ' Refer to <SKILL_DIR>/templates/plan.md for correct structure.';
   process.stdout.write(JSON.stringify({ decision: 'deny', reason: msg }));
   process.exit(0);
 }

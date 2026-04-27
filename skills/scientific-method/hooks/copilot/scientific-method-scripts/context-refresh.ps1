@@ -52,7 +52,7 @@ $elapsed = $now - $lastRefresh
 
 if ($elapsed -gt $REFRESH_INTERVAL) {
     [System.IO.File]::WriteAllText($REFRESH_TS_FILE, "$now")
-    $msg = "CONTEXT REFRESH: ${elapsed}s since last refresh. Re-read AGENTS.md and all files under .squad/ to prevent protocol drift."
+    $msg = "CONTEXT REFRESH: Re-read AGENTS.md and .squad/ directory now to prevent protocol drift. Do NOT modify .context_refresh_ts manually. After re-reading, your next action will proceed normally."
     $result = @{ permissionDecision = "deny"; permissionDecisionReason = $msg } | ConvertTo-Json -Compress
     Write-Output $result
     exit 0
