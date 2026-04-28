@@ -1,5 +1,18 @@
 # SOP Skill — Changelog
 
+## 1.1.0 (2026-04-28)
+
+### Added
+- Hooks: format-check preToolUse hook (3 runtimes: PS1, bash, JS) — validates plan.md structure: required `## Phases` section, valid Status values, Phase sections with Status/Prerequisites/checklist items, non-empty Current State Phase/Step, completion gate for last phase
+- SKILL.md: Critical Rules section with 4 rules: When a Hook Denies Your Action, Hook-Managed Files, Preserve Template Structure, Keep Files Fresh
+- Hook configs: format-check added as first preToolUse/BeforeTool entry in both Copilot and Gemini sop.json
+
+### Changed
+- Hooks: staleness-check deny message optimized across all 3 runtimes — now references `<SKILL_DIR>/templates/` and explicitly forbids timestamp manipulation
+- Hooks: context-refresh deny message optimized (Copilot PS1 + bash) — clearer instructions, warns against modifying `.context_refresh_ts`
+- SKILL.md: Quick Start step 3 updated to mention setting Current State after copying templates
+- SKILL.md: version bump from 1.0.7 to 1.1.0
+
 ## 1.0.7 (2026-04-27)
 - Hooks: unify whitelist across all 6 hook scripts (2 PS1 + 2 bash + 2 JS) — skip when tool targets `plan.md`, `progress.md`, `findings.md`, `OPERATION.md`, `report.html`, `.squad/`, or `.github/`
 - Hooks: add stdin parsing and whitelist to context-refresh.ps1 and context-refresh.sh (previously missing)

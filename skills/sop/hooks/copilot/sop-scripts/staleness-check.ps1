@@ -38,7 +38,7 @@ foreach ($f in @("plan.md", "progress.md", "findings.md")) {
 
 if ($staleFiles.Count -gt 0) {
     $fileList = $staleFiles -join " "
-    $msg = "STALENESS: The following files have not been updated in over ${MAX_STALE}s: ${fileList}. Re-read SKILL.md, then check plan.md, progress.md, and findings.md for sections that need updating."
+    $msg = "STALENESS: Working files not updated in over ${MAX_STALE}s: ${fileList}. Update your working files with real progress NOW. Refer to <SKILL_DIR>/templates/ for what goes where. Do NOT touch/reset file timestamps -- write actual content."
     $py = if (Get-Command python3 -ErrorAction SilentlyContinue) { "python3" } else { "python" }
     $escaped = $msg | & $py -c "import sys,json; print(json.dumps(sys.stdin.read().strip(), ensure_ascii=False))" 2>$null
     if (-not $escaped) { $escaped = "`"$msg`"" }
