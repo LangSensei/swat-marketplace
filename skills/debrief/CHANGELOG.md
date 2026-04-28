@@ -1,5 +1,12 @@
 # Debrief Skill — Changelog
 
+## 3.2.0 (2026-04-28)
+
+### Added
+- `operation_id` parameter to `swat_notify` usage — links desktop notification to report.html when clicked
+- `details` parameter to `swat_dispatch` usage — separates lengthy context from the classification-used `brief`
+- Usage notes explaining each new parameter
+
 ## 3.1.0 (2026-04-17)
 
 ### Added
