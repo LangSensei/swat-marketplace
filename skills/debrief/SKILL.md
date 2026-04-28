@@ -1,6 +1,6 @@
 ---
 name: debrief
-version: "3.1.0"
+version: "3.2.0"
 description: Operation completion gate — notify the user or dispatch the next task
 dependencies:
   skills: []
@@ -64,8 +64,10 @@ Send a concise notification to the user with your key findings.
 Call the `swat_notify` MCP tool with your notification message:
 
 ```json
-swat_notify({"message": "your notification message"})
+swat_notify({"operation_id": "<your-operation-id>", "message": "your notification message"})
 ```
+
+> **`operation_id`** — read from OPERATION.md frontmatter. This enables the desktop notification to link directly to `report.html` when clicked. Optional but recommended.
 
 ### Notification Guidelines
 
@@ -101,8 +103,11 @@ When further work is needed, use the `swat_dispatch` MCP tool to hand off to the
 Call the `swat_dispatch` MCP tool with a task brief:
 
 ```json
-swat_dispatch({"brief": "your dispatch brief"})
+swat_dispatch({"brief": "your dispatch brief", "details": "additional context, file paths, specifics"})
 ```
+
+> **`brief`** — concise one-line task description (used for classification). Keep it short and actionable.
+> **`details`** — expanded context, constraints, file paths, code snippets, error messages. Put lengthy context here instead of cramming it into `brief`.
 
 ### Dispatch Brief Format
 
