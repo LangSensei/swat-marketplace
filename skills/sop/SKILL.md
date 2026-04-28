@@ -1,6 +1,6 @@
 ---
 name: sop
-version: "1.0.7"
+version: "1.1.0"
 description: Standard Operating Procedure — phase-based execution with sequential step checklists and structured working files. (Mandatory execution methodology, follow SKILL.md to setup before any other tool calls)
 ---
 
@@ -32,7 +32,7 @@ Execute structured tasks by following predefined phases with step-by-step checkl
    ```
    > `<SKILL_DIR>` is the directory containing this SKILL.md. Resolve from your runtime context.
 2. Understand your task — read the assignment/brief to identify the phases
-3. Fill in Goal + Phases in `plan.md`
+3. Fill in Goal + Phases in `plan.md`. Update Current State `**Phase:**` and `**Step:**` to your starting position.
 4. Execute phases in order — check off steps as you go
 5. Update findings.md after every 2 search/browse/view operations (2-Action Rule)
 6. Update progress.md with actions taken at each phase gate
@@ -84,4 +84,37 @@ If you can answer these from your files, your context is solid:
 | What's the goal? | Goal in plan.md |
 | What have I found? | findings.md |
 | What have I done? | progress.md |
+
+## Critical Rules
+
+### When a Hook Denies Your Action
+Hooks are lightweight sentries that enforce working-file discipline. When a hook denies your action:
+
+1. **Read the deny message carefully** — it tells you exactly what is wrong
+2. **Fix the issue in your working files** — update the files the message identifies
+3. **Refer to `<SKILL_DIR>/templates/`** for correct file structure if unsure what goes where
+4. **Retry your original action** — it will succeed once the issue is resolved
+
+Do NOT attempt to bypass hooks, reset file timestamps, or modify hook-managed files to work around a denial.
+
+### Hook-Managed Files
+The following files are managed by hooks and must never be manually created, modified, or deleted:
+
+- `.context_refresh_ts` — timestamp file used by the context-refresh hook to track refresh intervals
+
+### Preserve Template Structure
+The `plan.md` template structure is enforced by hooks. Do not rename, remove, or merge these required elements:
+
+- **Phase sections:** `### Phase N:` with `**Status:**`, `**Prerequisites:**`, and at least one checklist item (`- [ ]` or `- [x]`)
+- **Status fields:** Every phase that has a `**Status:**` field must keep it. Valid values: `not_started`, `in_progress`, `complete`
+- **Required top-level section:** `## Phases`
+- **Current State format:** `**Phase:**` and `**Step:**` must be non-empty
+
+### Keep Files Fresh
+Working files must be updated at least every 2 minutes, regardless of the 2-Action Rule. Stale files trigger a staleness denial.
+
+- **Before long operations** (builds, tests, large searches): update `progress.md` with what you are about to do
+- **After completing work**: update `findings.md` with what you discovered
+
+The staleness hook checks modification timestamps on `plan.md`, `progress.md`, and `findings.md`. Writing real content resets the clock. Do NOT touch or reset file timestamps — write actual progress.
 

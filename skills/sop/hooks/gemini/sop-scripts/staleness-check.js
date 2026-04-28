@@ -60,7 +60,7 @@ process.stdin.on('end', () => {
   }
 
   if (staleFiles.length > 0) {
-    const msg = `STALENESS: Not updated in over ${MAX_STALE}s: ${staleFiles.join(' ')}. Re-read SKILL.md, then check plan.md, progress.md, and findings.md for sections that need updating.`;
+    const msg = `STALENESS: Working files not updated in over ${MAX_STALE}s: ${staleFiles.join(' ')}. Update your working files with real progress NOW. Refer to <SKILL_DIR>/templates/ for what goes where. Do NOT touch/reset file timestamps -- write actual content.`;
     process.stdout.write(JSON.stringify({ decision: 'deny', reason: msg }));
     process.exit(0);
   }

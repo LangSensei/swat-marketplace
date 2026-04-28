@@ -6,6 +6,12 @@
         "hooks": [
           {
             "type": "command",
+            "command": "node .gemini/hooks/sop-scripts/format-check.js",
+            "name": "format-check",
+            "timeout": 5000
+          },
+          {
+            "type": "command",
             "command": "node .gemini/hooks/sop-scripts/staleness-check.js",
             "name": "staleness-check",
             "timeout": 5000

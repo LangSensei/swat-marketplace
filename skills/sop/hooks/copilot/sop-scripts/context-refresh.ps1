@@ -39,7 +39,7 @@ $lastRefresh = [int](Get-Content $REFRESH_TS_FILE -ErrorAction SilentlyContinue)
 $elapsed = $now - $lastRefresh
 if ($elapsed -gt $REFRESH_INTERVAL) {
     Set-Content -Path $REFRESH_TS_FILE -Value $now -NoNewline
-    $msg = "CONTEXT REFRESH: ${elapsed}s since last refresh. Re-read AGENTS.md and all files under .squad/ to prevent protocol drift."
+    $msg = "CONTEXT REFRESH: Re-read AGENTS.md and .squad/ directory now to prevent protocol drift. Do NOT modify .context_refresh_ts manually. After re-reading, your next action will proceed normally."
     $py = if (Get-Command python3 -ErrorAction SilentlyContinue) { "python3" } else { "python" }
     $escaped = $msg | & $py -c "import sys,json; print(json.dumps(sys.stdin.read().strip(), ensure_ascii=False))" 2>$null
     if (-not $escaped) { $escaped = "`"$msg`"" }
