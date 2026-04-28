@@ -61,7 +61,7 @@ process.stdin.on('end', () => {
   const elapsed = nowSec - lastRefresh;
   if (elapsed > REFRESH_INTERVAL) {
     fs.writeFileSync(REFRESH_TS_FILE, String(nowSec), 'utf8');
-    const msg = `CONTEXT REFRESH: ${elapsed}s since last refresh. Re-read GEMINI.md and all files under .squad/ to prevent protocol drift.`;
+    const msg = `CONTEXT REFRESH: Re-read GEMINI.md and .squad/ directory now to prevent protocol drift. Do NOT modify .context_refresh_ts manually. After re-reading, your next action will proceed normally.`;
     process.stdout.write(JSON.stringify({ decision: 'deny', reason: msg }));
     process.exit(0);
   }
