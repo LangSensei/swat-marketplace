@@ -1,9 +1,9 @@
 ---
 name: dye-finish-advisor
-version: "1.0.0"
+version: "1.1.0"
 description: Full-stack technical advisor for dyeing and finishing of woven synthetic fiber fabrics
 dependencies:
-  skills: [sop, fabric-fiber-analyst, dye-process-advisor, finish-compliance-advisor]
+  skills: [sop, fabric-fiber-analyst, dye-process-advisor, finish-compliance-advisor, textile-fiber-reference, textile-compliance-reference]
 ---
 
 # Dye Finish Advisor Squad
@@ -94,12 +94,12 @@ Report should include:
 
 ### Intel file routing
 
-- Use `intel/fiber-identification-quick-reference.md` when interpreting burn, DSC, density, FTIR, or solubility clues.
-- Use `intel/fiber-dye-matching-and-process-windows.md` when mapping fibers to dye classes and process windows.
-- Use `intel/dwr-system-comparison.md` for finish-system comparisons and DWR trade-offs.
-- Use `intel/pfas-global-regulations.md` and `intel/hazardous-substance-thresholds.md` for compliance screening.
-- Use `intel/auxiliary-chemical-brands.md` when decoding supplier or product-line references.
-- Use `intel/cost-and-energy-structure-reference.md` when comparing process pathways on commercial burden.
+- Use `skills/textile-fiber-reference/fiber-identification-quick-reference.md` when interpreting burn, DSC, density, FTIR, or solubility clues.
+- Use `skills/textile-fiber-reference/fiber-dye-matching-and-process-windows.md` when mapping fibers to dye classes and process windows.
+- Use `skills/textile-compliance-reference/dwr-system-comparison.md` for finish-system comparisons and DWR trade-offs.
+- Use `skills/textile-compliance-reference/pfas-global-regulations.md` and `skills/textile-compliance-reference/hazardous-substance-thresholds.md` for compliance screening.
+- Use `skills/textile-compliance-reference/auxiliary-chemical-brands.md` when decoding supplier or product-line references.
+- Use `skills/textile-fiber-reference/cost-and-energy-structure-reference.md` when comparing process pathways on commercial burden.
 
 ### Constraints
 

@@ -1,7 +1,9 @@
 ---
 name: finish-compliance-advisor
-version: "1.0.0"
+version: "1.1.0"
 description: Compare finish systems, interpret SDS or trade names, assess PFAS and chemical compliance, and recommend substitutes for woven synthetics.
+dependencies:
+  skills: [textile-compliance-reference]
 ---
 
 # Finish Compliance Advisor Skill
@@ -21,10 +23,10 @@ description: Compare finish systems, interpret SDS or trade names, assess PFAS a
 
 ## Reference Files
 
-- `intel/dwr-system-comparison.md`
-- `intel/pfas-global-regulations.md`
-- `intel/hazardous-substance-thresholds.md`
-- `intel/auxiliary-chemical-brands.md`
+- `skills/textile-compliance-reference/dwr-system-comparison.md`
+- `skills/textile-compliance-reference/pfas-global-regulations.md`
+- `skills/textile-compliance-reference/hazardous-substance-thresholds.md`
+- `skills/textile-compliance-reference/auxiliary-chemical-brands.md`
 
 ## Workflow
 

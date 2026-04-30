@@ -1,7 +1,9 @@
 ---
 name: fabric-fiber-analyst
-version: "1.0.0"
+version: "1.1.0"
 description: Identify woven synthetic fibers and explain their dyeing and finishing implications from lab clues, fabric specs, and supplier claims.
+dependencies:
+  skills: [textile-fiber-reference]
 ---
 
 # Fabric Fiber Analyst Skill
@@ -21,8 +23,8 @@ description: Identify woven synthetic fibers and explain their dyeing and finish
 
 ## Reference Files
 
-- `intel/fiber-identification-quick-reference.md`
-- `intel/fiber-dye-matching-and-process-windows.md`
+- `skills/textile-fiber-reference/fiber-identification-quick-reference.md`
+- `skills/textile-fiber-reference/fiber-dye-matching-and-process-windows.md`
 
 ## Workflow
 

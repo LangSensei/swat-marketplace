@@ -1,7 +1,9 @@
 ---
 name: dye-process-advisor
-version: "1.0.0"
+version: "1.1.0"
 description: Design or interpret dye process curves for woven synthetics, diagnose defects, and recommend colorfastness improvements with explicit trade-offs.
+dependencies:
+  skills: [textile-fiber-reference]
 ---
 
 # Dye Process Advisor Skill
@@ -21,8 +23,8 @@ description: Design or interpret dye process curves for woven synthetics, diagno
 
 ## Reference Files
 
-- `intel/fiber-dye-matching-and-process-windows.md`
-- `intel/cost-and-energy-structure-reference.md`
+- `skills/textile-fiber-reference/fiber-dye-matching-and-process-windows.md`
+- `skills/textile-fiber-reference/cost-and-energy-structure-reference.md`
 
 ## Workflow
 
