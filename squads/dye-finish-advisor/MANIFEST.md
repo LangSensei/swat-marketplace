@@ -3,7 +3,7 @@ name: dye-finish-advisor
 version: "1.0.0"
 description: Full-stack technical advisor for dyeing and finishing of woven synthetic fiber fabrics
 dependencies:
-  skills: [fabric-fiber-analyst, dye-process-advisor, finish-compliance-advisor]
+  skills: [sop, fabric-fiber-analyst, dye-process-advisor, finish-compliance-advisor]
 ---
 
 # Dye Finish Advisor Squad
