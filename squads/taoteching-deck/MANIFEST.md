@@ -3,7 +3,7 @@ name: taoteching-deck
 version: "1.0.0"
 description: Tao Te Ching (Daodejing) chapter HTML slide-deck generator — single-file, ink-style, 10-page narrative (cover / concept overview / original text / five-paragraph analysis / key line / chapter summary) with paired ancient-modern case studies
 dependencies:
-  skills: [taoteching-deck-template]
+  skills: [sop, taoteching-deck-template]
   mcps: []
 ---
 
