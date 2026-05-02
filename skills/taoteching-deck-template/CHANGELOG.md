@@ -11,3 +11,11 @@
 - Three-colour semantic palette: gold `#f5c97a` for `<strong>` highlights, red `#c53d43` for paragraph numbers and history labels, green `#2d5a3d` for modern-case borders
 - Three-tier responsive strategy at 1100 / 900 / 500 px breakpoints
 - Background strategy: default gradient placeholders with TODO imagery hints; optional base64-inlined images for the polished version
+- Iterated on PR review feedback before release
+- Fixed JS engine busy-flag race: lock now releases at 600ms (matching CSS transition) instead of 100ms — eliminates skipped-slide / stutter on rapid keyboard or dot-click navigation
+- Added `templates/skeleton.html` — pre-assembled, runnable single-file deck; operators copy this rather than stitch sections
+- Documented `.an-spin` viewBox=200 origin constraint (override `transform-origin` if a different viewBox is used)
+- Normalized passive event listener flags (`{passive:1}` → `{passive:true}`, `{passive:0}` → `{passive:false}`)
+- Documented intentional full-document `wheel` capture (deck is a fullscreen kiosk; page scroll is never desired)
+- Introduced `{{TOKEN}}` placeholder convention with cheatsheet for grep-verification (`grep '{{' taoteching-{N}.html` must return zero after authoring)
+- Scope-restricted skill description to Tao Te Ching (was: any Chinese classical-text deck)

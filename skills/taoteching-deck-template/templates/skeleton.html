@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<!-- Output filename: taoteching-{{CHAPTER_NUM}}.html
+     Replace every double-brace placeholder below; see SKILL.md
+     "Placeholder Cheatsheet" for the full set. Verify with:
+     grep "{{" taoteching-{{CHAPTER_NUM}}.html      (must return zero matches). -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>道德经学用 · 第{{CHAPTER_NUM_CN}}章 · {{CHAPTER_TITLE}}</title>
+<style>
+/* ============================================================
+   1) :root variables — see SKILL.md "CSS Variables (canonical block)"
+   ============================================================ */
+:root {
+  --ink:   #1a1a2e;
+  --ink2:  #12121f;
+  --paper: #f0e6d3;
+  --dim:   #b8a88a;
+  --red:   #c53d43;
+  --gold:  #d4a574;
+  --green: #2d5a3d;
+  --kai:   "楷体","KaiTi","STKaiti","华文楷体",serif;
+  --song:  "宋体","SimSun","STSong",serif;
+}
+
+/* ============================================================
+   2) reset + html/body — see SKILL.md "Layout primitive"
+   ============================================================ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  height:100%;
+  overflow:hidden;
+  font-family: var(--song);
+  background: var(--ink);
+  color: var(--paper);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ============================================================
+   3) deck / slide structure + ambient halo + entry stagger
+   ============================================================ */
+.deck { display:flex; height:100vh; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+.slide {
+  flex: 0 0 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 60px;
+  overflow: hidden;
+}
+.slide::before {
+  content:''; position:absolute; top:-30%; right:-20%;
+  width:60%; height:60%;
+  background: radial-gradient(ellipse, rgba(45,90,61,0.1) 0%, transparent 70%);
+  border-radius:50%; filter:blur(60px); pointer-events:none;
+}
+.slide::after {
+  content:''; position:absolute; bottom:-20%; left:-15%;
+  width:50%; height:50%;
+  background: radial-gradient(ellipse, rgba(197,61,67,0.06) 0%, transparent 70%);
+  border-radius:50%; filter:blur(80px); pointer-events:none;
+}
+
+/* declarative slide-entry stagger */
+.slide .a    { opacity:0; transform: translateY(25px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.slide.on .a { opacity:1; transform: translateY(0); }
+.slide.on .d1 { transition-delay: .10s; }
+.slide.on .d2 { transition-delay: .25s; }
+.slide.on .d3 { transition-delay: .40s; }
+.slide.on .d4 { transition-delay: .55s; }
+.slide.on .d5 { transition-delay: .70s; }
+.slide.on .d6 { transition-delay: .85s; }
+
+/* ============================================================
+   4) navigation chrome — see SKILL.md "Navigation chrome"
+   ============================================================ */
+.arr {
+  position:fixed; top:50%; transform:translateY(-50%); z-index:100;
+  width:46px; height:46px; display:flex; align-items:center; justify-content:center;
+  border:1px solid rgba(240,230,211,0.15); border-radius:50%;
+  background:rgba(26,26,46,0.6); backdrop-filter:blur(8px);
+  cursor:pointer; transition:all .3s; color:var(--dim); font-size:18px;
+}
+.arr:hover { border-color:var(--gold); color:var(--gold); background:rgba(212,165,116,0.1); }
+.arr-l { left:20px; } .arr-r { right:20px; }
+.arr.hide { opacity:0; pointer-events:none; }
+
+.dots {
+  position:fixed; bottom:26px; left:50%; transform:translateX(-50%); z-index:100;
+  display:flex; gap:10px; align-items:center;
+}
+.dot {
+  width:8px; height:8px; border-radius:50%;
+  background:rgba(240,230,211,0.15); cursor:pointer; transition:all .3s;
+}
+.dot.on { background:var(--gold); width:24px; border-radius:4px; }
+
+.pn {
+  position:fixed; top:26px; right:34px; z-index:100;
+  font-family:var(--kai); font-size:14px; color:var(--dim);
+  opacity:.5; letter-spacing:2px;
+}
+
+/* ============================================================
+   5) animation library — see SKILL.md "Animation Library"
+   ============================================================ */
+.an-pulse   { animation: kPulse 3s ease-in-out infinite; transform-origin:center; }
+.an-pulse-d { animation-delay: .8s; }
+@keyframes kPulse { 0%,100%{ opacity:.3; transform:scale(1); } 50%{ opacity:.7; transform:scale(1.08); } }
+
+.an-glow    { animation: kGlow 4s ease-in-out infinite; }
+.an-glow-d  { animation-delay: 1.2s; }
+@keyframes kGlow  { 0%,100%{ opacity:.4; } 50%{ opacity:1; } }
+
+.an-bob     { animation: kBob 3.5s ease-in-out infinite; }
+.an-b1{animation-delay:0s} .an-b2{animation-delay:.6s}
+.an-b3{animation-delay:1.2s} .an-b4{animation-delay:1.8s}
+@keyframes kBob   { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
+
+.an-ring    { animation: kRing 4s ease-in-out infinite; }
+.an-r1{animation-delay:0s} .an-r2{animation-delay:.5s} .an-r3{animation-delay:1s}
+@keyframes kRing  { 0%,100%{ opacity:.15; stroke-dashoffset:0; } 50%{ opacity:.5; stroke-dashoffset:12; } }
+
+.an-drift   { animation: kDrift 5s ease-in-out infinite; }
+.an-drift-r { animation: kDrift 5s ease-in-out infinite reverse; }
+@keyframes kDrift { 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(6px,-6px); } }
+
+.an-spin    { animation: kSpin 24s linear infinite; transform-origin: 100px 100px; }
+.an-spin-r  { animation: kSpin 18s linear infinite reverse; transform-origin: 100px 100px; }
+@keyframes kSpin  { from{ transform:rotate(0); } to{ transform:rotate(360deg); } }
+
+.an-fade    { animation: kFade 5s ease-in-out infinite; }
+.an-f1{animation-delay:0s} .an-f2{animation-delay:1.5s} .an-f3{animation-delay:3s}
+@keyframes kFade  { 0%,100%{ opacity:.2; } 50%{ opacity:.85; } }
+
+/* ============================================================
+   6) per-slide CSS — copied verbatim from SKILL.md "Per-Slide CSS"
+   ============================================================ */
+
+/* --- P1 cover --- */
+.s-cover {
+  /* TODO: 替换为封面背景图 base64 — 推荐:山水云雾远景,混沌苍茫感 */
+  background: linear-gradient(160deg, #1e1e35 0%, var(--ink) 50%, #0f0f1a 100%);
+  background-size: cover;
+  background-position: center;
+}
+.s-cover::before { content:''; position:absolute; inset:0; background:rgba(18,18,31,0.55); pointer-events:none; z-index:0; }
+.s-cover > * { position:relative; z-index:1; }
+.cv-line  { width:80px; height:1.5px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin-bottom:32px; }
+.cv-title { font-family:var(--kai); font-size:clamp(3.2rem,7vw,5.5rem); font-weight:400; letter-spacing:.3em; text-shadow:0 0 40px rgba(240,230,211,0.1); margin-bottom:24px; }
+.cv-sub   { font-family:var(--kai); font-size:clamp(1.1rem,2.5vw,1.5rem); color:var(--gold); letter-spacing:.6em; margin-bottom:16px; }
+.cv-desc  { font-size:.9rem; color:var(--dim); letter-spacing:.2em; opacity:.6; }
+
+.seal { display:flex; align-items:center; justify-content:center; width:76px; height:76px; border:2px solid var(--red); border-radius:6px; opacity:.55; margin-top:36px; }
+.seal span { display:block; writing-mode:vertical-rl; font-family:var(--kai); font-size:1.2rem; color:var(--red); letter-spacing:.15em; line-height:1.7; height:2.8em; }
+
+.mtn { position:absolute; bottom:0; left:0; right:0; height:180px; pointer-events:none; opacity:.04; }
+.mtn::before { content:''; position:absolute; bottom:0; left:8%;  border-left:160px solid transparent; border-right:180px solid transparent; border-bottom:250px solid var(--paper); }
+.mtn::after  { content:''; position:absolute; bottom:0; right:12%; border-left:120px solid transparent; border-right:140px solid transparent; border-bottom:200px solid var(--paper); }
+
+/* --- P2 concept overview --- */
+.s-intro {
+  /* TODO: 替换为 P2 背景图 base64 — 推荐:深邃星空/混沌氤氲 */
+  background: linear-gradient(150deg, #1a1a2e 0%, #0d0d18 100%);
+  background-size: cover; background-position: center;
+  padding: 60px 80px;
+}
+.s-intro::before { content:''; position:absolute; inset:0; background:rgba(10,10,20,0.9); z-index:0; }
+.s-intro > * { position:relative; z-index:1; }
+.sec-t  { font-family:var(--kai); font-size:clamp(2rem,4.5vw,2.8rem); letter-spacing:.25em; text-align:center; margin-bottom:16px; }
+.sec-t::after { content:''; display:block; width:50px; height:1.5px; background:var(--red); margin:14px auto 0; }
+.in-sub { font-family:var(--kai); font-size:clamp(1.05rem,2.2vw,1.3rem); color:#ffffffcc; text-align:center; letter-spacing:.1em; margin-bottom:44px; text-shadow:0 2px 8px rgba(0,0,0,0.8); }
+
+.in-grid { display:grid; grid-template-columns:1fr 1px 1fr; gap:0 44px; max-width:1060px; width:100%; align-items:start; background:rgba(10,10,20,0.75); border:1px solid rgba(240,230,211,0.06); border-radius:14px; padding:36px 40px; }
+.in-divider { background: linear-gradient(180deg, transparent, rgba(212,165,116,0.25), transparent); }
+.in-block { padding:0 10px; }
+.in-label { font-family:var(--kai); font-size:1.2rem; color:#f5c97a; letter-spacing:.15em; margin-bottom:18px; display:flex; align-items:center; gap:10px; text-shadow:0 2px 8px rgba(0,0,0,0.8); }
+.in-label .ico { font-size:.95rem; color:var(--red); opacity:.7; }
+.in-p { font-size:1.05rem; line-height:2; color:#ffffffee; letter-spacing:.04em; margin-bottom:14px; text-shadow:0 2px 8px rgba(0,0,0,0.8), 0 0 2px rgba(0,0,0,0.6); }
+.in-p strong { color:#f5c97a; }
+.in-quote { margin-top:10px; padding:16px 20px; background:rgba(212,165,116,0.08); border-left:2px solid var(--gold); border-radius:0 8px 8px 0; font-family:var(--kai); font-size:1rem; color:var(--gold); line-height:1.8; letter-spacing:.06em; opacity:.9; }
+
+/* --- P3 original text --- */
+.s-text {
+  /* TODO: 替换为 P3 背景图 base64 — 推荐:古卷竹简/水墨留白 */
+  background: linear-gradient(145deg, #1c1c30 0%, var(--ink) 60%, #0a0a14 100%);
+  background-size: cover; background-position: center;
+}
+.s-text::before { content:''; position:absolute; inset:0; background:rgba(8,8,16,0.92); z-index:0; }
+.s-text > * { position:relative; z-index:1; }
+.tx-label { font-family:var(--kai); font-size:.95rem; color:#ffffffaa; letter-spacing:.4em; margin-bottom:36px; text-shadow:0 2px 8px rgba(0,0,0,0.8); }
+.tx-deco { width:100px; height:1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.tx-deco-t { margin-bottom:30px; } .tx-deco-b { margin-top:30px; }
+.tx-body { text-align:center; background:rgba(8,8,16,0.8); border:1px solid rgba(240,230,211,0.06); border-radius:14px; padding:40px 60px; max-width:900px; }
+.tx-body .ln { font-family:var(--kai); font-size:clamp(1.2rem,2.6vw,1.8rem); line-height:2.2; letter-spacing:.15em; display:block; color:#fff; text-shadow:0 2px 10px rgba(0,0,0,0.9), 0 0 3px rgba(0,0,0,0.6); }
+
+/* --- P4–P8 paragraph analysis --- */
+.s-para { padding: 60px 80px; background-size: cover; background-position: center; }
+.s-p4 { /* TODO: 第一段背景图 — 推荐:混沌一团/星云螺旋   */ background: linear-gradient(165deg, #1e1e35 0%, var(--ink) 100%); }
+.s-p5 { /* TODO: 第二段背景图 — 推荐:雾中孤峰/无字碑     */ background: linear-gradient(165deg, #1e1e35 0%, var(--ink) 100%); }
+.s-p6 { /* TODO: 第三段背景图 — 推荐:旋涡/年轮/循环图腾  */ background: linear-gradient(165deg, #1e1e35 0%, var(--ink) 100%); }
+.s-p7 { /* TODO: 第四段背景图 — 推荐:四方天地/宫殿剪影   */ background: linear-gradient(165deg, #1e1e35 0%, var(--ink) 100%); }
+.s-p8 { /* TODO: 第五段背景图 — 推荐:层叠山峦/层级递进   */ background: linear-gradient(165deg, #1e1e35 0%, var(--ink) 100%); }
+
+.s-p4::before, .s-p5::before, .s-p6::before, .s-p7::before, .s-p8::before, .s-p9::before, .s-p10::before {
+  content:''; position:absolute; inset:0; background:rgba(10,10,20,0.88); pointer-events:none; z-index:0;
+}
+.s-p4 > *, .s-p5 > *, .s-p6 > *, .s-p7 > *, .s-p8 > *, .s-p9 > *, .s-p10 > * { position:relative; z-index:1; }
+
+.pa-container { display:flex; flex-direction:column; gap:22px; max-width:1100px; width:100%; }
+.pa-wrap  { display:flex; align-items:center; gap:44px; width:100%; background:rgba(8,8,16,0.8); border:1px solid rgba(240,230,211,0.06); border-radius:14px; padding:28px 40px; }
+.pa-left  { flex:0 0 200px; display:flex; align-items:center; justify-content:center; }
+.pa-right { flex:1; }
+.pa-num   { font-family:var(--kai); font-size:.85rem; color:var(--red); letter-spacing:.25em; margin-bottom:10px; opacity:.65; }
+.pa-quote { font-family:var(--kai); font-size:clamp(1.2rem,2.4vw,1.7rem); color:#f5c97a; line-height:1.7; letter-spacing:.12em; margin-bottom:18px; padding-bottom:16px; border-bottom:1px solid rgba(240,230,211,0.08); text-shadow:0 2px 8px rgba(0,0,0,0.7); }
+.pa-label { font-family:var(--kai); font-size:.9rem; color:var(--red); letter-spacing:.15em; margin-bottom:8px; text-shadow:0 1px 4px rgba(0,0,0,0.6); }
+.pa-text  { font-size:.98rem; line-height:1.95; color:#ffffffdd; letter-spacing:.04em; text-shadow:0 2px 8px rgba(0,0,0,0.7); }
+.pa-text strong { color:#f5c97a; }
+.pa-svg { width:180px; height:180px; }
+.pa-divider-row { display:flex; align-items:center; gap:16px; font-family:var(--kai); color:var(--gold); font-size:.85rem; letter-spacing:.4em; opacity:.75; }
+.pa-divider-row::before, .pa-divider-row::after { content:''; flex:1; height:1px; background: linear-gradient(90deg, transparent, rgba(212,165,116,0.35), transparent); }
+.pa-cases { display:grid; grid-template-columns:1fr 1fr; gap:18px; width:100%; }
+.pa-case  { background:rgba(8,8,16,0.78); border:1px solid rgba(240,230,211,0.08); border-left:3px solid var(--gold); border-radius:10px; padding:18px 22px; display:flex; flex-direction:column; gap:8px; }
+.pa-case.modern { border-left-color: var(--green); }
+.pa-case-head   { display:flex; align-items:center; gap:10px; font-family:var(--kai); font-size:.9rem; color:var(--gold); letter-spacing:.2em; }
+.pa-case.modern .pa-case-head { color:#6db58a; }
+.pa-case-icon   { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; font-size:.85rem; border:1px solid currentColor; border-radius:4px; opacity:.8; }
+.pa-case-title  { font-family:var(--kai); font-size:1.02rem; color:#f5c97a; letter-spacing:.08em; text-shadow:0 1px 4px rgba(0,0,0,0.6); }
+.pa-case.modern .pa-case-title { color:#8fd0a8; }
+.pa-case-text   { font-size:.85rem; line-height:1.85; color:#ffffffcc; letter-spacing:.02em; text-shadow:0 1px 4px rgba(0,0,0,0.6); }
+.pa-case-text strong { color:#fff; }
+
+/* --- P9 key line --- */
+.s-key { /* TODO: P9 背景图 — 推荐:辽阔自然景观/晨曦 */
+  background: linear-gradient(135deg, #2d5a3d22 0%, var(--ink) 40%, #1e1e35 100%);
+  background-size: cover; background-position: center;
+}
+.s-p9 { padding: 60px; }
+.kk-box  { text-align:center; max-width:880px; }
+.kk-pre  { font-family:var(--kai); font-size:1rem; color:var(--dim); letter-spacing:.35em; margin-bottom:36px; opacity:.7; }
+.kk-deco { width:60px; height:1px; background:var(--gold); margin:0 auto 36px; opacity:.6; }
+.kk-main { font-family:var(--kai); font-size:clamp(2.4rem,5.5vw,4.2rem); color:var(--paper); letter-spacing:.35em; line-height:1.6; margin-bottom:28px; text-shadow:0 0 50px rgba(212,165,116,0.2), 0 2px 12px rgba(0,0,0,0.8); }
+.kk-main em { font-style:normal; color:#f5c97a; }
+.kk-sub  { font-family:var(--kai); font-size:clamp(1rem,1.8vw,1.2rem); color:#ffffffcc; letter-spacing:.15em; line-height:2; margin-top:36px; text-shadow:0 2px 8px rgba(0,0,0,0.8); }
+.kk-sub strong { color:#f5c97a; }
+
+/* --- P10 summary --- */
+.s-sum { /* TODO: P10 背景图 — 推荐:山水合一/云海日出 */
+  background: linear-gradient(140deg, #1e1e35 0%, var(--ink) 40%, #1a2030 100%);
+  background-size: cover; background-position: center;
+}
+.sm-box { max-width:760px; text-align:center; padding:50px; background:rgba(8,8,16,0.85); border:1px solid rgba(212,165,116,0.15); border-radius:16px; position:relative; z-index:1; }
+.sm-t   { font-family:var(--kai); font-size:clamp(1.6rem,3.5vw,2.2rem); color:var(--gold); letter-spacing:.35em; margin-bottom:28px; }
+.sm-p   { font-size:.95rem; line-height:2.2; color:#ffffffdd; letter-spacing:.05em; text-shadow:0 2px 8px rgba(0,0,0,0.7); }
+.sm-p strong { color:#f5c97a; }
+
+/* ============================================================
+   7) responsive — see SKILL.md "Responsive Block"
+   ============================================================ */
+@media (max-width:1100px){
+  .s-intro{ padding:50px 40px }
+  .in-grid{ gap:0 24px }
+  .s-para{  padding:50px 40px }
+}
+@media (max-width:900px){
+  .slide{   padding:50px 30px }
+  .s-intro{ padding:50px 24px }
+  .in-grid{ grid-template-columns:1fr; gap:28px 0 }
+  .in-divider{ display:none }
+  .s-para{  padding:40px 24px }
+  .pa-wrap{ flex-direction:column; gap:18px; text-align:center; padding:24px 20px }
+  .pa-left{ flex:0 0 auto }
+  .pa-svg{  width:130px; height:130px }
+  .pa-cases{ grid-template-columns:1fr; gap:12px }
+  .pa-case{ padding:14px 18px }
+  .arr{ width:40px; height:40px; font-size:15px }
+  .arr-l{ left:10px } .arr-r{ right:10px }
+  .sm-box{ padding:30px 20px }
+  .tx-body{ padding:30px 24px }
+}
+@media (max-width:500px){
+  .cv-title{ letter-spacing:.15em }
+  .slide{   padding:40px 16px }
+  .s-para{  padding:40px 16px }
+  .arr{ width:36px; height:36px; font-size:13px }
+  .arr-l{ left:6px } .arr-r{ right:6px }
+  .kk-main{ letter-spacing:.2em }
+}
+</style>
+</head>
+<body>
+
+<div class="arr arr-l hide" id="bl" onclick="go(-1)">&#10094;</div>
+<div class="arr arr-r"      id="br" onclick="go(1)">&#10095;</div>
+<div class="pn" id="pn">1 / 10</div>
+<div class="dots" id="ds"></div>
+
+<div class="deck" id="dk">
+
+  <!-- =================================================
+       P1 — Cover
+       ================================================= -->
+  <div class="slide s-cover on">
+    <div class="mtn"></div>
+    <div class="cv-line a d1"></div>
+    <h1 class="cv-title a d2">道德经学用</h1>
+    <p class="cv-sub a d3">第{{CHAPTER_NUM_CN}}章 · {{CHAPTER_TITLE}}</p>
+    <p class="cv-desc a d4">{{CHAPTER_INCIPIT}}</p>
+    <div class="seal a d5"><span>{{CHAPTER_TITLE}}</span></div>
+  </div>
+
+  <!-- =================================================
+       P2 — Concept Overview
+       ================================================= -->
+  <div class="slide s-intro">
+    <h2 class="sec-t a d1">道德经第{{CHAPTER_NUM_CN}}章 · {{CHAPTER_TITLE}}</h2>
+    <p class="in-sub a d2">{{P2_QUESTION}}</p>
+    <div class="in-grid">
+      <div class="in-block a d3">
+        <div class="in-label"><span class="ico">概</span> {{CONCEPT_A_LABEL}}</div>
+        {{CONCEPT_A_BODY}}
+        <div class="in-quote">{{CONCEPT_A_QUOTE}}</div>
+      </div>
+      <div class="in-divider"></div>
+      <div class="in-block a d4">
+        <div class="in-label"><span class="ico">概</span> {{CONCEPT_B_LABEL}}</div>
+        {{CONCEPT_B_BODY}}
+        <div class="in-quote">{{CONCEPT_B_QUOTE}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================================================
+       P3 — Original Text
+       ================================================= -->
+  <div class="slide s-text">
+    <p class="tx-label a d1">道德经 · 第{{CHAPTER_NUM_CN}}章 · 原文</p>
+    <div class="tx-deco tx-deco-t a d2"></div>
+    <div class="tx-body">
+      {{ORIGINAL_TEXT_LINES}}
+    </div>
+    <div class="tx-deco tx-deco-b a d6"></div>
+  </div>
+
+  <!-- =================================================
+       P4 — Paragraph 1 analysis
+       SVG slot: copy Pattern A / B / C / D / E from SKILL.md
+                 "SVG Concept Diagrams" and remix labels.
+       ================================================= -->
+  <div class="slide s-para s-p4">
+    <div class="pa-container">
+      <div class="pa-wrap">
+        <div class="pa-left a d1">
+          {{P4_SVG}}
+        </div>
+        <div class="pa-right">
+          <div class="pa-num   a d2">{{P4_TITLE}}</div>
+          <div class="pa-quote a d3">{{P4_QUOTE}}</div>
+          <div class="pa-label a d4">解析</div>
+          <div class="pa-text  a d4">{{P4_ANALYSIS}}</div>
+        </div>
+      </div>
+      <div class="pa-divider-row a d5"><span>✦ 古今印证 ✦</span></div>
+      <div class="pa-cases">
+        <div class="pa-case a d5">
+          <div class="pa-case-head"><span class="pa-case-icon">史</span> 历史镜鉴</div>
+          <div class="pa-case-title">{{P4_HISTORY_TITLE}}</div>
+          <div class="pa-case-text">{{P4_HISTORY_CASE}}</div>
+        </div>
+        <div class="pa-case modern a d5">
+          <div class="pa-case-head"><span class="pa-case-icon">今</span> 现代镜鉴</div>
+          <div class="pa-case-title">{{P4_MODERN_TITLE}}</div>
+          <div class="pa-case-text">{{P4_MODERN_CASE}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================================================
+       P5 — Paragraph 2 analysis
+       ================================================= -->
+  <div class="slide s-para s-p5">
+    <div class="pa-container">
+      <div class="pa-wrap">
+        <div class="pa-left a d1">
+          {{P5_SVG}}
+        </div>
+        <div class="pa-right">
+          <div class="pa-num   a d2">{{P5_TITLE}}</div>
+          <div class="pa-quote a d3">{{P5_QUOTE}}</div>
+          <div class="pa-label a d4">解析</div>
+          <div class="pa-text  a d4">{{P5_ANALYSIS}}</div>
+        </div>
+      </div>
+      <div class="pa-divider-row a d5"><span>✦ 古今印证 ✦</span></div>
+      <div class="pa-cases">
+        <div class="pa-case a d5">
+          <div class="pa-case-head"><span class="pa-case-icon">史</span> 历史镜鉴</div>
+          <div class="pa-case-title">{{P5_HISTORY_TITLE}}</div>
+          <div class="pa-case-text">{{P5_HISTORY_CASE}}</div>
+        </div>
+        <div class="pa-case modern a d5">
+          <div class="pa-case-head"><span class="pa-case-icon">今</span> 现代镜鉴</div>
+          <div class="pa-case-title">{{P5_MODERN_TITLE}}</div>
+          <div class="pa-case-text">{{P5_MODERN_CASE}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================================================
+       P6 — Paragraph 3 analysis
+       ================================================= -->
+  <div class="slide s-para s-p6">
+    <div class="pa-container">
+      <div class="pa-wrap">
+        <div class="pa-left a d1">
+          {{P6_SVG}}
+        </div>
+        <div class="pa-right">
+          <div class="pa-num   a d2">{{P6_TITLE}}</div>
+          <div class="pa-quote a d3">{{P6_QUOTE}}</div>
+          <div class="pa-label a d4">解析</div>
+          <div class="pa-text  a d4">{{P6_ANALYSIS}}</div>
+        </div>
+      </div>
+      <div class="pa-divider-row a d5"><span>✦ 古今印证 ✦</span></div>
+      <div class="pa-cases">
+        <div class="pa-case a d5">
+          <div class="pa-case-head"><span class="pa-case-icon">史</span> 历史镜鉴</div>
+          <div class="pa-case-title">{{P6_HISTORY_TITLE}}</div>
+          <div class="pa-case-text">{{P6_HISTORY_CASE}}</div>
+        </div>
+        <div class="pa-case modern a d5">
+          <div class="pa-case-head"><span class="pa-case-icon">今</span> 现代镜鉴</div>
+          <div class="pa-case-title">{{P6_MODERN_TITLE}}</div>
+          <div class="pa-case-text">{{P6_MODERN_CASE}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================================================
+       P7 — Paragraph 4 analysis
+       ================================================= -->
+  <div class="slide s-para s-p7">
+    <div class="pa-container">
+      <div class="pa-wrap">
+        <div class="pa-left a d1">
+          {{P7_SVG}}
+        </div>
+        <div class="pa-right">
+          <div class="pa-num   a d2">{{P7_TITLE}}</div>
+          <div class="pa-quote a d3">{{P7_QUOTE}}</div>
+          <div class="pa-label a d4">解析</div>
+          <div class="pa-text  a d4">{{P7_ANALYSIS}}</div>
+        </div>
+      </div>
+      <div class="pa-divider-row a d5"><span>✦ 古今印证 ✦</span></div>
+      <div class="pa-cases">
+        <div class="pa-case a d5">
+          <div class="pa-case-head"><span class="pa-case-icon">史</span> 历史镜鉴</div>
+          <div class="pa-case-title">{{P7_HISTORY_TITLE}}</div>
+          <div class="pa-case-text">{{P7_HISTORY_CASE}}</div>
+        </div>
+        <div class="pa-case modern a d5">
+          <div class="pa-case-head"><span class="pa-case-icon">今</span> 现代镜鉴</div>
+          <div class="pa-case-title">{{P7_MODERN_TITLE}}</div>
+          <div class="pa-case-text">{{P7_MODERN_CASE}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================================================
+       P8 — Paragraph 5 analysis
+       ================================================= -->
+  <div class="slide s-para s-p8">
+    <div class="pa-container">
+      <div class="pa-wrap">
+        <div class="pa-left a d1">
+          {{P8_SVG}}
+        </div>
+        <div class="pa-right">
+          <div class="pa-num   a d2">{{P8_TITLE}}</div>
+          <div class="pa-quote a d3">{{P8_QUOTE}}</div>
+          <div class="pa-label a d4">解析</div>
+          <div class="pa-text  a d4">{{P8_ANALYSIS}}</div>
+        </div>
+      </div>
+      <div class="pa-divider-row a d5"><span>✦ 古今印证 ✦</span></div>
+      <div class="pa-cases">
+        <div class="pa-case a d5">
+          <div class="pa-case-head"><span class="pa-case-icon">史</span> 历史镜鉴</div>
+          <div class="pa-case-title">{{P8_HISTORY_TITLE}}</div>
+          <div class="pa-case-text">{{P8_HISTORY_CASE}}</div>
+        </div>
+        <div class="pa-case modern a d5">
+          <div class="pa-case-head"><span class="pa-case-icon">今</span> 现代镜鉴</div>
+          <div class="pa-case-title">{{P8_MODERN_TITLE}}</div>
+          <div class="pa-case-text">{{P8_MODERN_CASE}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================================================
+       P9 — Key Line
+       ================================================= -->
+  <div class="slide s-key s-p9">
+    <div class="kk-box">
+      <div class="kk-pre a d1">本章金句</div>
+      <div class="kk-deco a d1"></div>
+      <div class="kk-main a d2">{{KEY_LINE}}</div>
+      <div class="kk-sub a d4">{{KEY_LINE_INTERPRETATION}}</div>
+    </div>
+  </div>
+
+  <!-- =================================================
+       P10 — Summary
+       ================================================= -->
+  <div class="slide s-sum s-p10">
+    <div class="sm-box">
+      <div class="sm-t a d1">本章总结</div>
+      <div class="sm-p a d2">{{SUMMARY_PARA_1}}</div>
+      <div class="sm-p a d3" style="margin-top:20px">{{SUMMARY_PARA_2}}</div>
+      <div class="seal a d4" style="margin:28px auto 0"><span>{{CHAPTER_TITLE}}</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+!function(){
+  var cur=0,dk=document.getElementById('dk'),ss=dk.querySelectorAll('.slide'),
+      tot=ss.length,bl=document.getElementById('bl'),br=document.getElementById('br'),
+      pn=document.getElementById('pn'),ds=document.getElementById('ds'),busy=0;
+
+  for(var i=0;i<tot;i++){
+    var d=document.createElement('div');
+    d.className='dot'+(i?'':' on');
+    d.setAttribute('data-i',i);
+    d.onclick=function(){goTo(+this.getAttribute('data-i'))};
+    ds.appendChild(d);
+  }
+
+  function goTo(n){
+    if(n<0||n>=tot||n===cur||busy)return;
+    busy=1;
+    ss[cur].classList.remove('on');
+    cur=n;
+    dk.style.transform='translateX(-'+cur*100+'vw)';
+    ui();
+    setTimeout(function(){ss[cur].classList.add('on')},100);
+    setTimeout(function(){busy=0},600);
+  }
+
+  function go(d){goTo(cur+d)}
+  window.go=go;
+
+  function ui(){
+    bl.classList.toggle('hide',cur===0);
+    br.classList.toggle('hide',cur===tot-1);
+    pn.textContent=(cur+1)+' / '+tot;
+    var dd=ds.querySelectorAll('.dot');
+    for(var i=0;i<dd.length;i++)dd[i].classList.toggle('on',i===cur);
+  }
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();go(1)}
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();go(-1)}
+  });
+
+  var sx=0,sy=0;
+  dk.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  dk.addEventListener('touchend',function(e){
+    var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>50)go(dx<0?1:-1);
+  },{passive:true});
+
+  var wt=null;
+  // Wheel: full-document capture is intentional — the deck is a fullscreen kiosk, page scroll is never desired.
+  document.addEventListener('wheel',function(e){
+    e.preventDefault();
+    if(wt)return;
+    wt=setTimeout(function(){wt=null},800);
+    go((Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY)>0?1:-1);
+  },{passive:false});
+
+  ss[0].classList.add('on');
+  ui();
+}();
+</script>
+</body>
+</html>

@@ -33,6 +33,8 @@ The squad takes a chapter number (and optionally the user-supplied original text
 - Hosting, CDN delivery, or any networked dependency in the output file
 - External fonts, JS libraries, CSS frameworks, or remote images in the deck
 
+Other classical texts (Zhuangzi, Analects, etc.) are explicitly out of scope — fork the squad to extend coverage.
+
 ## Write Access
 
 (none — all output stays within the operation directory)
@@ -81,8 +83,11 @@ When the brief asks for a chapter (e.g., "用 taoteching-deck 做第三十三章
    - Confirm every background-bearing slide has its `::before` mask (cover `.55`, intro `.90`, original-text page `.92`, paragraph / key / summary `.88`) and that all foreground elements use `position:relative; z-index:1`
    - Confirm every body text element carries `text-shadow: 0 2px 8px rgba(0,0,0,0.7)` (and double shadow on key lines and quotes)
 
+5.5. **Start from the skeleton, not from scratch.** Copy `<SKILL_DIR>/templates/skeleton.html` (where `<SKILL_DIR>` = the installed `taoteching-deck-template` skill directory) to the operation root, rename to `taoteching-{N}.html`, then edit. Do not assemble the file by stitching SKILL.md sections together — that path is reserved for skeleton maintenance, not chapter authoring. Every `{{TOKEN}}` placeholder in the skeleton must be replaced; see the skill's "Placeholder Cheatsheet" for the full list and run `grep '{{' taoteching-{N}.html` after editing to verify zero matches remain.
+
 6. **Write the file using `create` / `edit`**
    - Output path: `taoteching-{N}.html` in the operation root
+   - Fill every `{{TOKEN}}` placeholder. After editing, run `grep '{{' taoteching-{N}.html` — it must return zero matches. The full token list is in the skill's "Placeholder Cheatsheet" section.
    - Verify file size is under 100 KB when using gradient placeholders (typical: 40-50 KB). When using base64 backgrounds the file may reach 4-5 MB — flag this in the report
    - Mentally walk the file end-to-end and confirm: 10 `.slide` blocks present, dot count auto-derived from `.slide` count in JS, `.slide.s-cover` carries `.on` initially
 

@@ -1,7 +1,7 @@
 ---
 name: taoteching-deck-template
 version: "1.0.0"
-description: Single-file HTML slide-deck template for Chinese classical-text decks — ink-style, 10-page narrative, hand-rolled engine, reusable CSS variables and animation classes
+description: Single-file HTML slide-deck template for Tao Te Ching chapter decks — ink-style, 10-page narrative, hand-rolled engine, reusable CSS variables and animation classes
 dependencies:
   skills: []
   mcps: []
@@ -11,7 +11,7 @@ dependencies:
 
 This skill is the **HTML / CSS / JS source of truth** for the `taoteching-deck` squad. It documents the canonical 10-page deck skeleton, every reusable class, and every animation keyframe. Copy from here verbatim — do not re-derive.
 
-The template is also intentionally generic enough to seed other classical-text decks (e.g., *Zhuangzi* 《庄子》, *Analects* 《论语》) by swapping copy and section headings. The visual system, engine, and animation library remain unchanged.
+This skill is dedicated to the *Tao Te Ching* deck format. Other classical-text projects should fork the squad rather than extend this skill.
 
 ## Architecture at a Glance
 
@@ -160,7 +160,8 @@ In HTML, write `class="a d2"` to give an element the entry animation with the se
     cur=n;
     dk.style.transform='translateX(-'+cur*100+'vw)';
     ui();
-    setTimeout(function(){ss[cur].classList.add('on');busy=0},100);
+    setTimeout(function(){ss[cur].classList.add('on')},100);
+    setTimeout(function(){busy=0},600);
   }
 
   function go(d){goTo(cur+d)}
@@ -180,19 +181,20 @@ In HTML, write `class="a d2"` to give an element the entry animation with the se
   });
 
   var sx=0,sy=0;
-  dk.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:1});
+  dk.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
   dk.addEventListener('touchend',function(e){
     var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
     if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>50)go(dx<0?1:-1);
-  },{passive:1});
+  },{passive:true});
 
   var wt=null;
+  // Wheel: full-document capture is intentional — the deck is a fullscreen kiosk, page scroll is never desired.
   document.addEventListener('wheel',function(e){
     e.preventDefault();
     if(wt)return;
     wt=setTimeout(function(){wt=null},800);
     go((Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY)>0?1:-1);
-  },{passive:0});
+  },{passive:false});
 
   ss[0].classList.add('on');
   ui();
@@ -236,6 +238,8 @@ These class+keyframe pairs power every animated SVG element on every slide. Reus
 .an-f1{animation-delay:0s} .an-f2{animation-delay:1.5s} .an-f3{animation-delay:3s}
 @keyframes kFade  { 0%,100%{ opacity:.2; } 50%{ opacity:.85; } }
 ```
+
+**Note (`.an-spin` rotation centre):** `transform-origin: 100px 100px` assumes the SVG uses `viewBox="0 0 200 200"` (the canonical 180×180 concept-diagram size in this template). If you author an SVG with a different viewBox, override `transform-origin` inline on the rotating `<g>` so the rotation pivots around the visual centre.
 
 ## Per-Slide CSS
 
@@ -609,6 +613,8 @@ These five patterns covered the 25-chapter reference. Reuse them for analogous c
 
 ## Assembly Outline
 
+> **For most chapters, do not assemble from scratch.** Copy `templates/skeleton.html`, then fill in only the chapter-specific text and SVG content. The assembly outline below is for reference (or for understanding what's in the skeleton); the skeleton is the source of truth — see the "Placeholder Cheatsheet" at the end of this skill for the full `{{TOKEN}}` set the operator must replace.
+
 The assembled deck is built by stitching the canonical sections from this skill into one HTML file. This outline shows where each section lands; it is **not** a runnable file by itself — fill in each placeholder by copying from the corresponding section earlier in this skill.
 
 ```html
@@ -695,3 +701,63 @@ with open("taoteching-33.html", "w", encoding="utf-8") as f:
 ```
 
 A single corrupted multi-byte sequence breaks a glyph silently and the page looks fine in your editor but renders garbled in the browser.
+
+## Placeholder Cheatsheet
+
+`templates/skeleton.html` ships with double-brace `{{TOKEN}}` placeholders for every chapter-specific slot. The operator must replace every one before delivery; running `grep '{{' taoteching-{N}.html` after editing should return zero matches.
+
+**Header / cover (P1)**
+
+| Token | Where it lands | Example |
+|-------|----------------|---------|
+| `{{CHAPTER_NUM}}` | Arabic-numeral chapter number — used in `<title>`, file name, page numbering | `33` |
+| `{{CHAPTER_NUM_CN}}` | Chinese numeral form — appears in `.cv-sub` and `.sec-t` | `三十三` |
+| `{{CHAPTER_TITLE}}` | Chapter theme title — `.cv-sub` (after the chapter number), the seal, `.sec-t`, and `<title>` | `自知者明` |
+| `{{CHAPTER_INCIPIT}}` | Opening line / mood phrase under the cover title (`.cv-desc`) | `知人者智，自知者明` |
+
+**Concept overview (P2)**
+
+| Token | Where it lands | Example |
+|-------|----------------|---------|
+| `{{P2_QUESTION}}` | The two-part question in `.in-sub` ("什么是 X？什么又是 Y？") | `什么是"知人"？什么又是"自知"？` |
+| `{{CONCEPT_A_LABEL}}` | Left-column header glyph + label (`.in-label`) | `何为"知人"` |
+| `{{CONCEPT_A_BODY}}` | Left column body — 2–3 `<p class="in-p">` paragraphs | `<p class="in-p">"知人"是…</p>` |
+| `{{CONCEPT_A_QUOTE}}` | Left-column reinforcement quote (`.in-quote`) | `知人者智…<br>——《道德经》第三十三章` |
+| `{{CONCEPT_B_LABEL}}` | Right-column header glyph + label | `何为"自知"` |
+| `{{CONCEPT_B_BODY}}` | Right column body | (analogous) |
+| `{{CONCEPT_B_QUOTE}}` | Right-column reinforcement quote | (analogous) |
+
+**Original text (P3)**
+
+| Token | Where it lands | Example |
+|-------|----------------|---------|
+| `{{ORIGINAL_TEXT_LINES}}` | One or more `<span class="ln a dN">…</span>` lines, the chapter verbatim | `<span class="ln a d2">知人者智，自知者明。</span>…` |
+
+**Per-paragraph analysis (P4 – P8) — same eight tokens repeated for each of P4, P5, P6, P7, P8 (prefixed `P4_` … `P8_`)**
+
+| Token | Where it lands |
+|-------|----------------|
+| `{{PN_TITLE}}` | `.pa-num` — paragraph label (e.g., `第一段 · 道之体`) |
+| `{{PN_QUOTE}}` | `.pa-quote` — the paragraph quoted from the chapter's original text |
+| `{{PN_ANALYSIS}}` | `.pa-text` — commentary HTML with `<strong>` highlights |
+| `{{PN_SVG}}` | `.pa-left` SVG — copy one of Pattern A / B / C / D / E and remix the labels |
+| `{{PN_HISTORY_TITLE}}` / `{{PN_HISTORY_CASE}}` | `.pa-case` (history mirror) — `.pa-case-title` + `.pa-case-text` |
+| `{{PN_MODERN_TITLE}}` / `{{PN_MODERN_CASE}}` | `.pa-case.modern` — `.pa-case-title` + `.pa-case-text` |
+
+(`PN` stands for `P4`, `P5`, `P6`, `P7`, or `P8` — replicate the cluster five times.)
+
+**Key line (P9)**
+
+| Token | Where it lands | Example |
+|-------|----------------|---------|
+| `{{KEY_LINE}}` | `.kk-main` — the standalone canonical key line, `<em>` for accent words | `知人者智，<br>自知者<em>明</em>。` |
+| `{{KEY_LINE_INTERPRETATION}}` | `.kk-sub` — interpretation paragraph with `<strong>` highlights | `…顺其本性。` |
+
+**Summary (P10)**
+
+| Token | Where it lands | Example |
+|-------|----------------|---------|
+| `{{SUMMARY_PARA_1}}` | First `<div class="sm-p">` — chapter argument recap | `本章是老子…` |
+| `{{SUMMARY_PARA_2}}` | Second `<div class="sm-p">` — closing exhortation, `<strong>` allowed | `…顺应万物本来如此的状态。` |
+
+**Verification:** after editing the deck, run `grep '{{' taoteching-{N}.html`. The expected count is **zero**. If any token survives, an authoring slot was missed.

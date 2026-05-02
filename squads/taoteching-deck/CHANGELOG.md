@@ -11,3 +11,6 @@
 - Reuses HTML / CSS / JS skeleton from the `taoteching-deck-template` skill
 - Output stays inside the operation directory: `taoteching-{N}.html` plus `report.html`
 - Added `sop` methodology skill to MANIFEST `dependencies.skills` to satisfy marketplace lint Phase 2 (squad must declare a methodology skill — `sop` matches the precedent set by other content/HTML squads)
+- Iterated on PR review feedback before release
+- Added explicit guidance to start from `templates/skeleton.html` (workflow step 5.5) — operators copy the pre-assembled skeleton rather than stitching SKILL.md sections together
+- Reaffirmed scope: Tao Te Ching only — fork the squad to extend coverage of other classical texts (Zhuangzi, Analects, etc.)
